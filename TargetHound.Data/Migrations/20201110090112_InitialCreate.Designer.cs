@@ -10,7 +10,7 @@ using TargetHound.Data;
 namespace TargetHound.Data.Migrations
 {
     [DbContext(typeof(TargetHoundContext))]
-    [Migration("20201108082140_InitialCreate")]
+    [Migration("20201110090112_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -596,6 +596,29 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("Targets");
                 });
 
+            modelBuilder.Entity("TargetHound.Models.UserProject", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsAdmin")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ProjectId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
+
+                    b.HasIndex("ProjectId");
+
+                    b.ToTable("UsersProjects");
+                });
+
             modelBuilder.Entity("TargetHound.Models.ApplicationUser", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -724,7 +747,7 @@ namespace TargetHound.Data.Migrations
             modelBuilder.Entity("TargetHound.Models.Project", b =>
                 {
                     b.HasOne("TargetHound.Models.ApplicationUser", "Admin")
-                        .WithMany("Propjects")
+                        .WithMany()
                         .HasForeignKey("AdminId")
                         .OnDelete(DeleteBehavior.Restrict);
 
@@ -773,6 +796,19 @@ namespace TargetHound.Data.Migrations
 
                     b.HasOne("TargetHound.Models.Project", "Project")
                         .WithMany("Targets")
+                        .HasForeignKey("ProjectId")
+                        .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("TargetHound.Models.UserProject", b =>
+                {
+                    b.HasOne("TargetHound.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("UserProjects")
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TargetHound.Models.Project", "Project")
+                        .WithMany("ProjectUsers")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict);
                 });

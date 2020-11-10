@@ -18,9 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TargetHound.Blazor\TargetHound.Blazor.csproj" />
     <ProjectReference Include="..\TargetHound.Services\TargetHound.Services.csproj" />
-    <ProjectReference Include="..\TargetHound.SharedViews\TargetHound.SharedViews.csproj" />
+    <ProjectReference Include="..\TargetHound.SharedViews\TargetHound.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>

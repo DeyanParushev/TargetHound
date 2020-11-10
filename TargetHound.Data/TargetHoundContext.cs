@@ -17,9 +17,11 @@
             : base(options)
         {
         }
-        
-        public DbSet<Collar> Collars { get; set; }
 
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+
+        public DbSet<Collar> Collars { get; set; }
+        
         public DbSet<Borehole> Boreholes { get; set; }
 
         public DbSet<Client> Clients { get; set; }
@@ -41,6 +43,8 @@
         public DbSet<Target> Targets { get; set; }
 
         public DbSet<Dogleg> Doglegs { get; set; }
+
+        public DbSet<UserProject> UsersProjects { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

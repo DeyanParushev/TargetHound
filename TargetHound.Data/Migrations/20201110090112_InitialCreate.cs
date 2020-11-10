@@ -337,6 +337,32 @@ namespace TargetHound.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "UsersProjects",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    ApplicationUserId = table.Column<string>(nullable: true),
+                    ProjectId = table.Column<string>(nullable: true),
+                    IsAdmin = table.Column<bool>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UsersProjects", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UsersProjects_AspNetUsers_ApplicationUserId",
+                        column: x => x.ApplicationUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UsersProjects_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Boreholes",
                 columns: table => new
                 {
@@ -602,6 +628,16 @@ namespace TargetHound.Data.Migrations
                 name: "IX_Targets_ProjectId",
                 table: "Targets",
                 column: "ProjectId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersProjects_ApplicationUserId",
+                table: "UsersProjects",
+                column: "ApplicationUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UsersProjects_ProjectId",
+                table: "UsersProjects",
+                column: "ProjectId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -638,6 +674,9 @@ namespace TargetHound.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Targets");
+
+            migrationBuilder.DropTable(
+                name: "UsersProjects");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

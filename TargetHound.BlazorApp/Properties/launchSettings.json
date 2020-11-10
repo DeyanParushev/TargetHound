@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:51976",
-      "sslPort": 44352
+      "applicationUrl": "http://localhost:51793",
+      "sslPort": 44387
     }
   },
   "profiles": {
@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "TargetHound.Blazor": {
+    "TargetHound.BlazorApp": {
       "commandName": "Project",
       "launchBrowser": true,
       "inspectUri": "{wsProtocol}://{url.hostname}:{url.port}/_framework/debug/ws-proxy?browser={browserInspectUri}",

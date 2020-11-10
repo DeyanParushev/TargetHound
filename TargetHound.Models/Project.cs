@@ -11,6 +11,9 @@
         {
             this.ProjectContractors = new HashSet<ProjectContractor>();
             this.Boreholes = new HashSet<Borehole>();
+            this.Collars = new HashSet<Collar>();
+            this.Targets = new HashSet<Target>();
+            this.ProjectUsers = new HashSet<UserProject>();
             this.Id = Guid.NewGuid().ToString();
         }
 
@@ -35,6 +38,8 @@
         public virtual ICollection<Collar> Collars { get; set; }
 
         public virtual ICollection<Target> Targets { get; set; }
+
+        public virtual ICollection<UserProject> ProjectUsers { get; set; }
 
         [ForeignKey("Client")]
         public string ClientId { get; set; }

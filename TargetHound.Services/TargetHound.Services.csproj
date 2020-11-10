@@ -1,19 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <OutputType>Library</OutputType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="ClientServices\**" />
+    <Compile Remove="ServerServices\**" />
+    <EmbeddedResource Remove="ClientServices\**" />
+    <EmbeddedResource Remove="ServerServices\**" />
+    <None Remove="ClientServices\**" />
+    <None Remove="ServerServices\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TargetHound.Calcualtions\TargetHound.Calcualtions.csproj" />
     <ProjectReference Include="..\TargetHound.Data\TargetHound.Data.csproj" />
     <ProjectReference Include="..\TargetHound.Models\TargetHound.Models.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="ClientServices\" />
-    <Folder Include="ServerServices\" />
   </ItemGroup>
 
 </Project>

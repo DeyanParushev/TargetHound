@@ -1,18 +1,13 @@
-using System;
-using System.Net.Http;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Text;
-using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using TargetHound.Services.Interfaces;
-using TargetHound.Services;
-using TargetHound.Data;
-
-namespace TargetHound.Blazor
+namespace TargetHound.BlazorApp
 {
+    using System;
+    using System.Net.Http;
+    using System.Threading.Tasks;
+    using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+    using Microsoft.Extensions.DependencyInjection;
+
+    using TargetHound.Data;
+
     public class Program
     {
         public static async Task Main(string[] args)
@@ -24,10 +19,8 @@ namespace TargetHound.Blazor
             builder.Services.AddHttpClient("TargetHound",
                 client => client.BaseAddress =
                 new Uri(builder.HostEnvironment.BaseAddress));
-         
-            builder.Services.AddSingleton<ITargetService, TargetService>();
+
             builder.Services.AddDbContext<TargetHoundContext>();
-            
             await builder.Build().RunAsync();
         }
     }

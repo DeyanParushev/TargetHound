@@ -27,11 +27,12 @@ namespace TargetHound.MVC
             
             services.AddDbContext<TargetHoundContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<TargetHoundContext>();
             services.AddControllersWithViews();
-            services.AddScoped<IBoreholeService, BoreholeService>();
-            services.AddTransient<ITargetService, TargetService>();
+
+            services.AddTransient<IProjectService, ProjectService>();
+
             services.AddRazorPages();
             services.AddServerSideBlazor();
         }

@@ -10,9 +10,10 @@
         public ApplicationUser()
         {
             base.Id = Guid.NewGuid().ToString();
+            this.UserProjects = new HashSet<UserProject>();
         }
 
-        public ICollection<Project> Propjects { get; set; }
+        public ICollection<UserProject> UserProjects { get; set; }
 
         [ForeignKey("Client")]
         public string ClientId { get; set; }
