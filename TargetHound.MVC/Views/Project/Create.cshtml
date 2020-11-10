@@ -1,0 +1,15 @@
+﻿@model TargetHound.InputModels.ProjectInputModel
+
+<form method="post" class="form">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input type="text" asp-for="Name" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="MagneticDeclination"></label>
+        <input type="text" asp-for="MagneticDeclination" />
+    </div>
+
+    <button class="btn btn-primary" type="submit">Create</button>
+</form>

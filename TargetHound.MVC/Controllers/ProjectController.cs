@@ -28,8 +28,12 @@
         [HttpPost]
         public async Task<IActionResult> Create(ProjectInputModel input)
         {
-            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier).Value;
-            await this.projectService.Create(userId, input.Name, input.MagneticDeclination);
+            string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId != null)
+            {
+                await this.projectService.Create(userId, input.Name, input.MagneticDeclination);
+            }
 
             return this.Redirect("/Planning");
         }
