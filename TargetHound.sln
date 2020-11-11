@@ -18,9 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TargetHound.Calculations.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TargetHound.MVC", "TargetHound.MVC\TargetHound.MVC.csproj", "{37E36E65-916C-4837-B83A-2710F59254FE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TargetHound.ViewModels", "TargetHound.SharedViews\TargetHound.ViewModels.csproj", "{4072B9FF-B014-43AB-AA85-957F90940167}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetHound.BlazorApp", "TargetHound.BlazorApp\TargetHound.BlazorApp.csproj", "{68183F2C-DBB6-4B24-BFD7-319AE18614C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TargetHound.BlazorApp", "TargetHound.BlazorApp\TargetHound.BlazorApp.csproj", "{68183F2C-DBB6-4B24-BFD7-319AE18614C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,10 +50,6 @@ Global
 		{37E36E65-916C-4837-B83A-2710F59254FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37E36E65-916C-4837-B83A-2710F59254FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37E36E65-916C-4837-B83A-2710F59254FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4072B9FF-B014-43AB-AA85-957F90940167}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4072B9FF-B014-43AB-AA85-957F90940167}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4072B9FF-B014-43AB-AA85-957F90940167}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4072B9FF-B014-43AB-AA85-957F90940167}.Release|Any CPU.Build.0 = Release|Any CPU
 		{68183F2C-DBB6-4B24-BFD7-319AE18614C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{68183F2C-DBB6-4B24-BFD7-319AE18614C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{68183F2C-DBB6-4B24-BFD7-319AE18614C1}.Release|Any CPU.ActiveCfg = Release|Any CPU

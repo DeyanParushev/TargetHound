@@ -15,12 +15,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.9" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\TargetHound.BlazorApp\TargetHound.BlazorApp.csproj" />
     <ProjectReference Include="..\TargetHound.Services\TargetHound.Services.csproj" />
-    <ProjectReference Include="..\TargetHound.SharedViews\TargetHound.ViewModels.csproj" />
   </ItemGroup>
 
   <ItemGroup>

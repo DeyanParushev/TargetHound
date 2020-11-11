@@ -46,5 +46,24 @@
 
             await this.dbContext.SaveChangesAsync();
         }
+
+#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
+        public async Task GetUserProjects(string userId)
+#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        {
+            var projects = this.dbContext.UsersProjects
+                .Where(x => x.ApplicationUserId == userId)
+                .Select(x => new
+                {
+                    Id = x.Id,
+                    Name = x.Project.Name,
+                    Boreholes = x.Project.Boreholes.Select(y => new
+                    {
+                        Id = y.Id,
+                        Name = y.Name
+                    })
+                })
+                .ToList();
+        } 
     }
 }

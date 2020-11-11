@@ -25,6 +25,11 @@
             return this.View();
         }
 
+        public IActionResult Load()
+        {
+            return this.View();
+        }
+
         [HttpPost]
         public async Task<IActionResult> Create(ProjectInputModel input)
         {
