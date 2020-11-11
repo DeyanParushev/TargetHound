@@ -1,5 +1,6 @@
 ﻿namespace TargetHound.Data
 {
+    using System;
     using System.Linq;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
@@ -7,13 +8,13 @@
     
     using TargetHound.Models;
 
-    public class TargetHoundContext : IdentityDbContext
+    public class TargetHoundContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
         public TargetHoundContext()
         {
         }
 
-        public TargetHoundContext(DbContextOptions options)
+        public TargetHoundContext(DbContextOptions<TargetHoundContext> options)
             : base(options)
         {
         }

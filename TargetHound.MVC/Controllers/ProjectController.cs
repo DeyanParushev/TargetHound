@@ -1,10 +1,13 @@
 ﻿namespace TargetHound.MVC.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
     using TargetHound.InputModels;
+    using TargetHound.Models;
     using TargetHound.Services.Interfaces;
+    using TargetHound.ViewModels.ViewModels;
 
     public class ProjectController : Controller
     {
@@ -27,7 +30,10 @@
 
         public IActionResult Load()
         {
-            return this.View();
+            string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var projects = this.projectService.GetProjectsByUserId<ProjectViewModel>(userId);
+            
+            return this.View(projects);
         }
 
         [HttpPost]

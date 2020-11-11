@@ -1,9 +1,11 @@
 ﻿namespace TargetHound.Services
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
     using TargetHound.Data;
     using TargetHound.Models;
+    using TargetHound.Services.Automapper;
     using TargetHound.Services.Interfaces;
 
     public class ProjectService : IProjectService
@@ -17,7 +19,8 @@
 
         public async Task Create(string userId, string projectName, double magneticDeclination)
         {
-            ApplicationUser user = this.dbContext.ApplicationUsers.FirstOrDefault(x => x.Id == userId);
+            var user = this.dbContext.ApplicationUsers.
+                FirstOrDefault(x => x.Id == userId);
 
             if(user == null)
             {
@@ -47,23 +50,14 @@
             await this.dbContext.SaveChangesAsync();
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        public async Task GetUserProjects(string userId)
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
+        public ICollection<T> GetProjectsByUserId<T>(string userId)
         {
-            var projects = this.dbContext.UsersProjects
+            var project = this.dbContext.UsersProjects
                 .Where(x => x.ApplicationUserId == userId)
-                .Select(x => new
-                {
-                    Id = x.Id,
-                    Name = x.Project.Name,
-                    Boreholes = x.Project.Boreholes.Select(y => new
-                    {
-                        Id = y.Id,
-                        Name = y.Name
-                    })
-                })
+                .To<T>()
                 .ToList();
+
+            return project;
         } 
     }
 }

@@ -1,16 +1,17 @@
 namespace TargetHound.MVC
 {
     using Microsoft.AspNetCore.Builder;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-   
+
     using TargetHound.Services;
     using TargetHound.Services.Interfaces;
     using TargetHound.Data;
+    using TargetHound.Models;
+    using System;
 
     public class Startup
     {
@@ -24,12 +25,18 @@ namespace TargetHound.MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            
+
             services.AddDbContext<TargetHoundContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-                .AddEntityFrameworkStores<TargetHoundContext>();
+
+            services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
+               .AddRoles<ApplicationRole>()
+               .AddEntityFrameworkStores<TargetHoundContext>();
+            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
+            //    .AddEntityFrameworkStores<TargetHoundContext>();
+            
             services.AddControllersWithViews();
+
 
             services.AddTransient<IProjectService, ProjectService>();
 
@@ -55,7 +62,7 @@ namespace TargetHound.MVC
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseBlazorFrameworkFiles();
-            
+
             app.UseRouting();
 
             app.UseAuthentication();
