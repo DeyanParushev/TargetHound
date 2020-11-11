@@ -9,7 +9,8 @@ namespace TargetHound.InputModels
         [Required(ErrorMessage = "Please enter a project name.")]
         public string Name { get; set; }
 
-        [Required(ErrorMessage = "The magnetic declination is required.")]
+        [Required(ErrorMessage = "The Magnetic Declination is required.")]
+        [Display(Name = "Magnetic Declination")]
         public double MagneticDeclination { get; set; }
     }
 }

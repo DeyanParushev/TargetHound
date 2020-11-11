@@ -1,15 +1,24 @@
 ﻿@model TargetHound.InputModels.ProjectInputModel
+<div class="form d-flex justify-content-center align-items-center vh-100">
+    <form method="post" class="form col-6 flex-row" asp-controller="Project" asp-action="Create">
+        <fieldset class="form-group">
+            <label class="control-label" asp-for="Name"></label>
+            <input class="form-control" type="text" asp-for="Name" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </fieldset>
 
-<form method="post" class="form">
-    <div class="form-group">
-        <label asp-for="Name"></label>
-        <input type="text" asp-for="Name" />
-    </div>
+        <fieldset class="form-group">
+            <label class="control-label" asp-for="MagneticDeclination"></label>
+            <input class="form-control" type="text" asp-for="MagneticDeclination" />
+            <span asp-validation-for="MagneticDeclination" class="text-danger"></span>
+        </fieldset>
+        <section class="d-flex flex-row justify-content-between">
+            <button class="btn btn-primary" type="submit">Create</button>
+            <a class="btn btn-primary font-weight-bold" href="/Project/Create">Load</a>
+        </section>
+    </form>
+</div>
 
-    <div class="form-group">
-        <label asp-for="MagneticDeclination"></label>
-        <input type="text" asp-for="MagneticDeclination" />
-    </div>
-
-    <button class="btn btn-primary" type="submit">Create</button>
-</form>
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
