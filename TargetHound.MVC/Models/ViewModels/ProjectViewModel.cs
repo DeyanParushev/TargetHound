@@ -9,13 +9,13 @@
     {
         public ProjectViewModel()
         {
-            //this.Boreholes = new HashSet<BoreholeViewModel>();
+            this.Boreholes = new HashSet<BoreholeViewModel>();
         }
 
         public string Name { get; set; }
 
         public string CountryName { get; set; }
 
-        //public ICollection<BoreholeViewModel> Boreholes { get; set; }
+        public ICollection<BoreholeViewModel> Boreholes { get; set; }
     }
 }

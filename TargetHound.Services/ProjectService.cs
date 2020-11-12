@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using TargetHound.Data;
     using TargetHound.Models;
     using TargetHound.Services.Automapper;
@@ -17,17 +18,17 @@
             this.dbContext = dbContext;
         }
 
-        public async Task Create(string userId, string projectName, double magneticDeclination)
+        public async Task CreateAsyc(string userId, string projectName, double magneticDeclination, int countyId)
         {
             var user = this.dbContext.ApplicationUsers.
                 FirstOrDefault(x => x.Id == userId);
 
-            if(user == null)
+            if (user == null)
             {
                 return;
             }
 
-            if(user.UserProjects.Any(x => x.Project.Name == projectName))
+            if (user.UserProjects.Any(x => x.Project.Name == projectName))
             {
                 return;
             }
@@ -36,7 +37,8 @@
             {
                 Name = projectName,
                 AdminId = userId,
-                MagneticDeclination = magneticDeclination
+                MagneticDeclination = magneticDeclination,
+                CountryId = countyId,
             };
 
             this.dbContext.Projects.Add(project);
@@ -52,12 +54,14 @@
 
         public ICollection<T> GetProjectsByUserId<T>(string userId)
         {
-            var project = this.dbContext.UsersProjects
+            var project = this.dbContext
+                .UsersProjects
                 .Where(x => x.ApplicationUserId == userId)
+                .Select(x => x.Project)
                 .To<T>()
                 .ToList();
 
             return project;
-        } 
+        }
     }
 }

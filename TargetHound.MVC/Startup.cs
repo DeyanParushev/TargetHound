@@ -6,12 +6,14 @@ namespace TargetHound.MVC
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using System.Reflection;
 
     using TargetHound.Services;
     using TargetHound.Services.Interfaces;
     using TargetHound.Data;
     using TargetHound.Models;
-    using System;
+    using TargetHound.Services.Automapper;
+    using TargetHound.MVC.Models;
 
     public class Startup
     {
@@ -32,13 +34,11 @@ namespace TargetHound.MVC
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                .AddRoles<ApplicationRole>()
                .AddEntityFrameworkStores<TargetHoundContext>();
-            //services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false)
-            //    .AddEntityFrameworkStores<TargetHoundContext>();
-            
+
             services.AddControllersWithViews();
 
-
             services.AddTransient<IProjectService, ProjectService>();
+            services.AddTransient<ICountriesService, CountriesService>();
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -47,6 +47,8 @@ namespace TargetHound.MVC
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

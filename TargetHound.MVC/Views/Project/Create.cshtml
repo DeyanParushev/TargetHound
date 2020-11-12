@@ -1,17 +1,27 @@
-﻿@model TargetHound.InputModels.ProjectInputModel
+﻿@model TargetHound.MVC.Models.InputModels.ProjectCountryInputModel
 <div class="form d-flex justify-content-center align-items-center vh-100">
     <form method="post" class="form col-6 flex-row" asp-controller="Project" asp-action="Create">
         <fieldset class="form-group">
-            <label class="control-label" asp-for="Name"></label>
-            <input class="form-control" type="text" asp-for="Name" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+            <label class="control-label" asp-for="Project.Name"></label>
+            <input class="form-control" type="text" asp-for="Project.Name" />
+            <span asp-validation-for="Project.Name" class="text-danger"></span>
         </fieldset>
 
         <fieldset class="form-group">
-            <label class="control-label" asp-for="MagneticDeclination"></label>
-            <input class="form-control" type="text" asp-for="MagneticDeclination" />
-            <span asp-validation-for="MagneticDeclination" class="text-danger"></span>
+            <label class="control-label" asp-for="Project.MagneticDeclination"></label>
+            <input class="form-control" type="text" asp-for="Project.MagneticDeclination" />
+            <span asp-validation-for="Project.MagneticDeclination" class="text-danger"></span>
         </fieldset>
+
+        <fieldset class="form-group">
+            <select asp-for="Project.CountryId">
+                @foreach (var country in Model.Cuntries)
+                {
+                     <option value="@country.Id">@country.Name</option>
+                }
+            </select>
+        </fieldset>
+
         <section class="d-flex flex-row justify-content-between">
             <button class="btn btn-primary" type="submit">Create</button>
             <a class="btn btn-primary font-weight-bold" href="/Project/Load">Load</a>

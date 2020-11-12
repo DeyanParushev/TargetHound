@@ -2,11 +2,10 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
-    using TargetHound.Models;
 
     public interface IProjectService
     {
-        public async Task Create(string userId, string projectName, double magneticDeclination) { }
+        public async Task CreateAsync(string userId, string projectName, double magneticDeclination, int countryId) { }
 
         public ICollection<T> GetProjectsByUserId<T>(string userId);
     }

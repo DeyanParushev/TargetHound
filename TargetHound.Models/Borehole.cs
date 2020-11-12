@@ -5,9 +5,7 @@
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    using TargetHound.Models.Interfaces;
-
-    public class Borehole
+    public class Borehole 
     {
         public Borehole()
         {
@@ -44,6 +42,6 @@
 
         public virtual ICollection<Dogleg> Doglegs { get; set; }
 
-        public bool  IsDeleted { get; set; }
+        public bool IsDeleted { get; set; }
     }
 }

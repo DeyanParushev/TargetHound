@@ -12,5 +12,7 @@ namespace TargetHound.InputModels
         [Required(ErrorMessage = "The Magnetic Declination is required.")]
         [Display(Name = "Magnetic Declination")]
         public double MagneticDeclination { get; set; }
+
+        public int CountryId { get; set; }
     }
 }
