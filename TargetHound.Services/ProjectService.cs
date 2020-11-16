@@ -1,5 +1,6 @@
 ﻿namespace TargetHound.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -39,6 +40,7 @@
                 AdminId = userId,
                 MagneticDeclination = magneticDeclination,
                 CountryId = countryId,
+                CreatedOn = DateTime.UtcNow,
             };
 
             this.dbContext.Projects.Add(project);

@@ -15,7 +15,7 @@
 
         <fieldset class="form-group">
             <select asp-for="Project.CountryId">
-                @foreach (var country in Model.Cuntries)
+                @foreach (var country in Model.Countries)
                 {
                      <option value="@country.Id">@country.Name</option>
                 }

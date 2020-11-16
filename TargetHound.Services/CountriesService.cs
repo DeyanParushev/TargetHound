@@ -18,10 +18,23 @@
 
         public ICollection<T> GetAllCountriesAsync<T>()
         {
-            return this.dbContext
+            var countries = this.dbContext
                 .Countries
                 .To<T>()
                 .ToList();
+
+            return countries;
+        }
+
+        public async Task<T> GetCountryByIdAsync<T>(int countryId)
+        {
+            var country = this.dbContext
+                .Countries
+                .Where(x => x.Id == countryId)
+                .To<T>()
+                .ToList()[0];
+
+            return country;
         }
     }
 }

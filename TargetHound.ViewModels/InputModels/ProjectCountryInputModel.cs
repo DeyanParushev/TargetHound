@@ -8,6 +8,6 @@
     {
         public ProjectInputModel Project { get; set; }
 
-        public ICollection<CountryViewModel> Cuntries { get; set; }
+        public ICollection<CountryViewModel> Countries { get; set; }
     }
 }

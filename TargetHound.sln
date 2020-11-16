@@ -20,7 +20,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TargetHound.MVC", "TargetHo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TargetHound.Blazor", "TargetHound.Blazor\TargetHound.Blazor.csproj", "{3981541E-C2AC-4513-8445-4EAA80E508E5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetHound.SharedViewModels", "TargetHound.ViewModels\TargetHound.SharedViewModels.csproj", "{1766ACEB-6F51-4D08-B532-C98C41B61C6E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TargetHound.SharedViewModels", "TargetHound.ViewModels\TargetHound.SharedViewModels.csproj", "{1766ACEB-6F51-4D08-B532-C98C41B61C6E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

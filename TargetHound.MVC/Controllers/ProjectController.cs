@@ -33,7 +33,7 @@
             ProjectCountryInputModel viewModel = new ProjectCountryInputModel
             {
                 Project = new ProjectInputModel(),
-                Cuntries = countries,
+                Countries = countries,
             };
 
             return this.View(viewModel);
@@ -58,10 +58,10 @@
                 await this.projectService.CreateAsync(userId, project.Name, project.MagneticDeclination, project.CountryId);
             }
 
-            string countryName = input.Cuntries.FirstOrDefault(x => x.Id == project.CountryId).Name;
-            ProjectViewModel projectView = new ProjectViewModel { Name = project.Name, CountryName = countryName };
+            CountryViewModel country = await this.countriesService.GetCountryByIdAsync<CountryViewModel>(input.Project.CountryId);
+            ProjectViewModel projectView = new ProjectViewModel { Name = project.Name, CountryName = country.Name };
 
-            return this.RedirectToAction("/Planning", projectView);
+            return this.Redirect("/Planning");
         }
     }
 }

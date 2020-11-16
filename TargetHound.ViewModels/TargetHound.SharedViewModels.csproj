@@ -5,6 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TargetHound.Data\TargetHound.Data.csproj" />
+    <ProjectReference Include="..\TargetHound.Models\TargetHound.DataModels.csproj" />
     <ProjectReference Include="..\TargetHound.Services\TargetHound.Services.csproj" />
   </ItemGroup>
 

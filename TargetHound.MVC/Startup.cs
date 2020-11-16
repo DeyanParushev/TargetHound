@@ -14,6 +14,7 @@ namespace TargetHound.MVC
     using TargetHound.Models;
     using TargetHound.Services.Automapper;
     using TargetHound.MVC.Models;
+    using TargetHound.ViewModels.ViewModels;
 
     public class Startup
     {
@@ -47,7 +48,9 @@ namespace TargetHound.MVC
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+            AutoMapperConfig.RegisterMappings(
+                typeof(ErrorViewModel).GetTypeInfo().Assembly, 
+                typeof(ProjectViewModel).GetTypeInfo().Assembly);
 
             if (env.IsDevelopment())
             {
@@ -65,7 +68,7 @@ namespace TargetHound.MVC
             app.UseBlazorFrameworkFiles();
 
             app.UseRouting();
-
+            
             app.UseAuthentication();
             app.UseAuthorization();
 

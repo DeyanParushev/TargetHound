@@ -10,23 +10,23 @@ using TargetHound.Data;
 namespace TargetHound.Data.Migrations
 {
     [DbContext(typeof(TargetHoundContext))]
-    [Migration("20201112110928_InitialCreate")]
+    [Migration("20201116095451_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9")
+                .UseIdentityColumns()
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "5.0.0");
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -50,7 +50,7 @@ namespace TargetHound.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
@@ -150,18 +150,18 @@ namespace TargetHound.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
+                        .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles");
@@ -183,8 +183,8 @@ namespace TargetHound.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -199,12 +199,12 @@ namespace TargetHound.Data.Migrations
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -222,19 +222,19 @@ namespace TargetHound.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ClientId");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
+                        .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers");
@@ -289,8 +289,8 @@ namespace TargetHound.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(40)")
-                        .HasMaxLength(40);
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.HasKey("ClientId");
 
@@ -345,8 +345,8 @@ namespace TargetHound.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<double>("Northing")
                         .HasColumnType("float");
@@ -371,8 +371,8 @@ namespace TargetHound.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(40)")
-                        .HasMaxLength(40);
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.HasKey("Id");
 
@@ -384,12 +384,12 @@ namespace TargetHound.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .UseIdentityColumn();
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(50)")
-                        .HasMaxLength(50);
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
@@ -439,18 +439,18 @@ namespace TargetHound.Data.Migrations
 
                     b.Property<string>("Model")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Number")
                         .IsRequired()
-                        .HasColumnType("nvarchar(20)")
-                        .HasMaxLength(20);
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -473,6 +473,9 @@ namespace TargetHound.Data.Migrations
                     b.Property<int?>("CountryId")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
@@ -481,8 +484,8 @@ namespace TargetHound.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(40)")
-                        .HasMaxLength(40);
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.HasKey("Id");
 
@@ -590,8 +593,8 @@ namespace TargetHound.Data.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(30)")
-                        .HasMaxLength(30);
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<double>("Northing")
                         .HasColumnType("float");
@@ -705,6 +708,8 @@ namespace TargetHound.Data.Migrations
                         .WithMany("Users")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Client");
                 });
 
             modelBuilder.Entity("TargetHound.Models.Borehole", b =>
@@ -727,6 +732,12 @@ namespace TargetHound.Data.Migrations
                         .WithMany("Boreholes")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Collar");
+
+                    b.Navigation("Contractor");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("TargetHound.Models.ClientContractor", b =>
@@ -740,6 +751,10 @@ namespace TargetHound.Data.Migrations
                         .WithMany("ClientContractors")
                         .HasForeignKey("ContractorId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Contractor");
                 });
 
             modelBuilder.Entity("TargetHound.Models.Collar", b =>
@@ -748,6 +763,8 @@ namespace TargetHound.Data.Migrations
                         .WithMany("Collars")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("TargetHound.Models.Dogleg", b =>
@@ -756,6 +773,8 @@ namespace TargetHound.Data.Migrations
                         .WithMany("Doglegs")
                         .HasForeignKey("BoreholeId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Borehole");
                 });
 
             modelBuilder.Entity("TargetHound.Models.DrillRig", b =>
@@ -764,6 +783,8 @@ namespace TargetHound.Data.Migrations
                         .WithMany("DrillRigs")
                         .HasForeignKey("ContractorId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Contractor");
                 });
 
             modelBuilder.Entity("TargetHound.Models.Project", b =>
@@ -782,6 +803,12 @@ namespace TargetHound.Data.Migrations
                         .WithMany("Projects")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Admin");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("TargetHound.Models.ProjectContractor", b =>
@@ -795,6 +822,10 @@ namespace TargetHound.Data.Migrations
                         .WithMany("ProjectContractors")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Contractor");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("TargetHound.Models.SurveyPoint", b =>
@@ -807,6 +838,8 @@ namespace TargetHound.Data.Migrations
                     b.HasOne("TargetHound.Models.Borehole", null)
                         .WithMany("SurveyPoints")
                         .HasForeignKey("BoreholeId1");
+
+                    b.Navigation("Borehole");
                 });
 
             modelBuilder.Entity("TargetHound.Models.Target", b =>
@@ -820,6 +853,10 @@ namespace TargetHound.Data.Migrations
                         .WithMany("Targets")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Borehole");
+
+                    b.Navigation("Project");
                 });
 
             modelBuilder.Entity("TargetHound.Models.UserProject", b =>
@@ -833,6 +870,71 @@ namespace TargetHound.Data.Migrations
                         .WithMany("ProjectUsers")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Project");
+                });
+
+            modelBuilder.Entity("TargetHound.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Claims");
+
+                    b.Navigation("Logins");
+
+                    b.Navigation("Roles");
+
+                    b.Navigation("UserProjects");
+                });
+
+            modelBuilder.Entity("TargetHound.Models.Borehole", b =>
+                {
+                    b.Navigation("Doglegs");
+
+                    b.Navigation("SurveyPoints");
+
+                    b.Navigation("Targets");
+                });
+
+            modelBuilder.Entity("TargetHound.Models.Client", b =>
+                {
+                    b.Navigation("ClientContractors");
+
+                    b.Navigation("Projects");
+
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("TargetHound.Models.Collar", b =>
+                {
+                    b.Navigation("Boreholes");
+                });
+
+            modelBuilder.Entity("TargetHound.Models.Contractor", b =>
+                {
+                    b.Navigation("Boreholes");
+
+                    b.Navigation("ClientContractors");
+
+                    b.Navigation("DrillRigs");
+                });
+
+            modelBuilder.Entity("TargetHound.Models.Country", b =>
+                {
+                    b.Navigation("Projects");
+                });
+
+            modelBuilder.Entity("TargetHound.Models.Project", b =>
+                {
+                    b.Navigation("Boreholes");
+
+                    b.Navigation("Collars");
+
+                    b.Navigation("ProjectContractors");
+
+                    b.Navigation("ProjectUsers");
+
+                    b.Navigation("Targets");
                 });
 #pragma warning restore 612, 618
         }

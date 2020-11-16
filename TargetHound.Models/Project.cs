@@ -31,6 +31,8 @@
 
         public virtual Country Country { get; set; }
 
+        public DateTime CreatedOn { get; set; }
+
         public virtual ICollection<ProjectContractor> ProjectContractors { get; set; }
 
         public virtual ICollection<Borehole> Boreholes { get; set; }
