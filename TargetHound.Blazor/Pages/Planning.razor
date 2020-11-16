@@ -1,6 +1,9 @@
 ﻿@page "/Planning"
 <h3>Planning</h3>
+<p>@project.Name</p>
+<p>@project.Country</p>
 
 @code {
-
+    [Parameter]
+    ProjectViewModel project { get; set; }
 }

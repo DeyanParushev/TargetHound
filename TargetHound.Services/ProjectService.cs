@@ -18,7 +18,7 @@
             this.dbContext = dbContext;
         }
 
-        public async Task CreateAsyc(string userId, string projectName, double magneticDeclination, int countyId)
+        public async Task CreateAsync(string userId, string projectName, double magneticDeclination, int countryId)
         {
             var user = this.dbContext.ApplicationUsers.
                 FirstOrDefault(x => x.Id == userId);
@@ -38,7 +38,7 @@
                 Name = projectName,
                 AdminId = userId,
                 MagneticDeclination = magneticDeclination,
-                CountryId = countyId,
+                CountryId = countryId,
             };
 
             this.dbContext.Projects.Add(project);

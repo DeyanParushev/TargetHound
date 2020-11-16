@@ -5,7 +5,7 @@
 
     public interface IProjectService
     {
-        public async Task CreateAsync(string userId, string projectName, double magneticDeclination, int countryId) { }
+        public Task CreateAsync(string userId, string projectName, double magneticDeclination, int countryId);
 
         public ICollection<T> GetProjectsByUserId<T>(string userId);
     }

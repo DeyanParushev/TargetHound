@@ -1,6 +1,7 @@
 ﻿namespace TargetHound.MVC.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
+    using System.Linq;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -47,16 +48,20 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(ProjectInputModel input)
+        public async Task<IActionResult> Create(ProjectCountryInputModel input)
         {
+            ProjectInputModel project = input.Project;
             string userId = this.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             if (userId != null)
             {
-                await this.projectService.CreateAsync(userId, input.Name, input.MagneticDeclination, input.CountryId);
+                await this.projectService.CreateAsync(userId, project.Name, project.MagneticDeclination, project.CountryId);
             }
 
-            return this.Redirect("/Planning");
+            string countryName = input.Cuntries.FirstOrDefault(x => x.Id == project.CountryId).Name;
+            ProjectViewModel projectView = new ProjectViewModel { Name = project.Name, CountryName = countryName };
+
+            return this.RedirectToAction("/Planning", projectView);
         }
     }
 }

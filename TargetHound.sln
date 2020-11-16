@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TargetHound.Models", "TargetHound.Models\TargetHound.Models.csproj", "{AA3F8EDF-7DA6-4887-8A7D-F98CC752913B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TargetHound.DataModels", "TargetHound.Models\TargetHound.DataModels.csproj", "{AA3F8EDF-7DA6-4887-8A7D-F98CC752913B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TargetHound.Data", "TargetHound.Data\TargetHound.Data.csproj", "{95E69472-5F6B-4083-A648-AE875AD1AC2D}"
 EndProject
@@ -18,9 +18,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TargetHound.Calculations.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TargetHound.MVC", "TargetHound.MVC\TargetHound.MVC.csproj", "{37E36E65-916C-4837-B83A-2710F59254FE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TargetHound.BlazorApp", "TargetHound.BlazorApp\TargetHound.BlazorApp.csproj", "{68183F2C-DBB6-4B24-BFD7-319AE18614C1}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetHound.Blazor", "TargetHound.Blazor\TargetHound.Blazor.csproj", "{3981541E-C2AC-4513-8445-4EAA80E508E5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TargetHound.Blazor", "TargetHound.Blazor\TargetHound.Blazor.csproj", "{3981541E-C2AC-4513-8445-4EAA80E508E5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -52,10 +50,6 @@ Global
 		{37E36E65-916C-4837-B83A-2710F59254FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{37E36E65-916C-4837-B83A-2710F59254FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{37E36E65-916C-4837-B83A-2710F59254FE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{68183F2C-DBB6-4B24-BFD7-319AE18614C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{68183F2C-DBB6-4B24-BFD7-319AE18614C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{68183F2C-DBB6-4B24-BFD7-319AE18614C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{68183F2C-DBB6-4B24-BFD7-319AE18614C1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3981541E-C2AC-4513-8445-4EAA80E508E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3981541E-C2AC-4513-8445-4EAA80E508E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3981541E-C2AC-4513-8445-4EAA80E508E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
