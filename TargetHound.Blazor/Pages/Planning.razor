@@ -1,9 +1,10 @@
 ﻿@page "/Planning"
+@using TargetHound.ViewModels.ViewModels
 <h3>Planning</h3>
 <p>@project.Name</p>
-<p>@project.Country</p>
+<p>@project.CountryName</p>
 
 @code {
     [Parameter]
-    ProjectViewModel project { get; set; }
+    public ProjectViewModel project { get; set; }
 }

@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TargetHound.Services\TargetHound.Services.csproj" />
+    <ProjectReference Include="..\TargetHound.ViewModels\TargetHound.SharedViewModels.csproj" />
   </ItemGroup>
 
 </Project>
