@@ -16,7 +16,7 @@
             this.dbContext = dbContext;
         }
 
-        public ICollection<T> GetAllCountriesAsync<T>()
+        public async Task<ICollection<T>> GetAllCountriesAsync<T>()
         {
             var countries = this.dbContext
                 .Countries

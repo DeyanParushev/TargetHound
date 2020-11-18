@@ -9,14 +9,17 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table class="table table-responsive-md table-active col-8 offset-2 text-center">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Name
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CountryName)
+                Country
+            </th>
+            <th>
+                Admin
             </th>
             <th></th>
         </tr>
@@ -25,15 +28,24 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Name)
+                <p>@item.Name</p>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CountryName)
+                <p>@item.CountryName</p>
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                <p><a href="/Email/Send">@item.AdminName</a></p>
+            </td>
+            <td>
+                <a class="btn btn-primary" href="/Planning?projectId=@item.Id">Load</a>
+               
+                <button class="btn btn-secondary" asp-action="Details">Details</button>
+                <button class="btn btn-secondary" asp-action="Edit">Edit</button>
+
+                @*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Load", "Load", new { item.Id }) |
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
             </td>
         </tr>
 }

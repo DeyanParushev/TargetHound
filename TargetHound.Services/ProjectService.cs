@@ -65,5 +65,26 @@
 
             return project;
         }
+
+        public async Task<string> GetProjectAdminName(string projectId)
+        {
+            string adminId = this.dbContext.UsersProjects.SingleOrDefault(x => x.ProjectId == projectId && x.IsAdmin == true).ApplicationUserId;
+
+            if (adminId == null)
+            {
+                return null;
+            }
+
+            string adminName = this.dbContext.ApplicationUsers.SingleOrDefault(x => x.Id == adminId).UserName;
+            return adminName;
+        }
+
+        public async Task<T> GetProjectById<T>(string projectId)
+        {
+            return this.dbContext.Projects
+                .Where(x => x.Id == projectId)
+                .To<T>()
+                .FirstOrDefault();
+        }
     }
 }

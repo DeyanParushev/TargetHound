@@ -13,6 +13,7 @@ namespace TargetHound.InputModels
         [Display(Name = "Magnetic Declination")]
         public double MagneticDeclination { get; set; }
 
+        [Range(1, 220)]
         public int CountryId { get; set; }
     }
 }

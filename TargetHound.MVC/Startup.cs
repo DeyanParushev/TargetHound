@@ -7,7 +7,6 @@ namespace TargetHound.MVC
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using System.Reflection;
-
     using TargetHound.Services;
     using TargetHound.Services.Interfaces;
     using TargetHound.Data;
@@ -15,6 +14,8 @@ namespace TargetHound.MVC
     using TargetHound.Services.Automapper;
     using TargetHound.MVC.Models;
     using TargetHound.ViewModels.ViewModels;
+    using Microsoft.AspNetCore.Mvc;
+    using TargetHound.MVC.Settings;
 
     public class Startup
     {
@@ -36,10 +37,15 @@ namespace TargetHound.MVC
                .AddRoles<ApplicationRole>()
                .AddEntityFrameworkStores<TargetHoundContext>();
 
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(configure =>
+            {
+                configure.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            })
+                .AddRazorRuntimeCompilation();
 
             services.AddTransient<IProjectService, ProjectService>();
             services.AddTransient<ICountriesService, CountriesService>();
+            services.AddTransient<IUserService, UserService>();
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
@@ -49,7 +55,7 @@ namespace TargetHound.MVC
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             AutoMapperConfig.RegisterMappings(
-                typeof(ErrorViewModel).GetTypeInfo().Assembly, 
+                typeof(ErrorViewModel).GetTypeInfo().Assembly,
                 typeof(ProjectViewModel).GetTypeInfo().Assembly);
 
             if (env.IsDevelopment())
@@ -68,7 +74,7 @@ namespace TargetHound.MVC
             app.UseBlazorFrameworkFiles();
 
             app.UseRouting();
-            
+
             app.UseAuthentication();
             app.UseAuthorization();
 
