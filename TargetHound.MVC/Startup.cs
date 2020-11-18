@@ -16,6 +16,9 @@ namespace TargetHound.MVC
     using TargetHound.ViewModels.ViewModels;
     using Microsoft.AspNetCore.Mvc;
     using TargetHound.MVC.Settings;
+    using System.Threading.Tasks;
+    using System;
+    using Microsoft.AspNetCore.Identity;
 
     public class Startup
     {
@@ -29,7 +32,6 @@ namespace TargetHound.MVC
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddDbContext<TargetHoundContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -49,6 +51,7 @@ namespace TargetHound.MVC
 
             services.AddRazorPages();
             services.AddServerSideBlazor();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,5 +91,7 @@ namespace TargetHound.MVC
                 endpoints.MapFallbackToFile("index.html");
             });
         }
+
+       
     }
 }
