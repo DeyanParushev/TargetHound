@@ -48,6 +48,7 @@ namespace TargetHound.MVC
             services.AddTransient<IProjectService, ProjectService>();
             services.AddTransient<ICountriesService, CountriesService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IClientService, ClientService>();
 
             services.AddRazorPages();
             services.AddServerSideBlazor();

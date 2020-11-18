@@ -1,6 +1,5 @@
 ﻿namespace TargetHound.MVC.Areas.Identity.Pages.Account
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
@@ -15,29 +14,37 @@
     using Microsoft.AspNetCore.Mvc.RazorPages;
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.Logging;
+    using TargetHound.Data;
     using TargetHound.Models;
+    using TargetHound.Services.Interfaces;
 
     [AllowAnonymous]
     public class RegisterModel : PageModel
     {
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly RoleManager<ApplicationRole> _roleManager;
+        private readonly TargetHoundContext dbContext;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly IClientService clientService;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             RoleManager<ApplicationRole> roleManager,
+            TargetHoundContext dbContext,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IClientService clientService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _roleManager = roleManager;
+            this.dbContext = dbContext;
             _logger = logger;
             _emailSender = emailSender;
+            this.clientService = clientService;
         }
 
         [BindProperty]
@@ -70,6 +77,9 @@
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Display(Name = "Company name")]
+            public string Company { get; set; } = "None";
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -94,9 +104,20 @@
                 var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 await _userManager.AddToRoleAsync(user, "User");
+
+                if(Input.Company != "None" && !string.IsNullOrWhiteSpace(Input.Company)) 
+                {
+                    if(!this.dbContext.Clients.Any(x => x.Name.ToLower() == Input.Company))
+                    {
+                        await this.clientService.CreateClientAsync(Input.Company, user.Id);
+                        await _userManager.AddToRoleAsync(user, "Client Admin");
+                    }
+                }
+
                 if (result.Succeeded)
                 {
                     return await this.Login(user, result, returnUrl);
+                    
                 }
                 foreach (var error in result.Errors)
                 {
@@ -108,6 +129,7 @@
             return Page();
         }
 
+        // TODO: extract user roles into enum for code quality
         private async Task<IActionResult> Login(ApplicationUser user, IdentityResult result, string returnUrl)
         {
             _logger.LogInformation("User created a new account with password.");
