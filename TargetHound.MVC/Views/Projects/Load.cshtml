@@ -1,0 +1,63 @@
+﻿@model IEnumerable<TargetHound.ViewModels.ViewModels.ProjectViewModel>
+
+@{
+    ViewData["Title"] = "Load";
+}
+
+<h1>Load</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-secondary table-hover table-responsive-md table-active col-8 offset-2 text-center">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Country
+            </th>
+            <th>
+                Admin
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <p>@item.Name</p>
+                </td>
+                <td>
+                    <p>@item.CountryName</p>
+                </td>
+                <td>
+                    <p><a href="/Email/Send">@item.AdminName</a></p>
+                </td>
+                <td class="d-flex flex-row">
+                    <form method="post" asp-controller="Projects" asp-action="LoadProject">
+                        <input type="hidden" name="projectId" value="@item.Id" />
+                        <button type="submit" class="btn btn-sm btn-primary mr-2">Load</button>
+                    </form>
+
+                    @if (item.IsCurrentUserAdmin)
+                    {
+                        <form method="post" asp-controller="Projects" asp-action="Edit">
+                            <input type="hidden" name="projectId" value="@item.Id" />
+                            <button type="submit"  class="btn btn-sm btn-primary mr-2">Edit</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <button class="btn btn-sm btn-outline-primary disabled mr-2" asp-route-projectId="@item.Id" asp-controller="Project" asp-action="Edit">Edit</button>
+                    }
+
+                    <button class="btn btn-sm btn-info mr-2" asp-action="Details">Details</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

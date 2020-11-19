@@ -54,7 +54,7 @@
             await this.dbContext.SaveChangesAsync();
         }
 
-        public ICollection<T> GetProjectsByUserId<T>(string userId)
+        public async Task<ICollection<T>> GetProjectsByUserId<T>(string userId)
         {
             var project = this.dbContext
                 .UsersProjects
@@ -85,6 +85,12 @@
                 .Where(x => x.Id == projectId)
                 .To<T>()
                 .FirstOrDefault();
+        }
+
+        public async Task<bool> IsUserIdSameWithProjectAdminId(string userId, string projectId)
+        {
+            bool userIsProjectAdmin = this.dbContext.Projects.SingleOrDefault(x => x.Id == projectId)?.AdminId == userId;
+            return userIsProjectAdmin;
         }
     }
 }

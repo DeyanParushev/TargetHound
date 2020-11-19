@@ -21,6 +21,8 @@
         public string Name { get; set; }
 
         public string CountryName { get; set; }
+     
+        public bool IsCurrentUserAdmin { get; set; }
 
         public string AdminName { get; set; }
 

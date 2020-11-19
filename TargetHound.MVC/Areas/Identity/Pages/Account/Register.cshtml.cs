@@ -1,5 +1,6 @@
 ﻿namespace TargetHound.MVC.Areas.Identity.Pages.Account
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
@@ -93,31 +94,37 @@
             returnUrl = returnUrl ?? Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-
             if (ModelState.IsValid)
             {
-                if (_userManager.Users.Count() <= 0)
+                var user = new ApplicationUser { UserName = Input.Username, Email = Input.Email };
+
+                if (_roleManager.Roles.Count() <= 0)
                 {
-                    await this.CreateRoles(Input.Username, Input.Password, Input.Email);
+                    await this.CreateRoles();
                 }
 
-                var user = new ApplicationUser { UserName = Input.Email, Email = Input.Email };
                 var result = await _userManager.CreateAsync(user, Input.Password);
-                await _userManager.AddToRoleAsync(user, "User");
+                await _userManager.AddToRoleAsync(user, SiteIdentityRoles.User.ToString());
 
-                if(Input.Company != "None" && !string.IsNullOrWhiteSpace(Input.Company)) 
+                ICollection<ApplicationUser> admins = await _userManager.GetUsersInRoleAsync(SiteIdentityRoles.SiteAdmin.ToString());
+                if(admins.Count == 0)
                 {
-                    if(!this.dbContext.Clients.Any(x => x.Name.ToLower() == Input.Company))
+                    await _userManager.AddToRoleAsync(user, SiteIdentityRoles.SiteAdmin.ToString());
+                }
+
+                if (Input.Company != "None" && !string.IsNullOrWhiteSpace(Input.Company))
+                {
+                    if (!this.dbContext.Clients.Any(x => x.Name.ToLower() == Input.Company))
                     {
                         await this.clientService.CreateClientAsync(Input.Company, user.Id);
-                        await _userManager.AddToRoleAsync(user, "Client Admin");
+                        await _userManager.AddToRoleAsync(user, SiteIdentityRoles.ClientAdmin.ToString());
                     }
                 }
 
                 if (result.Succeeded)
                 {
                     return await this.Login(user, result, returnUrl);
-                    
+
                 }
                 foreach (var error in result.Errors)
                 {
@@ -156,36 +163,17 @@
             }
         }
 
-        private async Task CreateRoles(string userName, string password, string email)
+        private async Task CreateRoles()
         {
-            string[] roleNames = { "Site Admin", "Client Admin", "Project Admin", "User" };
             IdentityResult roleResult;
+            var siteRoles = Enum.GetValues(typeof(SiteIdentityRoles));
 
-            foreach (string roleName in roleNames)
+            foreach (SiteIdentityRoles role in siteRoles)
             {
-                bool roleExist = await _roleManager.RoleExistsAsync(roleName);
+                bool roleExist = await _roleManager.RoleExistsAsync(role.ToString());
                 if (!roleExist)
                 {
-                    roleResult = await _roleManager.CreateAsync(new ApplicationRole(roleName));
-                }
-            }
-
-            ApplicationUser poweruser = new ApplicationUser
-            {
-                UserName = userName,
-                Email = email,
-            };
-
-            string userPWD = password;
-            var _user = await _userManager.FindByEmailAsync(email);
-
-            if (_user == null)
-            {
-                var createPowerUser = await _userManager.CreateAsync(poweruser, userPWD);
-
-                if (createPowerUser.Succeeded)
-                {
-                    await _userManager.AddToRolesAsync(poweruser, roleNames);
+                    roleResult = await _roleManager.CreateAsync(new ApplicationRole(role.ToString()));
                 }
             }
         }
