@@ -1,11 +1,9 @@
-﻿namespace TargetHound.ViewModels.ViewModels
+﻿namespace TargetHound.SharedViewModels.ViewModels
 {
     using System.Collections.Generic;
 
     using TargetHound.Models;
-    using TargetHound.MVC.Models.ViewModels;
     using TargetHound.Services.Automapper;
-    using TargetHound.SharedViewModels.ViewModels;
 
     public class ProjectViewModel : IMapFrom<Project>
     {

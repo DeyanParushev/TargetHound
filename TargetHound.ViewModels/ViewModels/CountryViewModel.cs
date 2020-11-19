@@ -1,4 +1,4 @@
-﻿namespace TargetHound.MVC.Models.ViewModels
+﻿namespace TargetHound.SharedViewModels.ViewModels
 {
     using TargetHound.Models;
     using TargetHound.Services.Automapper;

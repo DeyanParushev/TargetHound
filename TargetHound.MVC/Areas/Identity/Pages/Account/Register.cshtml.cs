@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
+    using System.Reflection;
     using System.Text;
     using System.Text.Encodings.Web;
     using System.Threading.Tasks;
@@ -104,12 +105,12 @@
                 }
 
                 var result = await _userManager.CreateAsync(user, Input.Password);
-                await _userManager.AddToRoleAsync(user, SiteIdentityRoles.User.ToString());
+                await _userManager.AddToRoleAsync(user, SiteIdentityRoles.User);
 
-                ICollection<ApplicationUser> admins = await _userManager.GetUsersInRoleAsync(SiteIdentityRoles.SiteAdmin.ToString());
+                ICollection<ApplicationUser> admins = await _userManager.GetUsersInRoleAsync(SiteIdentityRoles.SiteAdmin);
                 if(admins.Count == 0)
                 {
-                    await _userManager.AddToRoleAsync(user, SiteIdentityRoles.SiteAdmin.ToString());
+                    await _userManager.AddToRoleAsync(user, SiteIdentityRoles.SiteAdmin);
                 }
 
                 if (Input.Company != "None" && !string.IsNullOrWhiteSpace(Input.Company))
@@ -117,7 +118,7 @@
                     if (!this.dbContext.Clients.Any(x => x.Name.ToLower() == Input.Company))
                     {
                         await this.clientService.CreateClientAsync(Input.Company, user.Id);
-                        await _userManager.AddToRoleAsync(user, SiteIdentityRoles.ClientAdmin.ToString());
+                        await _userManager.AddToRoleAsync(user, SiteIdentityRoles.ClientAdmin);
                     }
                 }
 
@@ -165,15 +166,14 @@
 
         private async Task CreateRoles()
         {
-            IdentityResult roleResult;
-            var siteRoles = Enum.GetValues(typeof(SiteIdentityRoles));
+            var siteRoles = typeof(SiteIdentityRoles).GetFields();
 
-            foreach (SiteIdentityRoles role in siteRoles)
+            foreach (FieldInfo role in siteRoles)
             {
-                bool roleExist = await _roleManager.RoleExistsAsync(role.ToString());
+                bool roleExist = await _roleManager.RoleExistsAsync(role.Name);
                 if (!roleExist)
                 {
-                    roleResult = await _roleManager.CreateAsync(new ApplicationRole(role.ToString()));
+                    await _roleManager.CreateAsync(new ApplicationRole(role.Name));
                 }
             }
         }

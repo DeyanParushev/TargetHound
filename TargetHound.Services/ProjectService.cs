@@ -92,5 +92,11 @@
             bool userIsProjectAdmin = this.dbContext.Projects.SingleOrDefault(x => x.Id == projectId)?.AdminId == userId;
             return userIsProjectAdmin;
         }
+
+        public async Task<bool> IsUserInProject(string userId, string projectId)
+        {
+            bool isUserInTheProject = this.dbContext.UsersProjects.Any(x => x.ProjectId == projectId && x.ApplicationUserId == userId);
+            return isUserInTheProject;
+        }
     }
 }

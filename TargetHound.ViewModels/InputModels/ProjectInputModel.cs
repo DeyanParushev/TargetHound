@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace TargetHound.InputModels
+﻿namespace TargetHound.SharedViewModels.InputModels
 {
+    using System.ComponentModel.DataAnnotations;
+
     public class ProjectInputModel
     {
         [MinLength(5, ErrorMessage = "Project name should be between 5 and 40 characters long.")]

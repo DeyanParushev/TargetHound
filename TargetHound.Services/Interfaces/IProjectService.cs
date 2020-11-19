@@ -14,5 +14,7 @@
         public Task<ICollection<T>> GetProjectsByUserId<T>(string userId);
 
         public Task<bool> IsUserIdSameWithProjectAdminId(string userId, string projectId);
+       
+        public Task<bool> IsUserInProject(string userId, string projectId);
     }
 }

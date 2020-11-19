@@ -1,8 +1,7 @@
-﻿namespace TargetHound.MVC.Models.InputModels
+﻿namespace TargetHound.SharedViewModels.InputModels
 {
     using System.Collections.Generic;
-    using TargetHound.InputModels;
-    using TargetHound.MVC.Models.ViewModels;
+    using TargetHound.SharedViewModels.ViewModels;
 
     public class ProjectCountryInputModel
     {

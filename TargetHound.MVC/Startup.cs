@@ -13,7 +13,7 @@ namespace TargetHound.MVC
     using TargetHound.Models;
     using TargetHound.Services.Automapper;
     using TargetHound.MVC.Models;
-    using TargetHound.ViewModels.ViewModels;
+    using TargetHound.SharedViewModels.ViewModels;
     using Microsoft.AspNetCore.Mvc;
     using TargetHound.MVC.Settings;
     using System.Threading.Tasks;

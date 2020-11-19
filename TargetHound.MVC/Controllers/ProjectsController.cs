@@ -7,13 +7,11 @@
     using System.Security.Claims;
     using System.Threading.Tasks;
 
-    using TargetHound.InputModels;
     using TargetHound.Models;
     using TargetHound.MVC.Areas.Identity;
-    using TargetHound.MVC.Models.InputModels;
-    using TargetHound.MVC.Models.ViewModels;
     using TargetHound.Services.Interfaces;
-    using TargetHound.ViewModels.ViewModels;
+    using TargetHound.SharedViewModels.InputModels;
+    using TargetHound.SharedViewModels.ViewModels;
 
     public class ProjectsController : Controller
     {
@@ -52,7 +50,7 @@
         {
             string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
             ICollection<ProjectViewModel> projects = await this.projectService.GetProjectsByUserId<ProjectViewModel>(userId);
-           
+
             foreach (var project in projects)
             {
                 project.AdminName = await this.projectService.GetProjectAdminName(project.Id);
@@ -65,7 +63,14 @@
         [Authorize]
         public async Task<IActionResult> LoadProject(string projectId)
         {
-            return this.Json(await this.projectService.GetProjectById<ProjectViewModel>(projectId));
+            bool userIsInProject = await this.projectService.IsUserInProject(this.userManager.GetUserId(this.User), projectId);
+
+            if (userIsInProject)
+            {
+                return this.Json(await this.projectService.GetProjectById<ProjectViewModel>(projectId));
+            }
+
+            return this.Redirect("/Projects/Load");
         }
 
         [HttpPost]
@@ -78,7 +83,7 @@
             {
                 await this.projectService.CreateAsync(userId, project.Name, project.MagneticDeclination, project.CountryId);
                 ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-                await this.userManager.AddToRoleAsync(user, SiteIdentityRoles.ProjectAdmin.ToString());
+                await this.userManager.AddToRoleAsync(user, SiteIdentityRoles.ProjectAdmin);
             }
 
             CountryViewModel country = await this.countriesService.GetCountryByIdAsync<CountryViewModel>(input.Project.CountryId);
@@ -90,9 +95,11 @@
         [Authorize(Roles = SiteIdentityRoles.ProjectAdmin)]
         public async Task<IActionResult> Edit(string projectId)
         {
-            ProjectViewModel project = await this.projectService.GetProjectById<ProjectViewModel>(projectId);
+            ProjectEditInputModel project = await this.projectService.GetProjectById<ProjectEditInputModel>(projectId);
+            bool isCurrentUserAdmin = 
+                await this.projectService.IsUserIdSameWithProjectAdminId(this.userManager.GetUserId(this.User), project.Id);
 
-            if (!project.IsCurrentUserAdmin)
+            if (!isCurrentUserAdmin)
             {
                 return this.Redirect("/Projects/Load");
             }

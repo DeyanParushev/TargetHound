@@ -1,4 +1,4 @@
-﻿@model TargetHound.Models.Project
+﻿@model TargetHound.SharedViewModels.InputModels.ProjectEditInputModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -24,30 +24,15 @@
                 <input asp-for="MagneticDeclination" class="form-control" />
                 <span asp-validation-for="MagneticDeclination" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CountryId" class="control-label"></label>
+            @*<div class="form-group">
+                <label asp-for="CountryName" class="control-label"></label>
                 <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
                 <span asp-validation-for="CountryId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedOn" class="control-label"></label>
-                <input asp-for="CreatedOn" class="form-control" />
-                <span asp-validation-for="CreatedOn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ClientId" class="control-label"></label>
-                <select asp-for="ClientId" class="form-control" asp-items="ViewBag.ClientId"></select>
-                <span asp-validation-for="ClientId" class="text-danger"></span>
-            </div>
+            </div>*@
             <div class="form-group">
                 <label asp-for="AdminId" class="control-label"></label>
                 <select asp-for="AdminId" class="form-control" asp-items="ViewBag.AdminId"></select>
                 <span asp-validation-for="AdminId" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsDeleted" /> @Html.DisplayNameFor(model => model.IsDeleted)
-                </label>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -57,7 +42,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Projects" asp-action="Load">Back to List</a>
 </div>
 
 @section Scripts {
