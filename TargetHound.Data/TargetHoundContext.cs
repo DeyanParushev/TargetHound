@@ -58,6 +58,11 @@
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
+            modelBuilder.Entity<Client>()
+                .HasOne(x => x.Admin)
+                .WithOne(x => x.Client)
+                .OnDelete(DeleteBehavior.SetNull);
+
             modelBuilder.Entity<Borehole>()
                 .HasMany<SurveyPoint>()
                 .WithOne(x => x.Borehole)

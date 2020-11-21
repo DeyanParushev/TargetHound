@@ -15,10 +15,6 @@ namespace TargetHound.MVC
     using TargetHound.MVC.Models;
     using TargetHound.SharedViewModels.ViewModels;
     using Microsoft.AspNetCore.Mvc;
-    using TargetHound.MVC.Settings;
-    using System.Threading.Tasks;
-    using System;
-    using Microsoft.AspNetCore.Identity;
 
     public class Startup
     {

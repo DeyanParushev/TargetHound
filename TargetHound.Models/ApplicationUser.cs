@@ -20,7 +20,7 @@
 
         public bool IsDeleted { get; set; }
 
-        public ICollection<UserProject> UserProjects { get; set; }
+        public virtual ICollection<UserProject> UserProjects { get; set; }
 
         public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
 
