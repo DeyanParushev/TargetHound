@@ -3,7 +3,7 @@
     using TargetHound.Models;
     using TargetHound.Services.Automapper;
 
-    public class ClientEditInputModel : IMapTo<Client>
+    public class ClientEditInputModel : IMapFrom<Client>
     {
         public string Id { get; set; }
 

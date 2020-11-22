@@ -5,33 +5,35 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1 class="text-center">My Clients</h1>
+<div class="container-fluid d-flex flex-column">
+    <h1 class="text-center my-5">My Clients</h1>
 
-<table class="table table-active col-6 offset-3">
-    <thead>
-        <tr>
-            <td>
-                Client Name
-            </td>
-            <td>
-                Actions
-            </td>
-        </tr>
-    </thead>
-    <tbody class="table-bordered">
-        @foreach (var item in Model.Clients)
-        {
+    <table class="table table-active col-6 offset-3">
+        <thead>
             <tr>
                 <td>
-                    @item.Name
+                    <h4 class="text-center">Client Name</h4>
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <h4 class="text-center">Actions</h4>
                 </td>
             </tr>
-        }
-    </tbody>
-</table>
-
-<a asp-action="Index">Back to List</a>
+        </thead>
+        <tbody class="table-active">
+            @foreach (var item in Model.Clients)
+            {
+                <tr>
+                    <td class="text-center">
+                        @item.Name
+                    </td>
+                    <td class="d-flex justify-content-around">
+                        <a class="btn btn-primary" asp-action="Edit" asp-route-clientId="@item.Id">Edit</a>
+                        <a class="btn btn-primary" asp-action="AddUser" asp-route-clientId="@item.Id">Add User</a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-clientId="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <a class="btn btn-primary col-4 offset-4 my-5" asp-action="Create">Create New</a>
+</div>

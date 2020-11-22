@@ -10,28 +10,28 @@
 </head>
 <body class="">
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-transparent border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm bg-primary border-bottom box-shadow mb-3">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Target Hound</a>
+                <a class="navbar-brand text-white mx-5" asp-area="" asp-controller="Home" asp-action="Index"><h3>Target Hound</h3></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse font-weight-bold">
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
+                        <li class="nav-item mx-1">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item mx-1">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item mx-1">
                             <a class="nav-link text-light" asp-area="" asp-controller="Projects" asp-action="Planning">Planning</a>
                         </li>
                         @if (this.User.IsInRole("ClientAdmin"))
                         {
-                            <li class="nav-item">
+                            <li class="nav-item mx-1">
                                 <a class="nav-link text-light" asp-area="" asp-controller="Clients" asp-action="All">My Clients</a>
                             </li>
                         }

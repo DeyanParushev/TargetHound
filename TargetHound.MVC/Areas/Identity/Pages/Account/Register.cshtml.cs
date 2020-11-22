@@ -108,7 +108,7 @@
                 await _userManager.AddToRoleAsync(user, SiteIdentityRoles.User);
 
                 ICollection<ApplicationUser> siteAdmins = await _userManager.GetUsersInRoleAsync(SiteIdentityRoles.SiteAdmin);
-                if(siteAdmins.Count == 0)
+                if (siteAdmins.Count == 0)
                 {
                     await _userManager.AddToRoleAsync(user, SiteIdentityRoles.SiteAdmin);
                 }
@@ -119,8 +119,9 @@
                     {
                         await this.clientService.CreateClientAsync(Input.Company, user.Id);
                         await _userManager.AddToRoleAsync(user, SiteIdentityRoles.ClientAdmin);
-                        user.ClientId = this.dbContext.Clients.FirstOrDefault(x => x.Name == Input.Company)?.Id;
                     }
+
+                    user.ClientId = this.dbContext.Clients.FirstOrDefault(x => x.Name == Input.Company)?.Id;
                 }
 
                 if (result.Succeeded)
