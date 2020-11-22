@@ -27,6 +27,7 @@ namespace TargetHound.Data.Migrations
                 {
                     ClientId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    AdminId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
@@ -88,6 +89,7 @@ namespace TargetHound.Data.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ClientId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    ClientId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -109,6 +111,12 @@ namespace TargetHound.Data.Migrations
                     table.ForeignKey(
                         name: "FK_AspNetUsers_Clients_ClientId",
                         column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "ClientId",
+                        onDelete: ReferentialAction.SetNull);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Clients_ClientId1",
+                        column: x => x.ClientId1,
                         principalTable: "Clients",
                         principalColumn: "ClientId",
                         onDelete: ReferentialAction.Restrict);
@@ -563,7 +571,14 @@ namespace TargetHound.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_ClientId",
                 table: "AspNetUsers",
-                column: "ClientId");
+                column: "ClientId",
+                unique: true,
+                filter: "[ClientId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AspNetUsers_ClientId1",
+                table: "AspNetUsers",
+                column: "ClientId1");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",

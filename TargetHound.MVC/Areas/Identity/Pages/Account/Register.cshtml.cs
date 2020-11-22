@@ -60,7 +60,7 @@
         {
             [Required]
             [MinLength(4)]
-            [MaxLength(15)]
+            [MaxLength(40)]
             [Display(Name = "Username")]
             public string Username { get; set; }
 
@@ -107,8 +107,8 @@
                 var result = await _userManager.CreateAsync(user, Input.Password);
                 await _userManager.AddToRoleAsync(user, SiteIdentityRoles.User);
 
-                ICollection<ApplicationUser> admins = await _userManager.GetUsersInRoleAsync(SiteIdentityRoles.SiteAdmin);
-                if(admins.Count == 0)
+                ICollection<ApplicationUser> siteAdmins = await _userManager.GetUsersInRoleAsync(SiteIdentityRoles.SiteAdmin);
+                if(siteAdmins.Count == 0)
                 {
                     await _userManager.AddToRoleAsync(user, SiteIdentityRoles.SiteAdmin);
                 }

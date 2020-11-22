@@ -10,8 +10,8 @@ using TargetHound.Data;
 namespace TargetHound.Data.Migrations
 {
     [DbContext(typeof(TargetHoundContext))]
-    [Migration("20201121174434_AddClientIdNavigationProperty")]
-    partial class AddClientIdNavigationProperty
+    [Migration("20201121181835_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

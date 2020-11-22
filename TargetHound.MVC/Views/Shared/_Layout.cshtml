@@ -29,6 +29,18 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Projects" asp-action="Planning">Planning</a>
                         </li>
+                        @if (this.User.IsInRole("ClientAdmin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Clients" asp-action="All">My Clients</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item disabled">
+                                <a class="nav-link text-light" asp-area="" asp-controller="Clients" asp-action="All">My Clients</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>
