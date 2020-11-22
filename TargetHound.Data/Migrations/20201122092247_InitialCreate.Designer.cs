@@ -10,7 +10,7 @@ using TargetHound.Data;
 namespace TargetHound.Data.Migrations
 {
     [DbContext(typeof(TargetHoundContext))]
-    [Migration("20201121181835_InitialCreate")]
+    [Migration("20201122092247_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -288,7 +288,7 @@ namespace TargetHound.Data.Migrations
 
             modelBuilder.Entity("TargetHound.Models.Client", b =>
                 {
-                    b.Property<string>("ClientId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AdminId")
@@ -302,7 +302,7 @@ namespace TargetHound.Data.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
-                    b.HasKey("ClientId");
+                    b.HasKey("Id");
 
                     b.ToTable("Clients");
                 });

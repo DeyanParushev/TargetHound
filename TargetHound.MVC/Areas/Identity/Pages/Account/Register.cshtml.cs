@@ -119,6 +119,7 @@
                     {
                         await this.clientService.CreateClientAsync(Input.Company, user.Id);
                         await _userManager.AddToRoleAsync(user, SiteIdentityRoles.ClientAdmin);
+                        user.ClientId = this.dbContext.Clients.FirstOrDefault(x => x.Name == Input.Company)?.Id;
                     }
                 }
 

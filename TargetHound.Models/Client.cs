@@ -9,14 +9,14 @@
     {
         public Client()
         {
-            this.ClientId = Guid.NewGuid().ToString();
+            this.Id = Guid.NewGuid().ToString();
             this.Users = new HashSet<ApplicationUser>();
             this.Projects = new HashSet<Project>();
             this.ClientContractors = new HashSet<ClientContractor>();
         }
 
         [Key]
-        public string ClientId { get; set; }
+        public string Id { get; set; }
 
         [Required]
         [MaxLength(40)]

@@ -31,7 +31,7 @@
         public async Task<string> GetAdminId(string clientId)
         {
             string adminId = this.dbContext.
-                Clients.SingleOrDefault(x => x.ClientId == clientId)?.AdminId;
+                Clients.SingleOrDefault(x => x.Id == clientId)?.AdminId;
 
             return adminId;
         }

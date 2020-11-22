@@ -286,7 +286,7 @@ namespace TargetHound.Data.Migrations
 
             modelBuilder.Entity("TargetHound.Models.Client", b =>
                 {
-                    b.Property<string>("ClientId")
+                    b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("AdminId")
@@ -300,7 +300,7 @@ namespace TargetHound.Data.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
-                    b.HasKey("ClientId");
+                    b.HasKey("Id");
 
                     b.ToTable("Clients");
                 });
