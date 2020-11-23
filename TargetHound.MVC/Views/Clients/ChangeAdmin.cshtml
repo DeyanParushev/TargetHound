@@ -1,0 +1,55 @@
+﻿@model TargetHound.SharedViewModels.ViewModels.ClientEditViewModel
+
+@{
+    ViewData["Title"] = "Target Hound - Change Admin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="text-md-center my-5">Change Admin</h1>
+
+<table class="table table-active table-hover col-10 offset-1 px-0">
+    <thead>
+        <tr>
+            <th>
+                <span class="font-weight-bold">User Name</span>
+            </th>
+            <th>
+                <span class="font-weight-bold">Name</span>
+            </th>
+            <th>
+                <span class="font-weight-bold">Email</span>
+            </th>
+        </tr>
+    </thead>
+    <tbody class="p-0">
+        @foreach (var user in Model.Users)
+        {
+            <tr class="px-0">
+                <td>
+                    @user.UserName
+                </td>
+                <td>
+                    @user.Email
+                </td>
+                <td>
+                    @if (this.User.IsInRole("ClientAdmin"))
+                    {
+                        <form method="post" asp-controller="Clients" asp-action="AsignAdmin">
+                            <input type="hidden" name="userId" value="@user.Id" />
+                            <input type="hidden" name="clientId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-sm btn-primary mr-2">Promote to Admin</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <form method="post" asp-controller="Clients" asp-action="AsignAdmin">
+                            <input type="hidden" name="userId" value="@user.Id" />
+                            <input type="hidden" name="clientId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-sm btn-primary mr-2 disabled">Promote to Admin</button>
+                        </form>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

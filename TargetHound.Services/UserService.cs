@@ -19,5 +19,11 @@
             string userName = this.dbContext.ApplicationUsers.SingleOrDefault(x => x.Id == userId).UserName;
             return userName;
         }
+
+        public async Task<string> GetClientIdByAdminId(string userId)
+        {
+            string clientId = this.dbContext.Clients.SingleOrDefault(x => x.AdminId == userId)?.Id;
+            return clientId;
+        }
     }
 }

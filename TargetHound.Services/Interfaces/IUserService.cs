@@ -4,6 +4,8 @@
 
     public interface IUserService
     {
+        public Task<string> GetClientIdByAdminId(string userId);
+        
         public Task<string> GetUserNameById(string userId);
     }
 }

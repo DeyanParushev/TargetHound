@@ -13,6 +13,16 @@
         
         public Task<ICollection<T>> GetAllClientsByAdminId<T>(string adminId);
        
-        public Task<bool> AsingAdmin(string clientId, string userId);
+        public Task<bool> AsingAdminAsync(string clientId, string userId);
+        
+        public Task<bool> ChangeClientNameAsync(string clientId, string clientName);
+        
+        public Task<ICollection<T>> GetClientUsersAsync<T>(string clientId);
+        
+        public Task<bool> ChangeClientAdmin(string clientId, string newAdminId);
+        
+        public Task<bool> IsUserClientAdmin(string userId, string clientId);
+        
+        public Task<bool> AsignUserToClient(string userId, string clientId);
     }
 }

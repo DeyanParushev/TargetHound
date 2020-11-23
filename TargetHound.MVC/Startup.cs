@@ -47,6 +47,7 @@ namespace TargetHound.MVC
             services.AddTransient<IClientService, ClientService>();
 
             services.AddRazorPages();
+            services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddServerSideBlazor();
 
         }
@@ -62,6 +63,7 @@ namespace TargetHound.MVC
             {
                 app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
+                app.UseMigrationsEndPoint();
             }
             else
             {

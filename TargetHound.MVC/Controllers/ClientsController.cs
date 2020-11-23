@@ -3,7 +3,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using System.Collections.Generic;
     using System.Threading.Tasks;
     using TargetHound.Models;
     using TargetHound.MVC.Areas.Identity;
@@ -14,47 +13,76 @@
     public class ClientsController : Controller
     {
         private readonly IClientService clientService;
+        private readonly IUserService userService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
-        public ClientsController(IClientService clientService, UserManager<ApplicationUser> userManager)
+        public ClientsController(
+            IClientService clientService,
+            IUserService userService,
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             this.clientService = clientService;
+            this.userService = userService;
             this.userManager = userManager;
-        }
-        
-        [Authorize(Roles = SiteIdentityRoles.ClientAdmin)]
-        public async Task<IActionResult> Edit(string clientId)
-        {
-            string userId = this.userManager.GetUserId(this.User);
-            bool userIsClientAdmin =
-                await this.clientService.GetAdminId(clientId) == userId;
-
-            if (!userIsClientAdmin)
-            {
-                return this.View("Error");
-            }
-
-            ClientEditInputModel clientInfo =
-                 await this.clientService.GetClientInfoByAdminId<ClientEditInputModel>(clientId, userId);
-
-            return this.View(clientInfo);
+            this.signInManager = signInManager;
         }
 
         [Authorize]
         public async Task<IActionResult> All()
         {
-            string userId = this.userManager.GetUserId(this.User);
-            ICollection<ClientViewModel> clientsInfo = 
+            var userId = this.userManager.GetUserId(this.User);
+            var clientsInfo =
                 await this.clientService.GetAllClientsByAdminId<ClientViewModel>(userId);
             ClientListModel clientList = new ClientListModel { Clients = clientsInfo };
 
             return this.View(clientList);
         }
 
-        [Authorize] 
+        [Authorize(Roles = SiteIdentityRoles.ClientAdmin)]
+        public async Task<IActionResult> Edit(string clientId)
+        {
+            var userId = this.userManager.GetUserId(this.User);
+            var userIsClientAdmin = await this.clientService.IsUserClientAdmin(userId, clientId);
+
+            if (!userIsClientAdmin)
+            {
+                return this.View("Error");
+            }
+
+            var clientInfo =
+                 await this.clientService.GetClientInfoByAdminId<ClientEditInputModel>(clientId, userId);
+
+            return this.View(clientInfo);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = SiteIdentityRoles.ClientAdmin)]
+        public async Task<IActionResult> Edit(string clientId, string name)
+        {
+            var userId = this.userManager.GetUserId(this.User);
+            var userIsClientAdmin = await this.clientService.IsUserClientAdmin(userId, clientId);
+
+            if (!userIsClientAdmin)
+            {
+                return this.View("Error");
+            }
+
+            var changeIsSuccess = await this.clientService.ChangeClientNameAsync(clientId, name);
+
+            if (!changeIsSuccess)
+            {
+                return this.View("Error");
+            }
+
+            return this.RedirectToAction("All");
+        }
+
+        [Authorize]
         public async Task<IActionResult> Create()
         {
-            ClientCreateInputModel client = new ClientCreateInputModel();
+            var client = new ClientCreateInputModel();
             return this.View(client);
         }
 
@@ -62,10 +90,11 @@
         [Authorize]
         public async Task<IActionResult> Create(ClientCreateInputModel model)
         {
-            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-            string clientId = await this.clientService.CreateClientAsync(model.Name, user.Id);
+            var user = await this.userManager.GetUserAsync(this.User);
+            var clientId = await this.clientService.CreateClientAsync(model.Name, user.Id);
+            await this.clientService.AsignUserToClient(user.Id, clientId);
             await this.userManager.AddToRoleAsync(user, SiteIdentityRoles.ClientAdmin);
-            bool userIsAsigned = await this.clientService.AsingAdmin(clientId, user.Id);
+            var userIsAsigned = await this.clientService.AsingAdminAsync(clientId, user.Id);
 
             if (!userIsAsigned)
             {
@@ -73,6 +102,51 @@
             }
 
             return this.Redirect("/Clients/All");
+        }
+
+        [Authorize(Roles = SiteIdentityRoles.ClientAdmin)]
+        public async Task<IActionResult> ChangeAdmin(string clientId)
+        {
+            var clientUsers = await this.clientService.GetClientUsersAsync<UserViewModel>(clientId);
+            var viewModel = new ClientEditViewModel
+            {
+                Id = clientId,
+                Users = clientUsers,
+            };
+
+            return this.View(viewModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = SiteIdentityRoles.ClientAdmin)]
+        public async Task<IActionResult> AsignAdmin(string userId, string clientId)
+        {
+            var currentUser = await this.userManager.GetUserAsync(this.User);
+            var isAdmin = await this.clientService.IsUserClientAdmin(currentUser.Id, clientId);
+
+            if (!isAdmin)
+            {
+                return this.View("Error");
+            }
+
+            await this.userManager.RemoveFromRoleAsync(currentUser, SiteIdentityRoles.ClientAdmin);
+            bool adminIsChanged = await this.clientService.ChangeClientAdmin(clientId, userId);
+            ApplicationUser newAdmin = await this.userManager.FindByIdAsync(userId);
+
+            if (newAdmin == null)
+            {
+                return this.View("Error");
+            }
+
+            await this.userManager.AddToRoleAsync(newAdmin, SiteIdentityRoles.ClientAdmin);
+
+            if (!adminIsChanged)
+            {
+                return this.View("Error");
+            }
+
+            await this.signInManager.SignOutAsync();
+            return this.Redirect("/Identity/Pages/Account/Login");
         }
     }
 }
