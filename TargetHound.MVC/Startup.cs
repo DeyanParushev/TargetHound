@@ -15,6 +15,8 @@ namespace TargetHound.MVC
     using TargetHound.MVC.Models;
     using TargetHound.SharedViewModels.ViewModels;
     using Microsoft.AspNetCore.Mvc;
+    using TargetHound.Services.Messages;
+    using SendgridEmailInAspNetCore.Services;
 
     public class Startup
     {
@@ -45,6 +47,7 @@ namespace TargetHound.MVC
             services.AddTransient<ICountriesService, CountriesService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IClientService, ClientService>();
+            services.AddTransient<IEmailSender, SendGridEmailSender>();
 
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();

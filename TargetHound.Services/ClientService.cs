@@ -1,5 +1,6 @@
 ﻿namespace TargetHound.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -135,21 +136,30 @@
 
         public async Task<bool> AsignUserToClient(string userId, string clientId)
         {
-            if(this.dbContext.ApplicationUsers.Any(x => x.Id == userId))
-            {
-                return false;
-            }
-
-            if(this.dbContext.Clients.Any(x => x.Id == clientId))
-            {
-                return false;
-            }
+            this.CheckIfUserExists(userId);
+            this.CheckIfClientExists(clientId);
 
             var user = this.dbContext.ApplicationUsers.SingleOrDefault(x => x.Id == userId);
             user.ClientId = clientId;
             await this.dbContext.SaveChangesAsync();
             
             return true;
+        }
+
+        private void CheckIfUserExists(string userId)
+        {
+            if(!this.dbContext.ApplicationUsers.Any(x => x.Id == userId))
+            {
+                throw new ArgumentException("User doesn`t exist.");
+            }
+        }
+
+        private void CheckIfClientExists(string clientId)
+        {
+            if (!this.dbContext.Clients.Any(x => x.Id == clientId))
+            {
+                throw new ArgumentException("Company doesn`t exist.");
+            }
         }
     }
 }

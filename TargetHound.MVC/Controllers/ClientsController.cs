@@ -3,28 +3,31 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using System;
     using System.Threading.Tasks;
+    
     using TargetHound.Models;
     using TargetHound.MVC.Areas.Identity;
     using TargetHound.Services.Interfaces;
     using TargetHound.SharedViewModels.ViewModels;
     using TargetHound.SharedViewModels.InputModels;
+    using TargetHound.Services.Messages;
 
     public class ClientsController : Controller
     {
         private readonly IClientService clientService;
-        private readonly IUserService userService;
+        private readonly IEmailSender emailSender;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
 
         public ClientsController(
             IClientService clientService,
-            IUserService userService,
+            IEmailSender emailSender,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager)
         {
             this.clientService = clientService;
-            this.userService = userService;
+            this.emailSender = emailSender;
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
@@ -147,6 +150,43 @@
 
             await this.signInManager.SignOutAsync();
             return this.Redirect("/Identity/Pages/Account/Login");
+        }
+
+        [Authorize(Roles = SiteIdentityRoles.ClientAdmin)]
+        public async Task<IActionResult> AddUser(string clientId)
+        {
+            var addUserModel = new AddUserModel
+            {
+                Id = clientId,
+            };
+            return this.View(addUserModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = SiteIdentityRoles.ClientAdmin)]
+        public async Task<IActionResult> AddUser(string clientId, string email)
+        {
+            try
+            {
+                var user = await this.userManager.GetUserAsync(this.User);
+                var newUser = await this.userManager.FindByEmailAsync(email);
+
+                if (newUser == null)
+                {
+                    await this.emailSender.SendEmailAsync(user.Email, user.UserName, email, "hi", "Hi from targetHound");
+                }
+                else
+                {
+                    await this.clientService.AsignUserToClient(newUser.Id, clientId);
+                    await this.emailSender.SendEmailAsync(user.Email, user.UserName, email, "hi", "Hi from targetHound");
+                }
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+            }
+
+            return this.View();
         }
     }
 }
