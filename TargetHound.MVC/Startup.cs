@@ -47,7 +47,7 @@ namespace TargetHound.MVC
             services.AddTransient<ICountriesService, CountriesService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IClientService, ClientService>();
-            services.AddTransient<IEmailSender, SendGridEmailSender>();
+            services.AddSingleton<IEmailSender, SendGridEmailSender>();
 
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();

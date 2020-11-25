@@ -1,5 +1,6 @@
 ﻿namespace SendgridEmailInAspNetCore.Services
 {
+    using Microsoft.Extensions.Configuration;
     using SendGrid;
     using SendGrid.Helpers.Mail;
     using System;
@@ -10,8 +11,9 @@
     {
         private readonly SendGridClient client;
 
-        public SendGridEmailSender(string apiKey)
+        public SendGridEmailSender()
         {
+            string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
             this.client = new SendGridClient(apiKey);
         }
 
@@ -24,7 +26,7 @@
 
             var fromAddress = new EmailAddress(sender, fromName);
             var toAddress = new EmailAddress(receiver);
-            var message = MailHelper.CreateSingleEmail(fromAddress, toAddress, subject, null, htmlContent);
+            var message = MailHelper.CreateSingleEmail(fromAddress, toAddress, subject, htmlContent, htmlContent);
             await this.client.SendEmailAsync(message);
         }
     }

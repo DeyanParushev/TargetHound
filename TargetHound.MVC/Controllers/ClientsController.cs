@@ -186,7 +186,7 @@
                 this.ModelState.AddModelError(string.Empty, ex.Message);
             }
 
-            return this.View();
+            return this.Redirect("/Clients/All");
         }
     }
 }
