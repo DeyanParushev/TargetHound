@@ -5,6 +5,12 @@
 
     public interface IEmailSender
     {
-        public Task SendEmailAsync(string sender, string senderName, string receiver, string subject, string messaje);
+        public Task SendEmailAsync(
+            string sender, 
+            string senderName, 
+            string receiver, 
+            string receiverName,
+            string subject, 
+            string message);
     }
 }

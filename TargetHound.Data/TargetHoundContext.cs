@@ -66,12 +66,12 @@
             modelBuilder.Entity<Borehole>()
                 .HasMany<SurveyPoint>()
                 .WithOne(x => x.Borehole)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Collar>()
                 .HasMany<Borehole>()
                 .WithOne(x => x.Collar)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             base.OnModelCreating(modelBuilder);
         }

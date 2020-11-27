@@ -21,8 +21,10 @@
         
         public Task<bool> ChangeClientAdmin(string clientId, string newAdminId);
         
-        public Task<bool> IsUserClientAdmin(string userId, string clientId);
+        public Task<bool> IsUserClientAdminAsync(string userId, string clientId);
         
-        public Task<bool> AsignUserToClient(string userId, string clientId);
+        public Task<bool> AsignUserToClientAsync(string userId, string clientId);
+        
+        public Task SetClientToNullAsync(string userId, string clientId);
     }
 }

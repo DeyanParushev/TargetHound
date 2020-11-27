@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <section class="d-flex flex-column" >
-    <h1 class="text-center my-5">AddUser</h1>
+    <h1 class="text-center my-5">Add User</h1>
 
     <hr />
     <div class="row">
@@ -25,7 +25,7 @@
     </div>
 
     <div class="offset-11">
-        <a class="btn btn-outline-info" asp-action="Edit">Back</a>
+        <a class="btn btn-outline-info" asp-route-clientId="@Model.Id" asp-action="All">Back</a>
     </div>
 </section>
 

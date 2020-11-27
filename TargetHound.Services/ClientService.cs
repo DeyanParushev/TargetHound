@@ -55,14 +55,14 @@
 
         public async Task<bool> AsingAdminAsync(string clientId, string userId)
         {
-            var client = this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId);
+            var client = this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId && x.IsDeleted == false);
             if (!this.dbContext.ApplicationUsers.Any(x => x.Id == userId))
             {
                 return false;
             }
 
             client.AdminId = userId;
-            var user = this.dbContext.ApplicationUsers.SingleOrDefault(x => x.Id == userId);
+            var user = this.dbContext.ApplicationUsers.SingleOrDefault(x => x.Id == userId && x.IsDeleted == false);
             user.ClientId = client.Id;
             await this.dbContext.SaveChangesAsync();
             return true;
@@ -71,7 +71,7 @@
         public async Task<T> GetClientInfoByAdminId<T>(string clientId, string adminId)
         {
             var clientInfo = this.dbContext.Clients
-                .Where(x => x.Id == clientId && x.AdminId == adminId)
+                .Where(x => x.Id == clientId && x.AdminId == adminId && x.IsDeleted == false)
                 .To<T>()
                 .FirstOrDefault();
 
@@ -80,9 +80,9 @@
 
         public async Task<bool> ChangeClientNameAsync(string clientId, string clientName)
         {
-            var client = this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId);
+            var client = this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId && x.IsDeleted == false);
 
-            if(client == null)
+            if (client == null)
             {
                 return false;
             }
@@ -104,24 +104,26 @@
 
         public async Task<bool> ChangeClientAdmin(string clientId, string newAdminId)
         {
-            if(!this.dbContext.Clients.Any(x => x.Id == clientId && x.IsDeleted == false))
+            if (!this.dbContext.Clients.Any(x => x.Id == clientId && x.IsDeleted == false))
             {
                 return false;
             }
 
-            if(!this.dbContext.ApplicationUsers.Any(x => x.Id == newAdminId))
+            if (!this.dbContext.ApplicationUsers.Any(x => x.Id == newAdminId && x.IsDeleted == false))
             {
                 return false;
             }
 
-            this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId).AdminId = newAdminId;
+            this.dbContext.Clients
+                .SingleOrDefault(x => x.Id == clientId && x.IsDeleted == false)
+                .AdminId = newAdminId;
             await this.dbContext.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> IsUserClientAdmin(string userId, string clientId)
+        public async Task<bool> IsUserClientAdminAsync(string userId, string clientId)
         {
-            if(!this.dbContext.ApplicationUsers.Any(x => x.Id == userId))
+            if (!this.dbContext.ApplicationUsers.Any(x => x.Id == userId))
             {
                 return false;
             }
@@ -131,10 +133,12 @@
                 return false;
             }
 
-            return this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId).AdminId == userId;
+            return this.dbContext.Clients
+                .SingleOrDefault(x => x.Id == clientId && x.IsDeleted == false)
+                .AdminId == userId;
         }
 
-        public async Task<bool> AsignUserToClient(string userId, string clientId)
+        public async Task<bool> AsignUserToClientAsync(string userId, string clientId)
         {
             this.CheckIfUserExists(userId);
             this.CheckIfClientExists(clientId);
@@ -142,13 +146,35 @@
             var user = this.dbContext.ApplicationUsers.SingleOrDefault(x => x.Id == userId);
             user.ClientId = clientId;
             await this.dbContext.SaveChangesAsync();
-            
+
             return true;
+        }
+
+        public async Task SetClientToNullAsync(string userId, string clientId)
+        {
+            this.CheckIfUserExists(userId);
+            this.CheckIfClientExists(clientId);
+            var isUserAnAdmin = await this.IsUserClientAdminAsync(userId, clientId);
+
+            if (!isUserAnAdmin)
+            {
+                throw new ApplicationException("You are not admin for this client.");
+            }
+
+            var clientUsers = await this.GetClientUsersAsync<ApplicationUser>(clientId);
+
+            foreach (var user in clientUsers)
+            {
+                user.ClientId = null;
+            }
+
+            this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId).IsDeleted = true;
+            await this.dbContext.SaveChangesAsync();
         }
 
         private void CheckIfUserExists(string userId)
         {
-            if(!this.dbContext.ApplicationUsers.Any(x => x.Id == userId))
+            if (!this.dbContext.ApplicationUsers.Any(x => x.Id == userId))
             {
                 throw new ArgumentException("User doesn`t exist.");
             }

@@ -1,9 +1,10 @@
 ﻿namespace SendgridEmailInAspNetCore.Services
 {
-    using Microsoft.Extensions.Configuration;
     using SendGrid;
+    using SendGrid.Helpers.Errors.Model;
     using SendGrid.Helpers.Mail;
     using System;
+    using System.Net;
     using System.Threading.Tasks;
     using TargetHound.Services.Messages;
 
@@ -17,17 +18,30 @@
             this.client = new SendGridClient(apiKey);
         }
 
-        public async Task SendEmailAsync(string sender, string fromName, string receiver, string subject, string htmlContent)
+        public async Task SendEmailAsync(
+            string sender, 
+            string senderName, 
+            string receiver,
+            string receiverName,
+            string subject, 
+            string htmlContent)
         {
             if (string.IsNullOrWhiteSpace(subject) && string.IsNullOrWhiteSpace(htmlContent))
             {
                 throw new ArgumentException("Subject and message should be provided.");
             }
 
-            var fromAddress = new EmailAddress(sender, fromName);
-            var toAddress = new EmailAddress(receiver);
-            var message = MailHelper.CreateSingleEmail(fromAddress, toAddress, subject, htmlContent, htmlContent);
-            await this.client.SendEmailAsync(message);
+            var from = new EmailAddress(sender, senderName);
+            var to = new EmailAddress(receiver, "Receiver Name");
+            var plainTextContent = "and easy to do anywhere, even with C#";
+            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
+            var response = await this.client.SendEmailAsync(msg);
+
+            if (!response.StatusCode.Equals(HttpStatusCode.Accepted))
+            {
+                throw new ForbiddenException(
+                    "Something went wrong, we couldn`t send the email. We will notify the site admin.");
+            }
         }
     }
 }

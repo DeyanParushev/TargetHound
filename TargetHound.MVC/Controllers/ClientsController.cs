@@ -5,7 +5,7 @@
     using Microsoft.AspNetCore.Mvc;
     using System;
     using System.Threading.Tasks;
-    
+
     using TargetHound.Models;
     using TargetHound.MVC.Areas.Identity;
     using TargetHound.Services.Interfaces;
@@ -47,7 +47,7 @@
         public async Task<IActionResult> Edit(string clientId)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var userIsClientAdmin = await this.clientService.IsUserClientAdmin(userId, clientId);
+            var userIsClientAdmin = await this.clientService.IsUserClientAdminAsync(userId, clientId);
 
             if (!userIsClientAdmin)
             {
@@ -65,7 +65,7 @@
         public async Task<IActionResult> Edit(string clientId, string name)
         {
             var userId = this.userManager.GetUserId(this.User);
-            var userIsClientAdmin = await this.clientService.IsUserClientAdmin(userId, clientId);
+            var userIsClientAdmin = await this.clientService.IsUserClientAdminAsync(userId, clientId);
 
             if (!userIsClientAdmin)
             {
@@ -95,7 +95,7 @@
         {
             var user = await this.userManager.GetUserAsync(this.User);
             var clientId = await this.clientService.CreateClientAsync(model.Name, user.Id);
-            await this.clientService.AsignUserToClient(user.Id, clientId);
+            await this.clientService.AsignUserToClientAsync(user.Id, clientId);
             await this.userManager.AddToRoleAsync(user, SiteIdentityRoles.ClientAdmin);
             var userIsAsigned = await this.clientService.AsingAdminAsync(clientId, user.Id);
 
@@ -125,7 +125,7 @@
         public async Task<IActionResult> AsignAdmin(string userId, string clientId)
         {
             var currentUser = await this.userManager.GetUserAsync(this.User);
-            var isAdmin = await this.clientService.IsUserClientAdmin(currentUser.Id, clientId);
+            var isAdmin = await this.clientService.IsUserClientAdminAsync(currentUser.Id, clientId);
 
             if (!isAdmin)
             {
@@ -170,18 +170,47 @@
             {
                 var user = await this.userManager.GetUserAsync(this.User);
                 var newUser = await this.userManager.FindByEmailAsync(email);
-
+                var receiverEmail = email;
                 if (newUser == null)
                 {
-                    await this.emailSender.SendEmailAsync(user.Email, user.UserName, email, "hi", "Hi from targetHound");
+                    await this.emailSender.SendEmailAsync(
+                        user.Email, 
+                        user.UserName, 
+                        receiverEmail, 
+                        receiverEmail, 
+                        "hi", 
+                        "Hi from targetHound");
                 }
                 else
                 {
-                    await this.clientService.AsignUserToClient(newUser.Id, clientId);
-                    await this.emailSender.SendEmailAsync(user.Email, user.UserName, email, "hi", "Hi from targetHound");
+                    await this.clientService.AsignUserToClientAsync(newUser.Id, clientId);
+                    await this.emailSender.SendEmailAsync(
+                        user.Email, 
+                        user.UserName, 
+                        newUser.Email,
+                        newUser.UserName, 
+                        "hi", 
+                        "Hi from targetHound");
                 }
             }
             catch (Exception ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+            }
+
+            return this.Redirect("/Clients/All");
+        }
+
+        [HttpPost]
+        [Authorize(Roles = SiteIdentityRoles.ClientAdmin)]
+        public async Task<IActionResult> Delete(string clientId)
+        {
+            string userId = this.userManager.GetUserId(this.User);
+            try
+            {
+                await this.clientService.SetClientToNullAsync(userId, clientId);
+            }
+            catch(Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
             }
