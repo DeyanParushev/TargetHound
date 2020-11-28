@@ -17,7 +17,7 @@
     using Microsoft.AspNetCore.WebUtilities;
     using Microsoft.Extensions.Logging;
     using TargetHound.Data;
-    using TargetHound.Models;
+    using TargetHound.DataModels;
     using TargetHound.Services.Interfaces;
 
     [AllowAnonymous]

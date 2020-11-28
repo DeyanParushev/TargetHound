@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using TargetHound.Models;
-    using TargetHound.Models.Interfaces;
+    using TargetHound.DataModels;
+    using TargetHound.DataModels.Interfaces;
 
     public class CurveExtrapolationCalculator
     {

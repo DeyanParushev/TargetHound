@@ -1,6 +1,6 @@
 ﻿namespace TargetHound.SharedViewModels.InputModels
 {
-    using TargetHound.Models;
+    using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
     public class ClientEditInputModel : IMapFrom<Client>

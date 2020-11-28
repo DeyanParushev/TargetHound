@@ -2,9 +2,9 @@
 {
     using NUnit.Framework;
 
-    using TargetHound.Models;
     using TargetHound.Calcualtions;
-    using TargetHound.Models.Interfaces;
+    using TargetHound.DataModels;
+    using TargetHound.DataModels.Interfaces;
 
     public class StraightExtrapolationCalculatorTests
     {

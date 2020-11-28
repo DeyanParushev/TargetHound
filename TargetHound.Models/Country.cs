@@ -1,4 +1,4 @@
-﻿namespace TargetHound.Models
+﻿namespace TargetHound.DataModels
 {
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;

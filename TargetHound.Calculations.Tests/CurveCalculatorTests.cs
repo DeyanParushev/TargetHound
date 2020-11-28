@@ -3,7 +3,7 @@ namespace TargetHound.Calculations.Tests
     using NUnit.Framework;
     using System;
     using TargetHound.Calcualtions;
-    using TargetHound.Models;
+    using TargetHound.DataModels;
 
     public class CurveCalculatorTests
     {

@@ -6,7 +6,7 @@
     using System.Threading.Tasks;
 
     using TargetHound.Data;
-    using TargetHound.Models;
+    using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
     using TargetHound.Services.Interfaces;
 

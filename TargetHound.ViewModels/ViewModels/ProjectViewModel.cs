@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
 
-    using TargetHound.Models;
+    using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
     public class ProjectViewModel : IMapFrom<Project>

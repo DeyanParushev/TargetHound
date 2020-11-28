@@ -1,6 +1,6 @@
 ﻿namespace TargetHound.SharedViewModels.ViewModels
 {
-    using TargetHound.Models;
+    using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
     public class CollarViewModel : IMapFrom<Collar>

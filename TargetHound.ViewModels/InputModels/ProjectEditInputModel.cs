@@ -1,7 +1,7 @@
 ﻿namespace TargetHound.SharedViewModels.InputModels
 {
     using System.ComponentModel.DataAnnotations;
-    using TargetHound.Models;
+    using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
     public class ProjectEditInputModel : IMapFrom<Project>

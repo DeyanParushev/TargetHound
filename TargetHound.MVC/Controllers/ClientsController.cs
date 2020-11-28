@@ -6,7 +6,7 @@
     using System;
     using System.Threading.Tasks;
 
-    using TargetHound.Models;
+    using TargetHound.DataModels;
     using TargetHound.MVC.Areas.Identity;
     using TargetHound.Services.Interfaces;
     using TargetHound.SharedViewModels.ViewModels;
@@ -170,7 +170,11 @@
             {
                 var user = await this.userManager.GetUserAsync(this.User);
                 var newUser = await this.userManager.FindByEmailAsync(email);
+                var clientName = await this.clientService.GetClientNameById(clientId);
+                var linkToJoin = this.Url.Action(
+                    "Join", "Clients", new { clientId = clientId }, this.Request.Scheme);
                 var receiverEmail = email;
+               
                 if (newUser == null)
                 {
                     await this.emailSender.SendEmailAsync(
@@ -178,8 +182,8 @@
                         user.UserName, 
                         receiverEmail, 
                         receiverEmail, 
-                        "hi", 
-                        "Hi from targetHound");
+                        MessageTemplates.InvitationSubject(user.UserName), 
+                        MessageTemplates.ClientInvitation(user.UserName, clientName, linkToJoin));
                 }
                 else
                 {
@@ -189,9 +193,11 @@
                         user.UserName, 
                         newUser.Email,
                         newUser.UserName, 
-                        "hi", 
-                        "Hi from targetHound");
+                        MessageTemplates.InvitationSubject(user.UserName),
+                        MessageTemplates.ClientInvitation(user.UserName, clientName, linkToJoin));
                 }
+
+
             }
             catch (Exception ex)
             {

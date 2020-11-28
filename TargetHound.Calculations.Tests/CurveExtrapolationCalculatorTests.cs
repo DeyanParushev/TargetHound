@@ -1,8 +1,7 @@
 ﻿namespace TargetHound.Calculations.Tests
 {
     using NUnit.Framework;
-    using TargetHound.Calcualtions;
-    using TargetHound.Models;
+    using TargetHound.DataModels;
 
     public class CurveExtrapolationCalculatorTests
     {

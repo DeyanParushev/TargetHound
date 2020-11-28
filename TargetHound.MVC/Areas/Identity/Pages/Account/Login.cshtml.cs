@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
-using TargetHound.Models;
+using TargetHound.DataModels;
 
 namespace TargetHound.MVC.Areas.Identity.Pages.Account
 {

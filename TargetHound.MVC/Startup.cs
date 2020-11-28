@@ -10,7 +10,7 @@ namespace TargetHound.MVC
     using TargetHound.Services;
     using TargetHound.Services.Interfaces;
     using TargetHound.Data;
-    using TargetHound.Models;
+    using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
     using TargetHound.MVC.Models;
     using TargetHound.SharedViewModels.ViewModels;

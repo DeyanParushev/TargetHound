@@ -26,5 +26,7 @@
         public Task<bool> AsignUserToClientAsync(string userId, string clientId);
         
         public Task SetClientToNullAsync(string userId, string clientId);
+        
+        public Task<string> GetClientNameById(string clientId);
     }
 }

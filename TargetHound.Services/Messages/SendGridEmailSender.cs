@@ -23,7 +23,7 @@
             string senderName, 
             string receiver,
             string receiverName,
-            string subject, 
+            string subject,
             string htmlContent)
         {
             if (string.IsNullOrWhiteSpace(subject) && string.IsNullOrWhiteSpace(htmlContent))
@@ -32,8 +32,8 @@
             }
 
             var from = new EmailAddress(sender, senderName);
-            var to = new EmailAddress(receiver, "Receiver Name");
-            var plainTextContent = "and easy to do anywhere, even with C#";
+            var to = new EmailAddress(receiver, receiverName);
+            var plainTextContent = htmlContent;
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await this.client.SendEmailAsync(msg);
 

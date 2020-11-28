@@ -3,7 +3,7 @@
     using NUnit.Framework;
 
     using TargetHound.Calcualtions;
-    using TargetHound.Models;
+    using TargetHound.DataModels;
 
     public class CoordinatesSetterTests
     {

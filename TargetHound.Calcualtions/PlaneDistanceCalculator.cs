@@ -5,8 +5,8 @@
     using System.Threading.Tasks;
     using System.Collections.Generic;
    
-    using TargetHound.Models;
-    using TargetHound.Models.Interfaces;
+    using TargetHound.DataModels;
+    using TargetHound.DataModels.Interfaces;
 
     public class PlaneDistanceCalculator
     {

@@ -1,10 +1,10 @@
-﻿namespace TargetHound.Models
+﻿namespace TargetHound.DataModels
 {
     using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    using TargetHound.Models.Interfaces;
+    using TargetHound.DataModels.Interfaces;
 
     public class Target : IPoint
     {

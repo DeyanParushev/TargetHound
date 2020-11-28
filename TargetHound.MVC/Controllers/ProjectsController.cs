@@ -7,7 +7,7 @@
     using System.Security.Claims;
     using System.Threading.Tasks;
 
-    using TargetHound.Models;
+    using TargetHound.DataModels;
     using TargetHound.MVC.Areas.Identity;
     using TargetHound.Services.Interfaces;
     using TargetHound.SharedViewModels.InputModels;

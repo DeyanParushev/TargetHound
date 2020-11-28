@@ -5,7 +5,7 @@
     using System.Linq;
     using System.Threading.Tasks;
     using TargetHound.Data;
-    using TargetHound.Models;
+    using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
     using TargetHound.Services.Interfaces;
 
@@ -170,6 +170,12 @@
 
             this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId).IsDeleted = true;
             await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task<string> GetClientNameById(string clientId)
+        {
+            this.CheckIfClientExists(clientId);
+            return this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId).Name;
         }
 
         private void CheckIfUserExists(string userId)

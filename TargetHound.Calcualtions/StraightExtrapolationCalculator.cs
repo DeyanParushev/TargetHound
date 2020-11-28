@@ -2,7 +2,7 @@
 {
     using System;
 
-    using TargetHound.Models.Interfaces;
+    using TargetHound.DataModels.Interfaces;
 
     public class StraightExtrapolationCalculator
     {

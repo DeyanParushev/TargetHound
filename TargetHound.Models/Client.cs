@@ -1,4 +1,4 @@
-﻿namespace TargetHound.Models
+﻿namespace TargetHound.DataModels
 {
     using System;
     using System.Collections.Generic;
@@ -32,6 +32,8 @@
         public virtual ICollection<Project> Projects { get; set; }
 
         public virtual ICollection<ClientContractor> ClientContractors { get; set; }
+
+        public virtual ICollection<ClientInvitation> ClientInvitations { get; set; }
 
         public bool IsDeleted { get; set; }
     }

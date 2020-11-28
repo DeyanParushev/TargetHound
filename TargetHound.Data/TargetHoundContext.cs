@@ -1,12 +1,10 @@
 ﻿namespace TargetHound.Data
 {
-    using System;
     using System.Linq;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     
-    using TargetHound.Models;
+    using TargetHound.DataModels;
 
     public class TargetHoundContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
     {
@@ -46,6 +44,8 @@
         public DbSet<Dogleg> Doglegs { get; set; }
 
         public DbSet<UserProject> UsersProjects { get; set; }
+       
+        public DbSet<ClientInvitation> ClientInvitations { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

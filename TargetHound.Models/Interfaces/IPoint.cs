@@ -1,4 +1,4 @@
-﻿namespace TargetHound.Models.Interfaces
+﻿namespace TargetHound.DataModels.Interfaces
 {
     public interface IPoint
     {

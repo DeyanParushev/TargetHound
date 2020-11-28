@@ -1,8 +1,8 @@
 ﻿namespace TargetHound.Calcualtions
 {
     using System;
-    using TargetHound.Models;
-    using TargetHound.Models.Interfaces;
+    using TargetHound.DataModels;
+    using TargetHound.DataModels.Interfaces;
 
     public class CurveCalculator
     {
