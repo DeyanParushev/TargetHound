@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - TargetHound.MVC</title>
+    <title>@ViewData["Title"] - Target Hound</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link href="~/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/site.css" />
@@ -21,26 +21,14 @@
                     <partial name="_LoginPartial" />
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item mx-1">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Projects" asp-action="Planning">My Projects</a>
+                        </li>
+                        <li class="nav-item mx-1">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Clients" asp-action="All">My Clients</a>
                         </li>
                         <li class="nav-item mx-1">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
-                        <li class="nav-item mx-1">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Projects" asp-action="Planning">Planning</a>
-                        </li>
-                        @if (this.User.IsInRole("ClientAdmin"))
-                        {
-                            <li class="nav-item mx-1">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Clients" asp-action="All">My Clients</a>
-                            </li>
-                        }
-                        else
-                        {
-                            <li class="nav-item disabled">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Clients" asp-action="All">My Clients</a>
-                            </li>
-                        }
                     </ul>
                 </div>
             </div>

@@ -123,6 +123,26 @@ namespace TargetHound.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ClientInvitations",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClientId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IsAccepted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClientInvitations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ClientInvitations_Clients_ClientId",
+                        column: x => x.ClientId,
+                        principalTable: "Clients",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ClientsContractors",
                 columns: table => new
                 {
@@ -411,7 +431,7 @@ namespace TargetHound.Data.Migrations
                         column: x => x.CollarId,
                         principalTable: "Collars",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_Boreholes_Collars_CollarId1",
                         column: x => x.CollarId1,
@@ -479,7 +499,7 @@ namespace TargetHound.Data.Migrations
                         column: x => x.BoreholeId,
                         principalTable: "Boreholes",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                     table.ForeignKey(
                         name: "FK_SurveyPoints_Boreholes_BoreholeId1",
                         column: x => x.BoreholeId1,
@@ -608,6 +628,11 @@ namespace TargetHound.Data.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClientInvitations_ClientId",
+                table: "ClientInvitations",
+                column: "ClientId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ClientsContractors_CientId",
                 table: "ClientsContractors",
                 column: "CientId");
@@ -706,6 +731,9 @@ namespace TargetHound.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "ClientInvitations");
 
             migrationBuilder.DropTable(
                 name: "ClientsContractors");

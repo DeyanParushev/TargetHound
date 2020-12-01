@@ -1,48 +1,55 @@
 ﻿@model TargetHound.SharedViewModels.InputModels.ProjectEditInputModel
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Target Hound - Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1 class="text-center my-5">Edit Project</h1>
 
-<h4>Project</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MagneticDeclination" class="control-label"></label>
-                <input asp-for="MagneticDeclination" class="form-control" />
-                <span asp-validation-for="MagneticDeclination" class="text-danger"></span>
-            </div>
-            @*<div class="form-group">
-                    <label asp-for="CountryName" class="control-label"></label>
-                    <select asp-for="CountryId" class="form-control" asp-items="ViewBag.CountryId"></select>
-                    <span asp-validation-for="CountryId" class="text-danger"></span>
-                </div>*@
-            <div class="form-group">
-                <label asp-for="AdminId" class="control-label"></label>
-                <select asp-for="AdminId" class="form-control" asp-items="ViewBag.AdminId"></select>
-                <span asp-validation-for="AdminId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+<div class="flex-row col-md-4 offset-md-4 my-4">
+    <form class="" asp-action="Edit">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label asp-for="Name" class="control-label"></label>
+            <input asp-for="Name" class="form-control" />
+            <span asp-validation-for="Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="MagneticDeclination" class="control-label"></label>
+            <input asp-for="MagneticDeclination" class="form-control" />
+            <span asp-validation-for="MagneticDeclination" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <select asp-for="@Model.Countries">
+                @foreach (var country in Model.Countries)
+                {
+                    if (country.Id == Model.CountryId)
+                    {
+                        <option selected="selected" value="@country.Id">@country.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@country.Id">@country.Name</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label asp-for="AdminId" class="control-label"></label>
+            <select asp-for="AdminId" class="form-control" asp-items="ViewBag.AdminId"></select>
+            <span asp-validation-for="AdminId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
 </div>
 
 <div>
-    <a asp-controller="Projects" asp-action="Load">Back to List</a>
+    <a class="btn btn-outline-info offset-10" asp-controller="Projects" asp-action="Load">Back to List</a>
 </div>
 
 @section Scripts {

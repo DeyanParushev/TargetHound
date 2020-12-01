@@ -95,7 +95,10 @@
         [Authorize(Roles = SiteIdentityRoles.ProjectAdmin)]
         public async Task<IActionResult> Edit(string projectId)
         {
-            ProjectEditInputModel project = await this.projectService.GetProjectById<ProjectEditInputModel>(projectId);
+            var project = await this.projectService.GetProjectById<ProjectEditInputModel>(projectId);
+            var countries = await this.countriesService.GetAllCountriesAsync<CountryViewModel>();
+            project.Countries = countries;
+           
             bool isCurrentUserAdmin = 
                 await this.projectService.IsUserIdSameWithProjectAdminId(this.userManager.GetUserId(this.User), project.Id);
 

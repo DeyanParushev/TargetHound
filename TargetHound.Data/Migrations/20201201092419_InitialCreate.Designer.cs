@@ -10,7 +10,7 @@ using TargetHound.Data;
 namespace TargetHound.Data.Migrations
 {
     [DbContext(typeof(TargetHoundContext))]
-    [Migration("20201124093323_InitialCreate")]
+    [Migration("20201201092419_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -140,7 +140,7 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.ApplicationRole", b =>
+            modelBuilder.Entity("TargetHound.DataModels.ApplicationRole", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -167,7 +167,7 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("AspNetRoles");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.ApplicationUser", b =>
+            modelBuilder.Entity("TargetHound.DataModels.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -247,7 +247,7 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Borehole", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Borehole", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -286,7 +286,7 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("Boreholes");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Client", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Client", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -307,7 +307,7 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("Clients");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.ClientContractor", b =>
+            modelBuilder.Entity("TargetHound.DataModels.ClientContractor", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -330,7 +330,28 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("ClientsContractors");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Collar", b =>
+            modelBuilder.Entity("TargetHound.DataModels.ClientInvitation", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ClientId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.ToTable("ClientInvitations");
+                });
+
+            modelBuilder.Entity("TargetHound.DataModels.Collar", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -371,7 +392,7 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("Collars");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Contractor", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Contractor", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -389,7 +410,7 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("Contractors");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Country", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Country", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -406,7 +427,7 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("Countries");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Dogleg", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Dogleg", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -436,7 +457,7 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("Doglegs");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.DrillRig", b =>
+            modelBuilder.Entity("TargetHound.DataModels.DrillRig", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -469,7 +490,7 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("DrillRigs");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Project", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Project", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -508,7 +529,7 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.ProjectContractor", b =>
+            modelBuilder.Entity("TargetHound.DataModels.ProjectContractor", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -531,7 +552,7 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("ProjectsContractors");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.SurveyPoint", b =>
+            modelBuilder.Entity("TargetHound.DataModels.SurveyPoint", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -575,7 +596,7 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("SurveyPoints");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Target", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Target", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -623,7 +644,7 @@ namespace TargetHound.Data.Migrations
                     b.ToTable("Targets");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.UserProject", b =>
+            modelBuilder.Entity("TargetHound.DataModels.UserProject", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -648,7 +669,7 @@ namespace TargetHound.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
-                    b.HasOne("TargetHound.Models.ApplicationRole", null)
+                    b.HasOne("TargetHound.DataModels.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -657,12 +678,12 @@ namespace TargetHound.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("TargetHound.Models.ApplicationUser", null)
+                    b.HasOne("TargetHound.DataModels.ApplicationUser", null)
                         .WithMany("Claims")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TargetHound.Models.ApplicationUser", null)
+                    b.HasOne("TargetHound.DataModels.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -671,12 +692,12 @@ namespace TargetHound.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("TargetHound.Models.ApplicationUser", null)
+                    b.HasOne("TargetHound.DataModels.ApplicationUser", null)
                         .WithMany("Logins")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TargetHound.Models.ApplicationUser", null)
+                    b.HasOne("TargetHound.DataModels.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -685,18 +706,18 @@ namespace TargetHound.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
                 {
-                    b.HasOne("TargetHound.Models.ApplicationUser", null)
+                    b.HasOne("TargetHound.DataModels.ApplicationUser", null)
                         .WithMany("Roles")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TargetHound.Models.ApplicationRole", null)
+                    b.HasOne("TargetHound.DataModels.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("TargetHound.Models.ApplicationUser", null)
+                    b.HasOne("TargetHound.DataModels.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -705,44 +726,44 @@ namespace TargetHound.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("TargetHound.Models.ApplicationUser", null)
+                    b.HasOne("TargetHound.DataModels.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("TargetHound.Models.ApplicationUser", b =>
+            modelBuilder.Entity("TargetHound.DataModels.ApplicationUser", b =>
                 {
-                    b.HasOne("TargetHound.Models.Client", "Client")
+                    b.HasOne("TargetHound.DataModels.Client", "Client")
                         .WithOne("Admin")
-                        .HasForeignKey("TargetHound.Models.ApplicationUser", "ClientId")
+                        .HasForeignKey("TargetHound.DataModels.ApplicationUser", "ClientId")
                         .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("TargetHound.Models.Client", null)
+                    b.HasOne("TargetHound.DataModels.Client", null)
                         .WithMany("Users")
                         .HasForeignKey("ClientId1");
 
                     b.Navigation("Client");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Borehole", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Borehole", b =>
                 {
-                    b.HasOne("TargetHound.Models.Collar", "Collar")
+                    b.HasOne("TargetHound.DataModels.Collar", "Collar")
                         .WithMany()
                         .HasForeignKey("CollarId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("TargetHound.Models.Collar", null)
+                    b.HasOne("TargetHound.DataModels.Collar", null)
                         .WithMany("Boreholes")
                         .HasForeignKey("CollarId1");
 
-                    b.HasOne("TargetHound.Models.Contractor", "Contractor")
+                    b.HasOne("TargetHound.DataModels.Contractor", "Contractor")
                         .WithMany("Boreholes")
                         .HasForeignKey("ContractorId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TargetHound.Models.Project", "Project")
+                    b.HasOne("TargetHound.DataModels.Project", "Project")
                         .WithMany("Boreholes")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -754,14 +775,14 @@ namespace TargetHound.Data.Migrations
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.ClientContractor", b =>
+            modelBuilder.Entity("TargetHound.DataModels.ClientContractor", b =>
                 {
-                    b.HasOne("TargetHound.Models.Client", "Client")
+                    b.HasOne("TargetHound.DataModels.Client", "Client")
                         .WithMany("ClientContractors")
                         .HasForeignKey("CientId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TargetHound.Models.Contractor", "Contractor")
+                    b.HasOne("TargetHound.DataModels.Contractor", "Contractor")
                         .WithMany("ClientContractors")
                         .HasForeignKey("ContractorId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -771,9 +792,19 @@ namespace TargetHound.Data.Migrations
                     b.Navigation("Contractor");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Collar", b =>
+            modelBuilder.Entity("TargetHound.DataModels.ClientInvitation", b =>
                 {
-                    b.HasOne("TargetHound.Models.Project", "Project")
+                    b.HasOne("TargetHound.DataModels.Client", "Client")
+                        .WithMany("ClientInvitations")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("TargetHound.DataModels.Collar", b =>
+                {
+                    b.HasOne("TargetHound.DataModels.Project", "Project")
                         .WithMany("Collars")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -781,9 +812,9 @@ namespace TargetHound.Data.Migrations
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Dogleg", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Dogleg", b =>
                 {
-                    b.HasOne("TargetHound.Models.Borehole", "Borehole")
+                    b.HasOne("TargetHound.DataModels.Borehole", "Borehole")
                         .WithMany("Doglegs")
                         .HasForeignKey("BoreholeId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -791,9 +822,9 @@ namespace TargetHound.Data.Migrations
                     b.Navigation("Borehole");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.DrillRig", b =>
+            modelBuilder.Entity("TargetHound.DataModels.DrillRig", b =>
                 {
-                    b.HasOne("TargetHound.Models.Contractor", "Contractor")
+                    b.HasOne("TargetHound.DataModels.Contractor", "Contractor")
                         .WithMany("DrillRigs")
                         .HasForeignKey("ContractorId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -801,19 +832,19 @@ namespace TargetHound.Data.Migrations
                     b.Navigation("Contractor");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Project", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Project", b =>
                 {
-                    b.HasOne("TargetHound.Models.ApplicationUser", "Admin")
+                    b.HasOne("TargetHound.DataModels.ApplicationUser", "Admin")
                         .WithMany()
                         .HasForeignKey("AdminId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TargetHound.Models.Client", "Client")
+                    b.HasOne("TargetHound.DataModels.Client", "Client")
                         .WithMany("Projects")
                         .HasForeignKey("ClientId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TargetHound.Models.Country", "Country")
+                    b.HasOne("TargetHound.DataModels.Country", "Country")
                         .WithMany("Projects")
                         .HasForeignKey("CountryId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -825,14 +856,14 @@ namespace TargetHound.Data.Migrations
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.ProjectContractor", b =>
+            modelBuilder.Entity("TargetHound.DataModels.ProjectContractor", b =>
                 {
-                    b.HasOne("TargetHound.Models.Contractor", "Contractor")
+                    b.HasOne("TargetHound.DataModels.Contractor", "Contractor")
                         .WithMany()
                         .HasForeignKey("ContractorId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TargetHound.Models.Project", "Project")
+                    b.HasOne("TargetHound.DataModels.Project", "Project")
                         .WithMany("ProjectContractors")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -842,28 +873,28 @@ namespace TargetHound.Data.Migrations
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.SurveyPoint", b =>
+            modelBuilder.Entity("TargetHound.DataModels.SurveyPoint", b =>
                 {
-                    b.HasOne("TargetHound.Models.Borehole", "Borehole")
+                    b.HasOne("TargetHound.DataModels.Borehole", "Borehole")
                         .WithMany()
                         .HasForeignKey("BoreholeId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.SetNull);
 
-                    b.HasOne("TargetHound.Models.Borehole", null)
+                    b.HasOne("TargetHound.DataModels.Borehole", null)
                         .WithMany("SurveyPoints")
                         .HasForeignKey("BoreholeId1");
 
                     b.Navigation("Borehole");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Target", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Target", b =>
                 {
-                    b.HasOne("TargetHound.Models.Borehole", "Borehole")
+                    b.HasOne("TargetHound.DataModels.Borehole", "Borehole")
                         .WithOne("Targets")
-                        .HasForeignKey("TargetHound.Models.Target", "BoreholeId")
+                        .HasForeignKey("TargetHound.DataModels.Target", "BoreholeId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TargetHound.Models.Project", "Project")
+                    b.HasOne("TargetHound.DataModels.Project", "Project")
                         .WithMany("Targets")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -873,14 +904,14 @@ namespace TargetHound.Data.Migrations
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.UserProject", b =>
+            modelBuilder.Entity("TargetHound.DataModels.UserProject", b =>
                 {
-                    b.HasOne("TargetHound.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("TargetHound.DataModels.ApplicationUser", "ApplicationUser")
                         .WithMany("UserProjects")
                         .HasForeignKey("ApplicationUserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("TargetHound.Models.Project", "Project")
+                    b.HasOne("TargetHound.DataModels.Project", "Project")
                         .WithMany("ProjectUsers")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict);
@@ -890,7 +921,7 @@ namespace TargetHound.Data.Migrations
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.ApplicationUser", b =>
+            modelBuilder.Entity("TargetHound.DataModels.ApplicationUser", b =>
                 {
                     b.Navigation("Claims");
 
@@ -901,7 +932,7 @@ namespace TargetHound.Data.Migrations
                     b.Navigation("UserProjects");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Borehole", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Borehole", b =>
                 {
                     b.Navigation("Doglegs");
 
@@ -910,23 +941,25 @@ namespace TargetHound.Data.Migrations
                     b.Navigation("Targets");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Client", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Client", b =>
                 {
                     b.Navigation("Admin");
 
                     b.Navigation("ClientContractors");
+
+                    b.Navigation("ClientInvitations");
 
                     b.Navigation("Projects");
 
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Collar", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Collar", b =>
                 {
                     b.Navigation("Boreholes");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Contractor", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Contractor", b =>
                 {
                     b.Navigation("Boreholes");
 
@@ -935,12 +968,12 @@ namespace TargetHound.Data.Migrations
                     b.Navigation("DrillRigs");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Country", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Country", b =>
                 {
                     b.Navigation("Projects");
                 });
 
-            modelBuilder.Entity("TargetHound.Models.Project", b =>
+            modelBuilder.Entity("TargetHound.DataModels.Project", b =>
                 {
                     b.Navigation("Boreholes");
 

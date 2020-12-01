@@ -1,0 +1,27 @@
+﻿@model IEnumerable<TargetHound.SharedViewModels.ViewModels.ClientViewModel>
+
+@{
+    ViewData["Title"] = "InativeClients";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="my-5 text-center">My Inative Clients</h1>
+
+<table class="table col-5 m-auto">
+    <thead>
+        <tr>
+            <th>
+                <h4 class="font-weight-bold text-xl-center">Name</h4>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,6 +1,7 @@
 Insert into [dbo].[Countries] ([Name])
 Values 
-('Other...'),
+('Country...'),
+('Other'),
 ('Afghanistan'),
 ('Albania'),
 ('Algeria'),

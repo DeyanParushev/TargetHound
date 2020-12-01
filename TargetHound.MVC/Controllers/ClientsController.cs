@@ -12,22 +12,26 @@
     using TargetHound.SharedViewModels.ViewModels;
     using TargetHound.SharedViewModels.InputModels;
     using TargetHound.Services.Messages;
+    using TargetHound.MVC.Areas.Identity.Pages.Account;
 
     public class ClientsController : Controller
     {
         private readonly IClientService clientService;
         private readonly IEmailSender emailSender;
+        private readonly IClientInvitationsService clientInvitationsService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
 
         public ClientsController(
             IClientService clientService,
             IEmailSender emailSender,
+            IClientInvitationsService clientInvitationsService,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager)
         {
             this.clientService = clientService;
             this.emailSender = emailSender;
+            this.clientInvitationsService = clientInvitationsService;
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
@@ -37,7 +41,7 @@
         {
             var userId = this.userManager.GetUserId(this.User);
             var clientsInfo =
-                await this.clientService.GetAllClientsByAdminId<ClientViewModel>(userId);
+                await this.clientService.GetAllClientsByAdminIdAsync<ClientViewModel>(userId);
             ClientListModel clientList = new ClientListModel { Clients = clientsInfo };
 
             return this.View(clientList);
@@ -55,7 +59,7 @@
             }
 
             var clientInfo =
-                 await this.clientService.GetClientInfoByAdminId<ClientEditInputModel>(clientId, userId);
+                 await this.clientService.GetClientInfoByAdminIdAsync<ClientEditInputModel>(clientId, userId);
 
             return this.View(clientInfo);
         }
@@ -133,7 +137,7 @@
             }
 
             await this.userManager.RemoveFromRoleAsync(currentUser, SiteIdentityRoles.ClientAdmin);
-            bool adminIsChanged = await this.clientService.ChangeClientAdmin(clientId, userId);
+            bool adminIsChanged = await this.clientService.ChangeClientAdminAsync(clientId, userId);
             ApplicationUser newAdmin = await this.userManager.FindByIdAsync(userId);
 
             if (newAdmin == null)
@@ -170,7 +174,7 @@
             {
                 var user = await this.userManager.GetUserAsync(this.User);
                 var newUser = await this.userManager.FindByEmailAsync(email);
-                var clientName = await this.clientService.GetClientNameById(clientId);
+                var clientName = await this.clientService.GetClientNameByIdAsync(clientId);
                 var linkToJoin = this.Url.Action(
                     "Join", "Clients", new { clientId = clientId }, this.Request.Scheme);
                 var receiverEmail = email;
@@ -197,7 +201,7 @@
                         MessageTemplates.ClientInvitation(user.UserName, clientName, linkToJoin));
                 }
 
-
+                await this.clientInvitationsService.AcceptInvitationAsync(clientId, receiverEmail);
             }
             catch (Exception ex)
             {
@@ -222,6 +226,26 @@
             }
 
             return this.Redirect("/Clients/All");
+        }
+
+        [Authorize]
+        public async Task<IActionResult> InactiveClients()
+        {
+            string userId = this.userManager.GetUserId(this.User);
+            var inactiveClients = await this.clientService.GetInactiveClientsAsync<ClientViewModel>(userId);
+            return this.View(inactiveClients);
+        }
+
+        // TODO: Check for correct redirection after deployment
+        public async Task<IActionResult> Join(string clientId)
+        {
+            string clientName = await this.clientService.GetClientNameByIdAsync(clientId);
+            var register = new RegisterModel.InputModel
+            {
+                Company = clientName,
+            };
+
+            return this.RedirectToAction("/Identity/Pages/Account/Register", register);
         }
     }
 }

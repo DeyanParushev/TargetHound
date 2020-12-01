@@ -339,7 +339,7 @@ namespace TargetHound.Data.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsDeleted")
+                    b.Property<bool>("IsAccepted")
                         .HasColumnType("bit");
 
                     b.HasKey("Id");

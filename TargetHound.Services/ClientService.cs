@@ -35,7 +35,7 @@
             return client.Id;
         }
 
-        public async Task<string> GetAdminId(string clientId)
+        public async Task<string> GetClientAdminIdAsync(string clientId)
         {
             string adminId = this.dbContext.
                 Clients.SingleOrDefault(x => x.Id == clientId)?.AdminId;
@@ -43,7 +43,7 @@
             return adminId;
         }
 
-        public async Task<ICollection<T>> GetAllClientsByAdminId<T>(string userId)
+        public async Task<ICollection<T>> GetAllClientsByAdminIdAsync<T>(string userId)
         {
             var clientInfo = this.dbContext.Clients
                 .Where(x => x.AdminId == userId && x.IsDeleted == false)
@@ -68,7 +68,7 @@
             return true;
         }
 
-        public async Task<T> GetClientInfoByAdminId<T>(string clientId, string adminId)
+        public async Task<T> GetClientInfoByAdminIdAsync<T>(string clientId, string adminId)
         {
             var clientInfo = this.dbContext.Clients
                 .Where(x => x.Id == clientId && x.AdminId == adminId && x.IsDeleted == false)
@@ -102,7 +102,7 @@
             return clientUsers;
         }
 
-        public async Task<bool> ChangeClientAdmin(string clientId, string newAdminId)
+        public async Task<bool> ChangeClientAdminAsync(string clientId, string newAdminId)
         {
             if (!this.dbContext.Clients.Any(x => x.Id == clientId && x.IsDeleted == false))
             {
@@ -161,7 +161,10 @@
                 throw new ApplicationException("You are not admin for this client.");
             }
 
-            var clientUsers = await this.GetClientUsersAsync<ApplicationUser>(clientId);
+            var clientUsers = this.dbContext
+                .ApplicationUsers
+                .Where(x => x.ClientId == clientId && x.IsDeleted == false)
+                .ToList();
 
             foreach (var user in clientUsers)
             {
@@ -172,10 +175,23 @@
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task<string> GetClientNameById(string clientId)
+        public async Task<string> GetClientNameByIdAsync(string clientId)
         {
             this.CheckIfClientExists(clientId);
             return this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId).Name;
+        }
+
+        public async Task<ICollection<T>> GetInactiveClientsAsync<T>(string userId)
+        {
+            this.CheckIfUserExists(userId);
+
+            var clients = this.dbContext
+                .Clients
+                .Where(x => x.AdminId == userId && x.IsDeleted == true)
+                .To<T>()
+                .ToList();
+
+            return clients;
         }
 
         private void CheckIfUserExists(string userId)

@@ -10,6 +10,6 @@
 
         public Client Client { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool IsAccepted { get; set; }
     }
 }

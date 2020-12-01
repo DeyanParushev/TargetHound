@@ -1,5 +1,6 @@
 ﻿@model TargetHound.SharedViewModels.InputModels.ProjectCountryInputModel
-<div class="form d-flex justify-content-center align-items-center vh-100">
+<h1 class="text-center my-5">Create New Project</h1>
+<div class="form d-flex justify-content-center vh-100">
     <form method="post" class="form col-6 flex-row" asp-controller="Projects" asp-action="Create">
         <fieldset class="form-group">
             <label class="control-label" asp-for="Project.Name"></label>
@@ -13,18 +14,25 @@
             <span asp-validation-for="Project.MagneticDeclination" class="text-danger"></span>
         </fieldset>
 
-        <fieldset class="form-group">
+        <fieldset class="form-group my-4">
             <select asp-for="Project.CountryId">
                 @foreach (var country in Model.Countries)
                 {
-                     <option value="@country.Id">@country.Name</option>
+                    if (country.Name == "Country...")
+                    {
+                        <option selected="selected" value="@country.Id">@country.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@country.Id">@country.Name</option>
+                    }
                 }
             </select>
         </fieldset>
 
         <section class="d-flex flex-row justify-content-between">
-            <button class="btn btn-primary" type="submit">Create</button>
-            <a class="btn btn-primary font-weight-bold" href="/Projects/Load">Load</a>
+            <button class="btn btn-primary col-2" type="submit">Create</button>
+            <a class="btn btn-primary col-2" asp-action="Load">Load</a>
         </section>
     </form>
 </div>

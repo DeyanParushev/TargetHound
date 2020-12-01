@@ -1,8 +1,10 @@
 ﻿namespace TargetHound.SharedViewModels.InputModels
 {
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
+    using TargetHound.SharedViewModels.ViewModels;
 
     public class ProjectEditInputModel : IMapFrom<Project>
     {
@@ -13,7 +15,9 @@
         [Required(ErrorMessage = "Please enter a project name.")]
         public string Name { get; set; }
 
-        public string CountryName { get; set; }
+        public ICollection<CountryViewModel> Countries { get; set; }
+
+        public int CountryId { get; set; }
 
         public double MagneticDeclination { get; set; }
 
