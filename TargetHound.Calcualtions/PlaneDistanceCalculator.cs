@@ -5,8 +5,7 @@
     using System.Threading.Tasks;
     using System.Collections.Generic;
    
-    using TargetHound.DataModels;
-    using TargetHound.DataModels.Interfaces;
+    using TargetHound.DTOs;
 
     public class PlaneDistanceCalculator
     {
@@ -49,8 +48,8 @@
 
         private async Task SetPointOnTargetElevationAsync()
         {
-            IPoint startPoint = new SurveyPoint();
-            IPoint endPoint = new SurveyPoint();
+            IPoint startPoint = new SurveyPointDTO();
+            IPoint endPoint = new SurveyPointDTO();
 
             bool isPositivelyInclined = this.borehole[0].Elevation < this.target.Elevation;
 
@@ -89,7 +88,7 @@
                 elevationFromStartToTarget = this.target.Elevation - startPoint.Elevation;
             }
 
-            IPoint nextStation = new SurveyPoint
+            IPoint nextStation = new SurveyPointDTO
             {
                 Depth = startPoint.Depth + elevationFromStartToTarget,
                 Azimuth = startPoint.Azimuth + azimuthChangePerMeter * elevationFromStartToTarget,
@@ -107,7 +106,7 @@
                     elevationFromStartToTarget = this.target.Elevation - nextStation.Elevation;
                 }
 
-                IPoint tempStation = new SurveyPoint
+                IPoint tempStation = new SurveyPointDTO
                 {
                     Depth = nextStation.Depth + elevationFromStartToTarget,
                     Azimuth = nextStation.Azimuth + azimuthChangePerMeter * elevationFromStartToTarget,
@@ -137,7 +136,7 @@
 
             if (startStation.Depth > endStation.Depth)
             {
-                IPoint temp = new SurveyPoint
+                IPoint temp = new SurveyPointDTO
                 {
                     Depth = startStation.Depth,
                     Azimuth = startStation.Azimuth,
@@ -147,7 +146,7 @@
                     Elevation = startStation.Elevation,
                 };
 
-                startStation = new SurveyPoint
+                startStation = new SurveyPointDTO
                 {
                     Depth = endStation.Depth,
                     Azimuth = endStation.Azimuth,
@@ -167,7 +166,7 @@
             double dipChangePerMeter = totalDipChange / depthChange;
             double azimuthChangePerMeter = totalAzimuthChange / depthChange;
 
-            IPoint middleStation = new SurveyPoint();
+            IPoint middleStation = new SurveyPointDTO();
             middleStation.Depth = startStation.Depth + (depthChange / 2);
             middleStation.Azimuth = startStation.Azimuth + (azimuthChangePerMeter * (depthChange / 2));
             middleStation.Dip = startStation.Dip + (dipChangePerMeter * (depthChange / 2));
@@ -195,7 +194,7 @@
                     break;
                 }
 
-                middleStation = new SurveyPoint();
+                middleStation = new SurveyPointDTO();
                 middleStation.Depth = startStation.Depth + (depthChange / 2.0);
                 middleStation.Azimuth = startStation.Azimuth + (azimuthChangePerMeter * (depthChange / 2));
                 middleStation.Dip = startStation.Dip + (dipChangePerMeter * (depthChange / 2));

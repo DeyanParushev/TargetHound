@@ -3,12 +3,11 @@
     using NUnit.Framework;
 
     using TargetHound.Calcualtions;
-    using TargetHound.DataModels;
-    using TargetHound.DataModels.Interfaces;
+    using TargetHound.DTOs;
 
     public class StraightExtrapolationCalculatorTests
     {
-        private IPoint collar = new Collar { Easting = 659_866.0000, Northing = 9_022_962.0000, Elevation = 530.0000 };
+        private IPoint collar = new CollarDTO { Easting = 659_866.0000, Northing = 9_022_962.0000, Elevation = 530.0000 };
 
         [TestCase(660_011.77, 9_023_008.37, -811.72, 1350.4117)]
         // Only east change
@@ -28,7 +27,7 @@
             double targetElevation,
             double expectedLength)
         {
-            Target target = new Target { Easting = targetEasting, Northing = targetNorthing, Elevation = targetElevation };
+            TargetDTO target = new TargetDTO { Easting = targetEasting, Northing = targetNorthing, Elevation = targetElevation };
 
             StraightExtrapolationCalculator extrapolator = new StraightExtrapolationCalculator();
 
@@ -51,7 +50,7 @@
             double targetElevation,
             double expectedAzimuth)
         {
-            Target target = new Target { Easting = targetEasting, Northing = targetNorthing, Elevation = targetElevation };
+            TargetDTO target = new TargetDTO { Easting = targetEasting, Northing = targetNorthing, Elevation = targetElevation };
 
             StraightExtrapolationCalculator extrapolator = new StraightExtrapolationCalculator();
             this.collar.Azimuth = extrapolator.GetInitialAzimuthAngle(this.collar, target);
@@ -81,7 +80,7 @@
             double targetElevation,
             double expectedDip)
         {
-            Target target = new Target { Easting = targetEasting, Northing = targetNorthing, Elevation = targetElevation };
+            TargetDTO target = new TargetDTO { Easting = targetEasting, Northing = targetNorthing, Elevation = targetElevation };
 
             StraightExtrapolationCalculator extrapolator = new StraightExtrapolationCalculator();
             this.collar.Dip = extrapolator.GetInitialDipAngle(this.collar, target);

@@ -3,14 +3,13 @@
     using NUnit.Framework;
     using System.Collections.Generic;
     using TargetHound.Calcualtions;
-    using TargetHound.DataModels;
-    using TargetHound.DataModels.Interfaces;
+    using TargetHound.DTOs;
 
     public class PlaneDistanceCalculatorTests
     {
         // TODO: Test for positively inclined boreholes
-        private IPoint collar = new Collar { Easting = 659_866, Northing = 9_022_962, Elevation = 530, Depth = 0 };
-        private IPoint negativeTarget = new Target { Easting = 659_300, Northing = 9_022_400, Elevation = -811 };
+        private IPoint collar = new CollarDTO { Easting = 659_866, Northing = 9_022_962, Elevation = 530, Depth = 0 };
+        private IPoint negativeTarget = new TargetDTO { Easting = 659_300, Northing = 9_022_400, Elevation = -811 };
         private Extrapolator curveExtrapolator = new Extrapolator();
 
         [TestCase(225.18, -59.2, 0, 0, 1.8038841065563065)]

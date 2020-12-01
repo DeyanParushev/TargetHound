@@ -5,12 +5,11 @@
     using System.Collections.Generic;
 
     using TargetHound.Calcualtions;
-    using TargetHound.DataModels;
-    using TargetHound.DataModels.Interfaces;
+    using TargetHound.DTOs;
 
     public class ExtrapolatorTests
     {
-        private IPoint collar = new Collar { Easting = 659_866, Northing = 9_022_962, Elevation = 530, Depth = 0, Azimuth = 45, Dip = -75 };
+        private IPoint collar = new CollarDTO { Easting = 659_866, Northing = 9_022_962, Elevation = 530, Depth = 0, Azimuth = 45, Dip = -75 };
 
         [TestCase(1300)]
         [TestCase(300)]

@@ -98,5 +98,102 @@
             bool isUserInTheProject = this.dbContext.UsersProjects.Any(x => x.ProjectId == projectId && x.ApplicationUserId == userId);
             return isUserInTheProject;
         }
+
+        public async Task<ICollection<T>> GetProjectUsersAsync<T>(string projectId)
+        {
+            this.CheckProjectExists(projectId);
+
+            var users = this.dbContext
+                .UsersProjects
+                .Where(x => x.ProjectId == projectId && x.Project.IsDeleted == false)
+                .Select(x => x.ApplicationUser)
+                .To<T>()
+                .ToList();
+
+            return users;
+        }
+
+        public async Task<T> GetDetailsAsync<T>(string projectId)
+        {
+            this.CheckProjectExists(projectId);
+
+            var details = this.dbContext.Projects
+                .Where(x => x.Id == projectId && x.IsDeleted == false)
+                .To<T>()
+                .ToList()[0];
+
+            return details;
+        }
+
+        public async Task<int> GetUserCountAsync(string projectId)
+        {
+            this.CheckProjectExists(projectId);
+
+            var userCount = this.dbContext.Projects
+                .SingleOrDefault(x => x.Id == projectId && x.IsDeleted == false)
+                .ProjectUsers
+                .Count();
+
+            return userCount;
+        }
+
+        public async Task<string> GetCurrentContractorAsync(string projectId)
+        {
+            this.CheckProjectExists(projectId);
+
+            var contractorName = this.dbContext.ProjectsContractors
+                .Where(x => x.Id == projectId && x.IsDeleted == false)
+                .Select(x => x.Contractor.Name)
+                .FirstOrDefault();
+
+            return contractorName;
+        }
+
+        public async Task<ICollection<T>> GetBoreholesAsync<T> (string projectId)
+        {
+            this.CheckProjectExists(projectId);
+
+            var boreholes = this.dbContext.Projects
+                .Where(x => x.Id == projectId && x.IsDeleted == false)
+                .Select(x => x.Boreholes)
+                .To<T>()
+                .ToList();
+
+            return boreholes;
+        }
+
+        public async Task<ICollection<T>> GetCollarsAsync<T>(string projectId)
+        {
+            this.CheckProjectExists(projectId);
+
+            var collars = this.dbContext.Projects
+                .Where(x => x.Id == projectId && x.IsDeleted == false)
+                .Select(x => x.Collars)
+                .To<T>()
+                .ToList();
+
+            return collars;
+        }
+
+        public async Task<ICollection<T>> GetTargetsAsync<T>(string projectId)
+        {
+            this.CheckProjectExists(projectId);
+
+            var targets = this.dbContext.Projects
+                .Where(x => x.Id == projectId && x.IsDeleted == false)
+                .Select(x => x.Targets)
+                .To<T>()
+                .ToList();
+
+            return targets;
+        }
+
+        private void CheckProjectExists(string projectId)
+        {
+            if (!this.dbContext.Projects.Any(x => x.Id == projectId && x.IsDeleted == false))
+            {
+                throw new NullReferenceException("Project does not exist");
+            }
+        }
     }
 }

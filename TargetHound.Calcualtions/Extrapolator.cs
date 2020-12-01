@@ -3,8 +3,7 @@
     using System;
     using System.Collections.Generic;
 
-    using TargetHound.DataModels;
-    using TargetHound.DataModels.Interfaces;
+    using TargetHound.DTOs;
 
     public class Extrapolator
     {
@@ -33,7 +32,7 @@
 
             for (int i = 0; i < extrapolation.Capacity - 1; i++)
             {
-                IPoint surveyStation = new SurveyPoint();
+                IPoint surveyStation = new SurveyPointDTO();
 
                 if (i == 0)
                 {
@@ -56,7 +55,7 @@
                 extrapolation.Add(surveyStation);
             }
 
-            IPoint lastStation = new SurveyPoint
+            IPoint lastStation = new SurveyPointDTO
             {
                 Depth = extrapolation[extrapolation.Count - 1].Depth + (endSectionLength == 0 ? 30 : endSectionLength),
                 Azimuth = startAzimuth,
@@ -77,7 +76,7 @@
 
             for (int i = 0; i < extrapolationPointsCount; i++)
             {
-                IPoint surveyStation = new SurveyPoint();
+                IPoint surveyStation = new SurveyPointDTO();
 
                 if (i == 0)
                 {
@@ -100,7 +99,7 @@
                 extrapolation.Add(surveyStation);
             }
 
-            IPoint lastStation = new SurveyPoint
+            IPoint lastStation = new SurveyPointDTO
             {
                 Depth = extrapolation[extrapolation.Count - 1].Depth + (endSectionLength == 0 ? 30 : endSectionLength),
                 Azimuth = extrapolation[extrapolation.Count - 1].Azimuth,
@@ -128,7 +127,7 @@
 
             for (int i = 0; i < extrapolation.Capacity - 1; i++)
             {
-                IPoint surveyStation = new SurveyPoint();
+                IPoint surveyStation = new SurveyPointDTO();
 
                 if (i == 0)
                 {
@@ -168,7 +167,7 @@
                 extrapolation.Add(surveyStation);
             }
 
-            IPoint lastStation = new SurveyPoint
+            IPoint lastStation = new SurveyPointDTO
             {
                 Depth = extrapolation[extrapolation.Count - 1].Depth + (endSectionLength == 0 ? 30 : endSectionLength),
                 Azimuth = extrapolation[extrapolation.Count - 1].Azimuth + azimuthChange,
@@ -192,7 +191,7 @@
 
             for (int i = 0; i < extrapolation.Capacity - 1; i++)
             {
-                IPoint surveyStation = new SurveyPoint();
+                IPoint surveyStation = new SurveyPointDTO();
 
                 if (i == 0)
                 {
@@ -232,7 +231,7 @@
                 extrapolation.Add(surveyStation);
             }
 
-            IPoint lastStation = new SurveyPoint
+            IPoint lastStation = new SurveyPointDTO
             {
                 Depth = extrapolation[extrapolation.Count - 1].Depth + (endSectionLength == 0 ? 30 : endSectionLength),
                 Azimuth = extrapolation[extrapolation.Count - 1].Azimuth + azimuthChange,

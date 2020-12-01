@@ -52,7 +52,7 @@
                             <button class="btn btn-sm btn-outline-primary disabled mr-2" asp-route-projectId="@item.Id" asp-controller="Project" asp-action="Edit">Edit</button>
                         }
 
-                        <button class="btn btn-sm btn-info mr-2" asp-action="Details">Details</button>
+                        <a class="btn btn-sm btn-info mr-2" asp-route-projectId="@item.Id" asp-action="Details">Details</a>
                     </td>
                 </tr>
             }

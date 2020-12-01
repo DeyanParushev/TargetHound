@@ -4,8 +4,7 @@
     using System.Linq;
     using System.Collections.Generic;
    
-    using TargetHound.DataModels;
-    using TargetHound.DataModels.Interfaces;
+    using TargetHound.DTOs;
 
     public class _3DDistanceCalculator : PlaneDistanceCalculator
     {
@@ -32,7 +31,7 @@
 
             if (startStation.Depth > endStation.Depth)
             {
-                IPoint temp = new SurveyPoint
+                IPoint temp = new SurveyPointDTO
                 {
                     Depth = startStation.Depth,
                     Azimuth = startStation.Azimuth,
@@ -42,7 +41,7 @@
                     Elevation = startStation.Elevation,
                 };
 
-                startStation = new SurveyPoint
+                startStation = new SurveyPointDTO
                 {
                     Depth = endStation.Depth,
                     Azimuth = endStation.Azimuth,
@@ -62,7 +61,7 @@
             double dipChangePerMeter = totalDipChange / depthChange;
             double azimuthChangePerMeter = totalAzimuthChange / depthChange;
 
-            IPoint middleStation = new SurveyPoint();
+            IPoint middleStation = new SurveyPointDTO();
             middleStation.Depth = startStation.Depth + (depthChange / 2);
             middleStation.Azimuth = startStation.Azimuth + (azimuthChangePerMeter * (depthChange / 2));
             middleStation.Dip = startStation.Dip + (dipChangePerMeter * (depthChange / 2));
@@ -89,7 +88,7 @@
                     break;
                 }
 
-                middleStation = new SurveyPoint();
+                middleStation = new SurveyPointDTO();
                 middleStation.Depth = startStation.Depth + (depthChange / 2);
                 middleStation.Azimuth = startStation.Azimuth + (azimuthChangePerMeter * (depthChange / 2));
                 middleStation.Dip = startStation.Dip + (dipChangePerMeter * (depthChange / 2));

@@ -3,7 +3,7 @@ namespace TargetHound.Calculations.Tests
     using NUnit.Framework;
     using System;
     using TargetHound.Calcualtions;
-    using TargetHound.DataModels;
+    using TargetHound.DTOs;
 
     public class CurveCalculatorTests
     {
@@ -33,8 +33,8 @@ namespace TargetHound.Calculations.Tests
             double bottomDip,
             double expectedDogleg)
         {
-            SurveyPoint topStation = new SurveyPoint { Dip = topDip, Azimuth = topAzimuth };
-            SurveyPoint bottomStation = new SurveyPoint { Dip = bottomDip, Azimuth = bottomAzimuth };
+            SurveyPointDTO topStation = new SurveyPointDTO { Dip = topDip, Azimuth = topAzimuth };
+            SurveyPointDTO bottomStation = new SurveyPointDTO { Dip = bottomDip, Azimuth = bottomAzimuth };
             CurveCalculator curveCalculator = new CurveCalculator();
 
             double actualDoglegAngle = curveCalculator.GetDoglegAngle(topStation, bottomStation);
@@ -67,8 +67,8 @@ namespace TargetHound.Calculations.Tests
             double doglegSeverity
             )
         {
-            SurveyPoint topStation = new SurveyPoint { Depth = topDepth, Azimuth = topAzimuth, Dip = topDip };
-            SurveyPoint bottomStation = new SurveyPoint { Depth = bottomDepth, Azimuth = bottomAzimuth, Dip = bottomDip };
+            SurveyPointDTO topStation = new SurveyPointDTO { Depth = topDepth, Azimuth = topAzimuth, Dip = topDip };
+            SurveyPointDTO bottomStation = new SurveyPointDTO { Depth = bottomDepth, Azimuth = bottomAzimuth, Dip = bottomDip };
             CurveCalculator curveCalculator = new CurveCalculator();
 
             double actualDoglegSeverity = curveCalculator.GetDoglegSeverity(topStation, bottomStation);
@@ -105,8 +105,8 @@ namespace TargetHound.Calculations.Tests
             double bottomDip,
             double toolFace)
         {
-            SurveyPoint topStation = new SurveyPoint { Azimuth = topAzimuth, Dip = topDip };
-            SurveyPoint bottomStation = new SurveyPoint { Azimuth = bottomAzimuth, Dip = bottomDip };
+            SurveyPointDTO topStation = new SurveyPointDTO { Azimuth = topAzimuth, Dip = topDip };
+            SurveyPointDTO bottomStation = new SurveyPointDTO { Azimuth = bottomAzimuth, Dip = bottomDip };
             CurveCalculator curveCalculator = new CurveCalculator();
 
             double actualToolFace = curveCalculator.GetToolFace(topStation, bottomStation);
@@ -123,8 +123,8 @@ namespace TargetHound.Calculations.Tests
             double bottomDip,
             double expectedRatioFactor)
         {
-            SurveyPoint topStation = new SurveyPoint { Azimuth = topAzimuth, Dip = topDip };
-            SurveyPoint bottomStation = new SurveyPoint { Azimuth = bottomAzimuth, Dip = bottomDip };
+            SurveyPointDTO topStation = new SurveyPointDTO { Azimuth = topAzimuth, Dip = topDip };
+            SurveyPointDTO bottomStation = new SurveyPointDTO { Azimuth = bottomAzimuth, Dip = bottomDip };
             CurveCalculator curveCalculator = new CurveCalculator();
 
             double actualRatioFactor = Math.Round(curveCalculator.GetRatioFactor(topStation, bottomStation), 5);

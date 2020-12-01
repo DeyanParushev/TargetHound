@@ -1,8 +1,7 @@
 ﻿namespace TargetHound.Calcualtions
 {
     using System;
-    using TargetHound.DataModels;
-    using TargetHound.DataModels.Interfaces;
+    using TargetHound.DTOs;
 
     public class CurveCalculator
     {
@@ -20,8 +19,8 @@
                 return 0;
             }
 
-            SurveyPoint preparedTopStation = this.PrepareAngles(topStation);
-            SurveyPoint preparedBottomStation = this.PrepareAngles(bottomStation);
+            SurveyPointDTO preparedTopStation = this.PrepareAngles(topStation);
+            SurveyPointDTO preparedBottomStation = this.PrepareAngles(bottomStation);
 
             // acos(cos(I2 – I1) – sinI1 sinI2 (1-cos(A2-A1 DL acos( cos(I ))) 
             double doglegInRadians = Math.Acos(
@@ -51,8 +50,8 @@
                 return bottomStation.Azimuth;
             }
 
-            SurveyPoint preparedTopStation = this.PrepareAngles(topStation);
-            SurveyPoint preparedBottomStation = this.PrepareAngles(bottomStation);
+            SurveyPointDTO preparedTopStation = this.PrepareAngles(topStation);
+            SurveyPointDTO preparedBottomStation = this.PrepareAngles(bottomStation);
 
             double doglegAngle = this.GetDoglegAngle(topStation, bottomStation);
             double doglegInRadians = this.angleConverter.ConvertAngleToRadians(doglegAngle);
@@ -114,9 +113,9 @@
             return ratioFactor;
         }
 
-        private SurveyPoint PrepareAngles(IPoint point)
+        private SurveyPointDTO PrepareAngles(IPoint point)
         {
-            SurveyPoint convertedPoint = new SurveyPoint();
+            SurveyPointDTO convertedPoint = new SurveyPointDTO();
             convertedPoint.Dip = this.angleConverter.ConvertAngleToRadians(
                 this.angleConverter.ConverDipToInclination(point.Dip));
 

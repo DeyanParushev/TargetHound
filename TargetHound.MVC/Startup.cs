@@ -49,6 +49,7 @@ namespace TargetHound.MVC
             services.AddTransient<IClientService, ClientService>();
             services.AddTransient<IEmailSender, SendGridEmailSender>();
             services.AddTransient<IClientInvitationsService, ClientInvitationsService>();
+            services.AddTransient<IContractorService, ContractorService>();
 
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
@@ -95,7 +96,5 @@ namespace TargetHound.MVC
                 endpoints.MapFallbackToFile("index.html");
             });
         }
-
-       
     }
 }

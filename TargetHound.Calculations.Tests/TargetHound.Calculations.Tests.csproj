@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TargetHound.Calcualtions\TargetHound.Calcualtions.csproj" />
-    <ProjectReference Include="..\TargetHound.Models\TargetHound.DataModels.csproj" />
+    <ProjectReference Include="..\TargetHound.DTOs\TargetHound.DTOs.csproj" />
   </ItemGroup>
 
 </Project>

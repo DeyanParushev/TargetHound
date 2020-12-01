@@ -3,11 +3,11 @@
     using NUnit.Framework;
 
     using TargetHound.Calcualtions;
-    using TargetHound.DataModels;
+    using TargetHound.DTOs;
 
     public class CoordinatesSetterTests
     {
-        private SurveyPoint topStation = new SurveyPoint
+        private SurveyPointDTO topStation = new SurveyPointDTO
         {
             Depth = 0,
             Azimuth = 90,
@@ -26,7 +26,7 @@
 
         public void SetEastingTest(double bottomDepth, double bottomAzimuth, double bottomDip, double expectedBottomEasting)
         {
-            SurveyPoint bottomStation = new SurveyPoint { Depth = bottomDepth, Azimuth = bottomAzimuth, Dip = bottomDip };
+            SurveyPointDTO bottomStation = new SurveyPointDTO { Depth = bottomDepth, Azimuth = bottomAzimuth, Dip = bottomDip };
             CoordinatesSetter coordinatesSetter = new CoordinatesSetter();
            
             coordinatesSetter.SetBottomStationUTMCoortinates(this.topStation, bottomStation);
@@ -44,7 +44,7 @@
 
         public void SetNorthingTest(double bottomDepth, double bottomAzimuth, double bottomDip, double expectedBottomEasting)
         {
-            SurveyPoint bottomStation = new SurveyPoint { Depth = bottomDepth, Azimuth = bottomAzimuth, Dip = bottomDip };
+            SurveyPointDTO bottomStation = new SurveyPointDTO { Depth = bottomDepth, Azimuth = bottomAzimuth, Dip = bottomDip };
             CoordinatesSetter coordinatesSetter = new CoordinatesSetter();
            
             coordinatesSetter.SetBottomStationUTMCoortinates(this.topStation, bottomStation);
@@ -62,7 +62,7 @@
 
         public void SetElevationTest(double bottomDepth, double bottomAzimuth, double bottomDip, double expectedBottomEasting)
         {
-            SurveyPoint bottomStation = new SurveyPoint { Depth = bottomDepth, Azimuth = bottomAzimuth, Dip = bottomDip };
+            SurveyPointDTO bottomStation = new SurveyPointDTO { Depth = bottomDepth, Azimuth = bottomAzimuth, Dip = bottomDip };
             CoordinatesSetter coordinatesSetter = new CoordinatesSetter();
            
             coordinatesSetter.SetBottomStationUTMCoortinates(this.topStation, bottomStation);

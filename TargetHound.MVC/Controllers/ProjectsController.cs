@@ -17,14 +17,17 @@
     {
         private readonly IProjectService projectService;
         private readonly ICountriesService countriesService;
+        private readonly IContractorService contractorService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public ProjectsController(IProjectService projectService,
             ICountriesService countriesService,
+            IContractorService contractorService,
             UserManager<ApplicationUser> userManager)
         {
             this.projectService = projectService;
             this.countriesService = countriesService;
+            this.contractorService = contractorService;
             this.userManager = userManager;
         }
 
@@ -97,8 +100,9 @@
         {
             var project = await this.projectService.GetProjectById<ProjectEditInputModel>(projectId);
             var countries = await this.countriesService.GetAllCountriesAsync<CountryViewModel>();
+            
             project.Countries = countries;
-           
+            
             bool isCurrentUserAdmin = 
                 await this.projectService.IsUserIdSameWithProjectAdminId(this.userManager.GetUserId(this.User), project.Id);
 
@@ -108,6 +112,27 @@
             }
 
             return this.View(project);
+        }
+
+        public async Task<IActionResult> Users(string projectId)
+        {
+            var users = await this.projectService.GetProjectUsersAsync<UserViewModel>(projectId);
+            return this.View(users);
+        }
+
+        //TODO: check the details after you have some data
+        [Authorize]
+        public async Task<IActionResult> Details(string projectId)
+        {
+            var details = await this.projectService.GetDetailsAsync<ProjectDetailsViewModel>(projectId);
+            details.CurrentContractorName = await this.projectService.GetCurrentContractorAsync(projectId);
+            details.UserCount = await this.projectService.GetUserCountAsync(projectId);
+            details.Machines = await this.contractorService.GetDrillRigsAsync<DrillRigViewModel>(projectId);
+            details.Boreholes = await this.projectService.GetBoreholesAsync<BoreholeViewModel>(projectId);
+            details.Collars = await this.projectService.GetBoreholesAsync<CollarViewModel>(projectId);
+            details.Targets = await this.projectService.GetBoreholesAsync<TargetViewModel>(projectId);
+
+            return this.View(details);
         }
     }
 }

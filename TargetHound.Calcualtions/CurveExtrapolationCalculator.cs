@@ -3,8 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using TargetHound.DataModels;
-    using TargetHound.DataModels.Interfaces;
+    using TargetHound.DTOs;
 
     public class CurveExtrapolationCalculator
     {
@@ -78,7 +77,7 @@
             double azimuthChangePerMeter = azimuthChange / depthChange;
             double dipChangePerMeter = dipChange / depthChange;
 
-            IPoint midStation = new SurveyPoint
+            IPoint midStation = new SurveyPointDTO
             {
                 Depth = startStation.Depth + (depthChange / 2),
                 Azimuth = startStation.Azimuth + (azimuthChangePerMeter * (depthChange / 2)),
@@ -107,7 +106,7 @@
                     break;
                 }
 
-                midStation = new SurveyPoint();
+                midStation = new SurveyPointDTO();
                 midStation.Depth = startStation.Depth + (depthChange / 2);
                 midStation.Azimuth = startStation.Azimuth + (azimuthChangePerMeter * (depthChange / 2));
                 midStation.Dip = startStation.Dip + (dipChangePerMeter * (depthChange / 2));

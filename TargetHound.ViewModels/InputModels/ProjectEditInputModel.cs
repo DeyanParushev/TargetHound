@@ -19,8 +19,7 @@
 
         public int CountryId { get; set; }
 
+        [Required]
         public double MagneticDeclination { get; set; }
-
-        public string AdminId { get; set; }
     }
 }
