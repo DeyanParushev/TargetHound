@@ -1,6 +1,9 @@
 ﻿namespace TargetHound.DTOs
 {
-    public class DrillRigDTO
+    using TargetHound.DataModels;
+    using TargetHound.Services.Automapper;
+
+    public class DrillRigDTO : IMapFrom<DrillRig>
     {
         public string Id { get; set; }
 

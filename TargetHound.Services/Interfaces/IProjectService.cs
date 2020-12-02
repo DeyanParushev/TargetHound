@@ -7,6 +7,8 @@
     {
         public Task CreateAsync(string userId, string projectName, double magneticDeclination, int countryId);
         
+        public  Task EditProjectAsync(string projectId, string projectName, double magneticDeclination, int countryId);
+        
         public Task<ICollection<T>> GetBoreholesAsync<T>(string projectId);
         
         public Task<ICollection<T>> GetCollarsAsync<T>(string projectId);

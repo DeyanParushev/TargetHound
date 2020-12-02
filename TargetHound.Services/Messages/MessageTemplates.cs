@@ -18,11 +18,11 @@ namespace TargetHound.Services.Messages
 
         public static string ProjectInvitation(
             string senderName, 
-            string clientName, 
+            string receiverName, 
             string projectName, 
             string linkToJoin)
         {
-            return $"Hello {clientName}!! {senderName} has invited you to join his project: {projectName} " +
+            return $"Hello {receiverName}!! {senderName} has invited you to join his project: {projectName} " +
                 $"on the Target Hound platform. " +
                 $"If you want to join him please click the link bellow." +
                 $"If you don`t know this person and don`t want to join our " +

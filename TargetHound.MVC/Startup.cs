@@ -17,6 +17,7 @@ namespace TargetHound.MVC
     using Microsoft.AspNetCore.Mvc;
     using TargetHound.Services.Messages;
     using SendgridEmailInAspNetCore.Services;
+    using TargetHound.DTOs;
 
     public class Startup
     {
@@ -62,7 +63,8 @@ namespace TargetHound.MVC
         {
             AutoMapperConfig.RegisterMappings(
                 typeof(ErrorViewModel).GetTypeInfo().Assembly,
-                typeof(ProjectViewModel).GetTypeInfo().Assembly);
+                typeof(ProjectViewModel).GetTypeInfo().Assembly,
+                typeof(ProjectDTO).GetTypeInfo().Assembly);
 
             if (env.IsDevelopment())
             {

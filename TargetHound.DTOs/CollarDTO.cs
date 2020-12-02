@@ -1,8 +1,9 @@
 ﻿namespace TargetHound.DTOs
 {
-    using TargetHound.DataModels.Interfaces;
+    using TargetHound.DataModels;
+    using TargetHound.Services.Automapper;
 
-    public class CollarDTO : IPoint
+    public class CollarDTO : IPoint, IMapFrom<Collar>
     {
         public double Depth { get; set; }
        

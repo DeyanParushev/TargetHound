@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TargetHound.Calcualtions\TargetHound.Calcualtions.csproj" />
     <ProjectReference Include="..\TargetHound.Data\TargetHound.Data.csproj" />
     <ProjectReference Include="..\TargetHound.Models\TargetHound.DataModels.csproj" />
   </ItemGroup>

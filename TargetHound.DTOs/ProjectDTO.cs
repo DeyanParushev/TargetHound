@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
-
-namespace TargetHound.DTOs
+﻿namespace TargetHound.DTOs
 {
-    public class ProjectDTO
+    using System.Collections.Generic;
+    using TargetHound.DataModels;
+    using TargetHound.Services.Automapper;
+
+    public class ProjectDTO : IMapFrom<Project>
     {
         public string Id { get; set; }
 

@@ -188,6 +188,18 @@
             return targets;
         }
 
+        public async Task EditProjectAsync(string projectId, string projectName, double magneticDeclination, int countryId)
+        {
+            this.CheckProjectExists(projectId);
+
+            var project = this.dbContext.Projects.SingleOrDefault(x => x.Id == projectId && x.IsDeleted == false);
+            project.Name = projectName;
+            project.MagneticDeclination = magneticDeclination;
+            project.CountryId = countryId;
+
+            await this.dbContext.SaveChangesAsync();
+        }
+
         private void CheckProjectExists(string projectId)
         {
             if (!this.dbContext.Projects.Any(x => x.Id == projectId && x.IsDeleted == false))

@@ -9,7 +9,7 @@
 
 <hr />
 <div class="flex-row col-md-4 offset-md-4 my-4">
-    <form class="" asp-action="Edit">
+    <form class="" asp-action="EditProject">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <div class="form-group">
@@ -25,7 +25,7 @@
         <div class="form-group">
             <label class="control-label" asp-for="CountryId">Country</label>
             <br />
-            <select asp-for="@Model.Countries">
+            <select asp-for="@Model.Countries" name="CountryId">
                 @foreach (var country in Model.Countries)
                 {
                     if (country.Id == Model.CountryId)

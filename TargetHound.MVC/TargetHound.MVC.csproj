@@ -25,6 +25,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TargetHound.Blazor\TargetHound.Blazor.csproj" />
+    <ProjectReference Include="..\TargetHound.DTOs\TargetHound.DTOs.csproj" />
     <ProjectReference Include="..\TargetHound.Services\TargetHound.Services.csproj" />
     <ProjectReference Include="..\TargetHound.ViewModels\TargetHound.SharedViewModels.csproj" />
   </ItemGroup>

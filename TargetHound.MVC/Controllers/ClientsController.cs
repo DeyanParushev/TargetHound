@@ -19,6 +19,7 @@
         private readonly IClientService clientService;
         private readonly IEmailSender emailSender;
         private readonly IClientInvitationsService clientInvitationsService;
+        private readonly IUserService userService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
 
@@ -26,12 +27,14 @@
             IClientService clientService,
             IEmailSender emailSender,
             IClientInvitationsService clientInvitationsService,
+            IUserService userService,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager)
         {
             this.clientService = clientService;
             this.emailSender = emailSender;
             this.clientInvitationsService = clientInvitationsService;
+            this.userService = userService;
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
@@ -173,32 +176,20 @@
             try
             {
                 var user = await this.userManager.GetUserAsync(this.User);
-                var newUser = await this.userManager.FindByEmailAsync(email);
+                var receiver = await this.userManager.FindByEmailAsync(email);
                 var clientName = await this.clientService.GetClientNameByIdAsync(clientId);
                 var linkToJoin = this.Url.Action(
                     "Join", "Clients", new { clientId = clientId }, this.Request.Scheme);
                 var receiverEmail = email;
                
-                if (newUser == null)
+                if (receiver == null)
                 {
-                    await this.emailSender.SendEmailAsync(
-                        user.Email, 
-                        user.UserName, 
-                        receiverEmail, 
-                        receiverEmail, 
-                        MessageTemplates.InvitationSubject(user.UserName), 
-                        MessageTemplates.ClientInvitation(user.UserName, clientName, linkToJoin));
+                    await this.userService.SendClientInvitationAsync(user.Email, user.UserName, receiverEmail, receiverEmail, clientId, linkToJoin);
                 }
                 else
                 {
-                    await this.clientService.AsignUserToClientAsync(newUser.Id, clientId);
-                    await this.emailSender.SendEmailAsync(
-                        user.Email, 
-                        user.UserName, 
-                        newUser.Email,
-                        newUser.UserName, 
-                        MessageTemplates.InvitationSubject(user.UserName),
-                        MessageTemplates.ClientInvitation(user.UserName, clientName, linkToJoin));
+                    await this.clientService.AsignUserToClientAsync(receiver.Id, clientId);
+                    await this.userService.SendClientInvitationAsync(user.Email, user.UserName, receiver.Email, receiver.UserName, clientId, linkToJoin);
                 }
 
                 await this.clientInvitationsService.AcceptInvitationAsync(clientId, receiverEmail);
@@ -206,6 +197,7 @@
             catch (Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
+                return this.View("Error");
             }
 
             return this.Redirect("/Clients/All");

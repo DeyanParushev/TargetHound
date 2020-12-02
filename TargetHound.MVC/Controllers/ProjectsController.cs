@@ -3,11 +3,13 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using System;
     using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
     using TargetHound.DataModels;
+    using TargetHound.DTOs;
     using TargetHound.MVC.Areas.Identity;
     using TargetHound.Services.Interfaces;
     using TargetHound.SharedViewModels.InputModels;
@@ -18,16 +20,19 @@
         private readonly IProjectService projectService;
         private readonly ICountriesService countriesService;
         private readonly IContractorService contractorService;
+        private readonly IUserService userService;
         private readonly UserManager<ApplicationUser> userManager;
 
         public ProjectsController(IProjectService projectService,
             ICountriesService countriesService,
             IContractorService contractorService,
+            IUserService userService,
             UserManager<ApplicationUser> userManager)
         {
             this.projectService = projectService;
             this.countriesService = countriesService;
             this.contractorService = contractorService;
+            this.userService = userService;
             this.userManager = userManager;
         }
 
@@ -70,7 +75,7 @@
 
             if (userIsInProject)
             {
-                return this.Json(await this.projectService.GetProjectById<ProjectViewModel>(projectId));
+                return this.Json(await this.projectService.GetProjectById<ProjectDTO>(projectId));
             }
 
             return this.Redirect("/Projects/Load");
@@ -89,10 +94,8 @@
                 await this.userManager.AddToRoleAsync(user, SiteIdentityRoles.ProjectAdmin);
             }
 
-            CountryViewModel country = await this.countriesService.GetCountryByIdAsync<CountryViewModel>(input.Project.CountryId);
-            ProjectViewModel projectView = new ProjectViewModel { Name = project.Name, CountryName = country.Name };
-
-            return this.RedirectToAction("/Planning", projectView);
+            // TODO: pass the real object to the blazor app
+            return this.RedirectToAction("/Planning");
         }
 
         [Authorize(Roles = SiteIdentityRoles.ProjectAdmin)]
@@ -100,10 +103,10 @@
         {
             var project = await this.projectService.GetProjectById<ProjectEditInputModel>(projectId);
             var countries = await this.countriesService.GetAllCountriesAsync<CountryViewModel>();
-            
+
             project.Countries = countries;
-            
-            bool isCurrentUserAdmin = 
+
+            bool isCurrentUserAdmin =
                 await this.projectService.IsUserIdSameWithProjectAdminId(this.userManager.GetUserId(this.User), project.Id);
 
             if (!isCurrentUserAdmin)
@@ -114,9 +117,24 @@
             return this.View(project);
         }
 
+        [HttpPost]
+        [Authorize(Roles = SiteIdentityRoles.ProjectAdmin)]
+        public async Task<IActionResult> EditProject(ProjectEditInputModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                this.ModelState.AddModelError(string.Empty, "Invalid data!");
+            }
+
+            await this.projectService.EditProjectAsync(model.Id, model.Name, model.MagneticDeclination, model.CountryId);
+            return this.RedirectToAction("Edit", new { projectId = model.Id });
+        }
+
+        [Authorize]
         public async Task<IActionResult> Users(string projectId)
         {
             var users = await this.projectService.GetProjectUsersAsync<UserViewModel>(projectId);
+            this.ViewData["projectId"] = projectId;
             return this.View(users);
         }
 
@@ -133,6 +151,46 @@
             details.Targets = await this.projectService.GetBoreholesAsync<TargetViewModel>(projectId);
 
             return this.View(details);
+        }
+
+        [Authorize(Roles = SiteIdentityRoles.ProjectAdmin)]
+        public async Task<IActionResult> AddUser(string projectId)
+        {
+            var addUserModel = new AddUserModel
+            {
+                Id = projectId,
+            };
+
+            return this.View(addUserModel);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = SiteIdentityRoles.ProjectAdmin)]
+        public async Task<IActionResult> AddUser(string projectId, string email)
+        {
+            try
+            {
+                var currentUser = await this.userManager.GetUserAsync(this.User);
+                var linkToJoin = this.Url.Action(
+                   "Join", "Projects", new { projectId = projectId }, this.Request.Scheme);
+                var receiverEmail = email;
+                var receiver = await this.userManager.FindByEmailAsync(receiverEmail);
+
+                if (receiver == null)
+                {
+                    await this.userService.SendProjectInvitationAsync(currentUser.Email, currentUser.UserName, receiverEmail, receiverEmail, projectId, linkToJoin);
+                }
+                else
+                {
+                    await this.userService.SendProjectInvitationAsync(currentUser.Email, currentUser.UserName, receiver.Email, receiver.UserName, projectId, linkToJoin);
+                }
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+            }
+
+            return this.RedirectToAction("Users", new { projectId = projectId });
         }
     }
 }

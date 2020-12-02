@@ -1,8 +1,9 @@
 ﻿namespace TargetHound.DTOs
 {
-    using TargetHound.DataModels.Interfaces;
+    using TargetHound.DataModels;
+    using TargetHound.Services.Automapper;
 
-    public class TargetDTO : IPoint
+    public class TargetDTO : IPoint, IMapFrom<Target>
     {
         public double Depth { get; set; }
         

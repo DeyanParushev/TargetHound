@@ -1,8 +1,10 @@
 ﻿namespace TargetHound.DTOs
 {
     using System.Collections.Generic;
+    using TargetHound.DataModels;
+    using TargetHound.Services.Automapper;
 
-    public class BoreholeDTO
+    public class BoreholeDTO : IMapFrom<Borehole>
     {
         public BoreholeDTO()
         {
