@@ -29,6 +29,7 @@
             var user = this.dbContext.Users.SingleOrDefault(x => x.Id == userId);
             client.Users.Add(user);
             user.ClientId = client.Id;
+
             await this.dbContext.Clients.AddAsync(client);
             await this.dbContext.SaveChangesAsync();
 
@@ -43,7 +44,7 @@
             return adminId;
         }
 
-        public async Task<ICollection<T>> GetAllClientsByAdminIdAsync<T>(string userId)
+        public async Task<IEnumerable<T>> GetAllClientsByAdminIdAsync<T>(string userId)
         {
             var clientInfo = this.dbContext.Clients
                 .Where(x => x.AdminId == userId && x.IsDeleted == false)
@@ -53,14 +54,13 @@
             return clientInfo;
         }
 
-        public async Task<bool> AsingAdminAsync(string clientId, string userId)
+        public async Task<bool> AsignAdminAsync(string clientId, string userId)
         {
-            var client = this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId && x.IsDeleted == false);
-            if (!this.dbContext.ApplicationUsers.Any(x => x.Id == userId))
-            {
-                return false;
-            }
+            this.CheckIfClientExists(clientId);
+            this.CheckIfUserExists(userId);
 
+            var client = this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId && x.IsDeleted == false);
+           
             client.AdminId = userId;
             var user = this.dbContext.ApplicationUsers.SingleOrDefault(x => x.Id == userId && x.IsDeleted == false);
             user.ClientId = client.Id;
@@ -104,15 +104,8 @@
 
         public async Task<bool> ChangeClientAdminAsync(string clientId, string newAdminId)
         {
-            if (!this.dbContext.Clients.Any(x => x.Id == clientId && x.IsDeleted == false))
-            {
-                return false;
-            }
-
-            if (!this.dbContext.ApplicationUsers.Any(x => x.Id == newAdminId && x.IsDeleted == false))
-            {
-                return false;
-            }
+            this.CheckIfClientExists(clientId);
+            this.CheckIfUserExists(newAdminId);
 
             this.dbContext.Clients
                 .SingleOrDefault(x => x.Id == clientId && x.IsDeleted == false)
@@ -123,15 +116,8 @@
 
         public async Task<bool> IsUserClientAdminAsync(string userId, string clientId)
         {
-            if (!this.dbContext.ApplicationUsers.Any(x => x.Id == userId))
-            {
-                return false;
-            }
-
-            if (!this.dbContext.Clients.Any(x => x.Id == clientId))
-            {
-                return false;
-            }
+            this.CheckIfClientExists(clientId);
+            this.CheckIfUserExists(userId);
 
             return this.dbContext.Clients
                 .SingleOrDefault(x => x.Id == clientId && x.IsDeleted == false)

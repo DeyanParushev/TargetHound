@@ -1,12 +1,12 @@
 ﻿@page "/Planning"
 @inject NavigationManager NavigationManager
 
-<h1>@project</h1>>
+<h1>@project</h1>
 
 @code {
     public string project { get; set; }
 
-    protected override async Task OnInitializedAsync()
+        protected override async Task OnInitializedAsync()
     {
         var url = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
         if (QueryHelpers.ParseQuery(url.Query).TryGetValue("projectId", out var projectId))

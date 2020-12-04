@@ -11,9 +11,9 @@
         
         public Task<T> GetClientInfoByAdminIdAsync<T>(string clientId, string adminId);
         
-        public Task<ICollection<T>> GetAllClientsByAdminIdAsync<T>(string adminId);
+        public Task<IEnumerable<T>> GetAllClientsByAdminIdAsync<T>(string adminId);
        
-        public Task<bool> AsingAdminAsync(string clientId, string userId);
+        public Task<bool> AsignAdminAsync(string clientId, string userId);
         
         public Task<bool> ChangeClientNameAsync(string clientId, string clientName);
         

@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+
     using System;
     using System.Collections.Generic;
     using System.Security.Claims;
@@ -101,33 +102,60 @@
         [Authorize(Roles = SiteIdentityRoles.ProjectAdmin)]
         public async Task<IActionResult> Edit(string projectId)
         {
-            var project = await this.projectService.GetProjectById<ProjectEditInputModel>(projectId);
-            var countries = await this.countriesService.GetAllCountriesAsync<CountryViewModel>();
-
-            project.Countries = countries;
-
-            bool isCurrentUserAdmin =
-                await this.projectService.IsUserIdSameWithProjectAdminId(this.userManager.GetUserId(this.User), project.Id);
-
-            if (!isCurrentUserAdmin)
+            try
             {
-                return this.Redirect("/Projects/Load");
-            }
+                var project = await this.projectService.GetProjectById<ProjectEditInputModel>(projectId);
+                var countries = await this.countriesService.GetAllCountriesAsync<CountryViewModel>();
 
-            return this.View(project);
+                project.Countries = countries;
+
+                bool isCurrentUserAdmin =
+                    await this.projectService
+                    .IsUserIdSameWithProjectAdminId(this.userManager.GetUserId(this.User), project.Id);
+
+                if (!isCurrentUserAdmin)
+                {
+                    return this.Redirect("/Projects/Load");
+                }
+
+                return this.View(project);
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                return this.View("Error");
+            }
         }
 
         [HttpPost]
         [Authorize(Roles = SiteIdentityRoles.ProjectAdmin)]
         public async Task<IActionResult> EditProject(ProjectEditInputModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                this.ModelState.AddModelError(string.Empty, "Invalid data!");
-            }
+                if (!ModelState.IsValid)
+                {
+                    this.ModelState.AddModelError(string.Empty, "Invalid data!");
+                    return this.View("Error");
+                }
 
-            await this.projectService.EditProjectAsync(model.Id, model.Name, model.MagneticDeclination, model.CountryId);
-            return this.RedirectToAction("Edit", new { projectId = model.Id });
+                string userId = this.userManager.GetUserId(this.User);
+                if (await this.projectService.IsUserIdSameWithProjectAdminId(userId, model.Id))
+                {
+                    await this.projectService.EditProjectAsync(model.Id, model.Name, model.MagneticDeclination, model.CountryId);
+                    return this.RedirectToAction("Edit", new { projectId = model.Id });
+                }
+                else
+                {
+                    this.ModelState.AddModelError(string.Empty, "You are not a project Admin.");
+                    return this.View("Error");
+                }
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                return this.View("Error");
+            }
         }
 
         [Authorize]
@@ -184,13 +212,14 @@
                 {
                     await this.userService.SendProjectInvitationAsync(currentUser.Email, currentUser.UserName, receiver.Email, receiver.UserName, projectId, linkToJoin);
                 }
+
+                return this.RedirectToAction("Users", new { projectId = projectId });
             }
             catch (Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
+                return this.View("Error");
             }
-
-            return this.RedirectToAction("Users", new { projectId = projectId });
         }
     }
 }

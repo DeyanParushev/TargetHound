@@ -25,6 +25,7 @@
 
             var clientInvitation = new ClientInvitation
             {
+                Id = Guid.NewGuid().ToString(),
                 ClientId = clientId,
                 Email = invitationEmail,
                 IsAccepted = false,

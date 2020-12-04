@@ -36,6 +36,7 @@
 
             Project project = new Project
             {
+                Id = Guid.NewGuid().ToString(),
                 Name = projectName,
                 AdminId = userId,
                 MagneticDeclination = magneticDeclination,
@@ -46,6 +47,7 @@
             this.dbContext.Projects.Add(project);
             this.dbContext.UsersProjects.Add(new UserProject
             {
+                Id = Guid.NewGuid().ToString(),
                 ApplicationUserId = userId,
                 ProjectId = project.Id,
                 IsAdmin = true,
@@ -89,7 +91,12 @@
 
         public async Task<bool> IsUserIdSameWithProjectAdminId(string userId, string projectId)
         {
-            bool userIsProjectAdmin = this.dbContext.Projects.SingleOrDefault(x => x.Id == projectId)?.AdminId == userId;
+            this.CheckUserExists(userId);
+            this.CheckProjectExists(projectId);
+
+            bool userIsProjectAdmin = this.dbContext
+                .Projects
+                .SingleOrDefault(x => x.Id == projectId).AdminId == userId;
             return userIsProjectAdmin;
         }
 
@@ -205,6 +212,14 @@
             if (!this.dbContext.Projects.Any(x => x.Id == projectId && x.IsDeleted == false))
             {
                 throw new NullReferenceException("Project does not exist");
+            }
+        }
+
+        private void CheckUserExists(string userId)
+        {
+            if (!this.dbContext.Projects.Any(x => x.Id == userId && x.IsDeleted == false))
+            {
+                throw new NullReferenceException("User does not exist");
             }
         }
     }

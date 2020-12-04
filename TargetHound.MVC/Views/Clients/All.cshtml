@@ -1,4 +1,4 @@
-﻿@model TargetHound.SharedViewModels.ViewModels.ClientListModel
+﻿@model IEnumerable<TargetHound.SharedViewModels.ViewModels.ClientViewModel>
 
 @{
     ViewData["Title"] = "All";
@@ -20,7 +20,7 @@
             </tr>
         </thead>
         <tbody class="table-active">
-            @foreach (var item in Model.Clients)
+            @foreach (var item in Model)
             {
                 <tr>
                     <td class="text-center">

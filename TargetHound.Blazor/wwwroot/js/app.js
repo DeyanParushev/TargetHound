@@ -1,0 +1,3 @@
+(() => {
+    consol.log("ebaaago");
+});

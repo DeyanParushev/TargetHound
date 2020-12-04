@@ -14,8 +14,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TargetHound.Services\TargetHound.Services.csproj" />
+    <ProjectReference Include="..\TargetHound.Calcualtions\TargetHound.Calcualtions.csproj" />
+    <ProjectReference Include="..\TargetHound.DTOs\TargetHound.DTOs.csproj" />
     <ProjectReference Include="..\TargetHound.ViewModels\TargetHound.SharedViewModels.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\css\bootstrap\bootstrap.min.css">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
