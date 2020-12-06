@@ -5,7 +5,6 @@
     using Microsoft.AspNetCore.Mvc;
 
     using System;
-    using System.Collections.Generic;
     using System.Security.Claims;
     using System.Threading.Tasks;
 
@@ -37,15 +36,15 @@
             this.userManager = userManager;
         }
 
-        public IActionResult Planning()
+        public IActionResult Options()
         {
             return this.View();
         }
 
         public async Task<IActionResult> Create()
         {
-            ICollection<CountryViewModel> countries = await this.countriesService.GetAllCountriesAsync<CountryViewModel>();
-            ProjectCountryInputModel viewModel = new ProjectCountryInputModel
+            var countries = await this.countriesService.GetAllCountriesAsync<CountryViewModel>();
+            var viewModel = new ProjectCountryInputModel
             {
                 Project = new ProjectInputModel(),
                 Countries = countries,
@@ -57,8 +56,8 @@
         [Authorize]
         public async Task<IActionResult> Load()
         {
-            string userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            ICollection<ProjectViewModel> projects = await this.projectService.GetProjectsByUserId<ProjectViewModel>(userId);
+            var userId = this.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var projects = await this.projectService.GetProjectsByUserId<ProjectViewModel>(userId);
 
             foreach (var project in projects)
             {
@@ -72,31 +71,40 @@
         [Authorize]
         public async Task<IActionResult> LoadProject(string projectId)
         {
-            bool userIsInProject = await this.projectService.IsUserInProject(this.userManager.GetUserId(this.User), projectId);
+            var userIsInProject = await this.projectService.IsUserInProject(this.userManager.GetUserId(this.User), projectId);
 
             if (userIsInProject)
             {
-                return this.Json(await this.projectService.GetProjectById<ProjectDTO>(projectId));
+                return this.Redirect($"/Planning/{projectId}");
             }
-
-            return this.Redirect("/Projects/Load");
+            else
+            {
+                this.ModelState.AddModelError(string.Empty, "You are not part of this project.");
+                return this.View("Error");
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(ProjectCountryInputModel input)
         {
-            ProjectInputModel project = input.Project;
-            string userId = this.userManager.GetUserId(this.User);
+            var project = input.Project;
+            var userId = this.userManager.GetUserId(this.User);
 
             if (userId != null)
             {
                 await this.projectService.CreateAsync(userId, project.Name, project.MagneticDeclination, project.CountryId);
                 ApplicationUser user = await this.userManager.GetUserAsync(this.User);
                 await this.userManager.AddToRoleAsync(user, SiteIdentityRoles.ProjectAdmin);
+                return this.RedirectToAction("Load");
             }
 
-            // TODO: pass the real object to the blazor app
-            return this.RedirectToAction("/Planning");
+            var projectModel = new ProjectDTO
+            {
+                Name = input.Project.Name,
+                MagneticDeclination = input.Project.MagneticDeclination,
+            };
+
+            return this.Redirect($"/Planning/{projectModel.Name}/{projectModel.MagneticDeclination}/");
         }
 
         [Authorize(Roles = SiteIdentityRoles.ProjectAdmin)]
@@ -109,7 +117,7 @@
 
                 project.Countries = countries;
 
-                bool isCurrentUserAdmin =
+                var isCurrentUserAdmin =
                     await this.projectService
                     .IsUserIdSameWithProjectAdminId(this.userManager.GetUserId(this.User), project.Id);
 
@@ -139,7 +147,8 @@
                     return this.View("Error");
                 }
 
-                string userId = this.userManager.GetUserId(this.User);
+                var userId = this.userManager.GetUserId(this.User);
+
                 if (await this.projectService.IsUserIdSameWithProjectAdminId(userId, model.Id))
                 {
                     await this.projectService.EditProjectAsync(model.Id, model.Name, model.MagneticDeclination, model.CountryId);

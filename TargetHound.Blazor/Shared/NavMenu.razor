@@ -5,11 +5,32 @@
     </button>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass= bg-dark" @onclick="ToggleNavMenu">
     <ul class="nav flex-column">
-        <li class="nav-item px-3">
-            <NavLink class="nav-link" href="/Planning">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Planning
+        <li class="">
+            <NavLink class="dropdown" @onclick="ToggleMenu">
+                <a class="btn btn-primary dropdown-toggle btn-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Planning</a>
+            </NavLink>
+            @if (showMenu)
+            {
+                <NavLink class="nav-link" href="">
+                    <span class="oi oi-list-rich" aria-hidden="true">Collars</span>
+                </NavLink>
+                <NavLink class="nav-link" href="">
+                    <span class="oi oi-list-rich" aria-hidden="true">Targets</span>
+                </NavLink>
+                <TargetHound.Blazor.Pages.Collar/>
+            }
+        </li>
+
+        <li class="">
+            <NavLink class="dropdown" href="/Save">
+                <a class="btn btn-primary dropdown-toggle btn-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Save</a>
+            </NavLink>
+        </li>
+        <li class="">
+            <NavLink class="dropdown" href="/Export">
+                <a class="btn btn-primary btn-block dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Export</a>
             </NavLink>
         </li>
     </ul>
@@ -17,11 +38,22 @@
 
 @code {
     private bool collapseNavMenu = true;
+    private bool showMenu;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         collapseNavMenu = !collapseNavMenu;
+    }
+
+    public void Print()
+    {
+        Console.WriteLine("Clicked!");
+    }
+
+    public void ToggleMenu()
+    {
+        this.showMenu = !showMenu;
     }
 }

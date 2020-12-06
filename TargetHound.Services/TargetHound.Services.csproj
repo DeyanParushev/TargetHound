@@ -15,13 +15,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\TargetHound.Data\TargetHound.Data.csproj" />
-    <ProjectReference Include="..\TargetHound.Models\TargetHound.DataModels.csproj" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="SendGrid" Version="9.21.2" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="AutoMapper" Version="10.1.1" />
-    <PackageReference Include="SendGrid" Version="9.21.2" />
+    <ProjectReference Include="..\TargetHound.Data\TargetHound.Data.csproj" />
+    <ProjectReference Include="..\TargetHound.Models\TargetHound.DataModels.csproj" />
   </ItemGroup>
 
 </Project>

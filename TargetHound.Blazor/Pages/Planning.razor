@@ -1,17 +1,38 @@
-﻿@page "/Planning"
-@inject NavigationManager NavigationManager
+﻿@page "/Planning/{name}/{declination:double}/"
+@page "/Planning/{projectId}"
+@inject HttpClient client
+@inject IJSRuntime jsRuntime
 
-<h1>@project</h1>
+    <div class="3dContainer">
+        
+    </div>
 
 @code {
-    public string project { get; set; }
+    [Parameter]
+    public string ProjectId { get; set; }
 
-        protected override async Task OnInitializedAsync()
+    [Parameter]
+    public string Name { get; set; }
+
+    [Parameter]
+    public double Declination { get; set; }
+
+    private ProjectDTO project = null;
+    private IJSObjectReference jsModule;
+
+    protected override async Task OnInitializedAsync()
     {
-        var url = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-        if (QueryHelpers.ParseQuery(url.Query).TryGetValue("projectId", out var projectId))
+        if(ProjectId != null)
         {
-            project = projectId;
+            this.project = await client.GetFromJsonAsync<ProjectDTO>($"api/ProjectApi/{ProjectId}");
+            this.jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/app.js");
         }
+
+
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        this.jsModule.InvokeVoidAsync("render", this.project).GetAwaiter();
     }
 }

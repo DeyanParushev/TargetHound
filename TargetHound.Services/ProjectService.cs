@@ -217,7 +217,7 @@
 
         private void CheckUserExists(string userId)
         {
-            if (!this.dbContext.Projects.Any(x => x.Id == userId && x.IsDeleted == false))
+            if (!this.dbContext.ApplicationUsers.Any(x => x.Id == userId && x.IsDeleted == false))
             {
                 throw new NullReferenceException("User does not exist");
             }
