@@ -5,6 +5,8 @@
 
     public class SurveyPointDTO : IPoint, IMapFrom<SurveyPoint>
     {
+        public string Id { get; set; }
+
         public double Depth { get; set; }
         
         public double Azimuth { get; set; }

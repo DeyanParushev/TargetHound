@@ -1,0 +1,44 @@
+﻿@inject TargetHound.Calcualtions.StraightExtrapolationCalculator calculator
+@inject ILocalStorageService storageService
+
+<EditForm Model="@Borehole" OnValidSubmit="AddToProject">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div>
+        <label>Borehole Name</label>
+        <InputText id="name" @bind-Value="@Borehole.Name" />
+
+        <input type="text" name="name" value="" placeholder="@this.Name"/>
+    </div>
+</EditForm>
+
+@code {
+
+    public BoreholeDTO Borehole { get; set; } = new BoreholeDTO();
+
+    public string Name { get; set; }
+
+    public double CollarEasting { get; set; }
+
+    public double CollarNorthing { get; set; }
+
+    public double CollarElevation { get; set; }
+
+    public double TargetEasting { get; set; }
+
+    public double TargetNorthing { get; set; }
+
+    public double TargetElevation { get; set; }
+
+    public void AddToProject()
+    {
+
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var project = await storageService.GetItemAsync<ProjectDTO>("localProject");
+        this.Name = project.Name;
+        return;
+    }
+}

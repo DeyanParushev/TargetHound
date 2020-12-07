@@ -6,6 +6,14 @@
 
     public class ProjectDTO : IMapFrom<Project>
     {
+        public ProjectDTO()
+        {
+            this.Boreholes = new List<BoreholeDTO>();
+            this.Collars = new List<CollarDTO>();
+            this.Targets = new List<TargetDTO>();
+            this.Contractors = new List<ContractorDTO>();
+        }
+
         public string Id { get; set; }
 
         public string Name { get; set; }
@@ -14,12 +22,12 @@
 
         public string ContractorName { get; set; }
 
-        public ICollection<BoreholeDTO> Boreholes { get; set; }
+        public IList<BoreholeDTO> Boreholes { get; set; }
 
-        public ICollection<TargetDTO> Targets { get; set; }
+        public IList<TargetDTO> Targets { get; set; }
 
-        public ICollection<CollarDTO> Collars { get; set; }
+        public IList<CollarDTO> Collars { get; set; }
 
-        public ICollection<ContractorDTO> Contractors { get; set; }
+        public IList<ContractorDTO> Contractors { get; set; }
     }
 }

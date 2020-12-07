@@ -21,7 +21,7 @@
 
         public CollarDTO Collar { get; set; }
 
-        public TargetDTO Targets { get; set; }
+        public TargetDTO Target { get; set; }
 
         public IList<SurveyPointDTO> SurveyPoints { get; set; }
     }

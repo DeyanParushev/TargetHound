@@ -13,13 +13,19 @@
             </NavLink>
             @if (showMenu)
             {
-                <NavLink class="nav-link" href="">
-                    <span class="oi oi-list-rich" aria-hidden="true">Collars</span>
+                <NavLink class="nav-link">
+                    <span class="oi oi-list-rich" aria-hidden="true" @onclick="ShowBorehole">Create Borehole</span>
                 </NavLink>
-                <NavLink class="nav-link" href="">
-                    <span class="oi oi-list-rich" aria-hidden="true">Targets</span>
+                @if(showBorehole) 
+                {
+                    <TargetHound.Blazor.Pages.AddBorehole />
+                }
+                <NavLink class="nav-link">
+                    <span class="oi oi-list-rich" aria-hidden="true">Create collar</span>
                 </NavLink>
-                <TargetHound.Blazor.Pages.Collar/>
+                <NavLink class="nav-link">
+                    <span class="oi oi-list-rich" aria-hidden="true">Create Target</span>
+                </NavLink>
             }
         </li>
 
@@ -39,6 +45,7 @@
 @code {
     private bool collapseNavMenu = true;
     private bool showMenu;
+    private bool showBorehole;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -55,5 +62,10 @@
     public void ToggleMenu()
     {
         this.showMenu = !showMenu;
+    }
+
+    public void ShowBorehole()
+    {
+        showBorehole = !showBorehole;
     }
 }

@@ -2,10 +2,24 @@
 @page "/Planning/{projectId}"
 @inject HttpClient client
 @inject IJSRuntime jsRuntime
+@inject ILocalStorageService storageService
 
-    <div class="3dContainer">
-        
-    </div>
+<div class="row bg-transparent">
+    <select>
+        @if (project != null)
+        }
+            @for (int i = 0; i < 5; i++)
+            {
+                <option value="value + @i">@i</option>
+            }
+        {
+    </select>
+</div>
+
+<div class="3dContainer">
+
+</div>
+
 
 @code {
     [Parameter]
@@ -18,17 +32,26 @@
     public double Declination { get; set; }
 
     private ProjectDTO project = null;
+    public string BoreholeId { get; set; }
     private IJSObjectReference jsModule;
 
     protected override async Task OnInitializedAsync()
     {
-        if(ProjectId != null)
+        if (ProjectId != null)
         {
             this.project = await client.GetFromJsonAsync<ProjectDTO>($"api/ProjectApi/{ProjectId}");
             this.jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/app.js");
         }
+        else
+        {
+            this.project = new ProjectDTO
+            {
+                Name = this.Name,
+                MagneticDeclination = this.Declination,
+            };
+        }
 
-
+        await storageService.SetItemAsync<ProjectDTO>("localProject", this.project);
     }
 
     protected override void OnAfterRender(bool firstRender)

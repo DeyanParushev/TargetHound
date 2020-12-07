@@ -1,0 +1,79 @@
+﻿<div class="">
+    <table>
+        <tr>
+            <td>Borehole</td>
+            <td><input type="text" name="name" value="@Borehole.Name" /></td>
+        </tr>
+        <tr>Collar</tr>
+        <tr>
+            <td>
+                Easting
+            </td>
+            <td>
+                <input type="number" name="name" value="@Borehole.Collar.Easting" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Northing
+            </td>
+            <td>
+                <input type="number" name="name" value="@Borehole.Collar.Northing" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Elevation
+            </td>
+            <td>
+                <input type="number" name="name" value="@Borehole.Collar.Elevation" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Azimuth
+            </td>
+            <td>
+                <input type="number" name="name" value="@Borehole.Collar.Azimuth" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Dip
+            </td>
+            <td>
+                <input type="number" name="name" value="@Borehole.Collar.Dip" />
+            </td>
+        </tr>
+        <tr>Target</tr>
+        <tr>
+            <td>
+                Easting
+            </td>
+            <td>
+                <input type="number" name="name" value="@Borehole.Target.Easting" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Northing
+            </td>
+            <td>
+                <input type="number" name="name" value="@Borehole.Target.Northing" />
+            </td>
+        </tr>
+        <tr>
+            <td>
+                Elevation
+            </td>
+            <td>
+                <input type="number" name="name" value="@Borehole.Target.Elevation" />
+            </td>
+        </tr>
+    </table>
+</div>
+
+@code {
+    [Parameter]
+    public BoreholeDTO Borehole { get; set; } = null;
+}

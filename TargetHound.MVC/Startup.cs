@@ -43,7 +43,7 @@ namespace TargetHound.MVC
                 configure.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
                 .AddRazorRuntimeCompilation();
-
+            
             services.AddTransient<IProjectService, ProjectService>();
             services.AddTransient<ICountriesService, CountriesService>();
             services.AddTransient<IUserService, UserService>();
