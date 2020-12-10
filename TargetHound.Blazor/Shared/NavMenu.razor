@@ -1,12 +1,8 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
-    <a class="navbar-brand" href="/Home/Index">Target Hound</a>
-    <button class="navbar-toggler" @onclick="ToggleNavMenu">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+﻿<div class="top-row navbar bg-primary" style="padding:0">
+    <h4 class="text-center font-weight-bold"><a href="/Home/Index" class="stretched-link">Target Hound</a></h4>
 </div>
-
-<div class="@NavMenuCssClass= bg-dark" @onclick="ToggleNavMenu">
-    <ul class="nav flex-column">
+<div class="@NavMenuCssClass= bg-primary overflow-auto vh-100" @onclick="ToggleNavMenu">
+    <ul class="nav flex-column bg-primary">
         <li class="">
             <NavLink class="dropdown" @onclick="ToggleMenu">
                 <a class="btn btn-primary dropdown-toggle btn-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Planning</a>
@@ -14,24 +10,32 @@
             @if (showMenu)
             {
                 <NavLink class="nav-link">
-                    <span class="oi oi-list-rich" aria-hidden="true" @onclick="ShowBorehole">Create Borehole</span>
+                    <span class="btn btn-primary btn-block dropdown-toggle" aria-hidden="true" @onclick="ShowBorehole">Create Borehole</span>
                 </NavLink>
-                @if(showBorehole) 
+                @if (showBorehole)
                 {
                     <TargetHound.Blazor.Pages.AddBorehole />
                 }
                 <NavLink class="nav-link">
-                    <span class="oi oi-list-rich" aria-hidden="true">Create collar</span>
+                    <span class="btn btn-primary btn-block dropdown-toggle" aria-hidden="true" @onclick="ShowCollar">Create Collar</span>
                 </NavLink>
+                @if (this.showCollar)
+                {
+                    <TargetHound.Blazor.Pages.AddCollar />
+                }
                 <NavLink class="nav-link">
-                    <span class="oi oi-list-rich" aria-hidden="true">Create Target</span>
+                    <span class="btn btn-primary btn-block dropdown-toggle" aria-hidden="true" @onclick="ShowTarget">Create Target</span>
                 </NavLink>
+                @if(this.showTarget)
+                {
+                    <TargetHound.Blazor.Pages.AddTarget/>
+                }
             }
         </li>
 
         <li class="">
             <NavLink class="dropdown" href="/Save">
-                <a class="btn btn-primary dropdown-toggle btn-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Save</a>
+                <a class="btn btn-primary btn-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Save</a>
             </NavLink>
         </li>
         <li class="">
@@ -46,6 +50,8 @@
     private bool collapseNavMenu = true;
     private bool showMenu;
     private bool showBorehole;
+    private bool showTarget;
+    private bool showCollar;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
@@ -54,18 +60,23 @@
         collapseNavMenu = !collapseNavMenu;
     }
 
-    public void Print()
-    {
-        Console.WriteLine("Clicked!");
-    }
-
     public void ToggleMenu()
     {
-        this.showMenu = !showMenu;
+        this.showMenu = !this.showMenu;
     }
 
     public void ShowBorehole()
     {
-        showBorehole = !showBorehole;
+        this.showBorehole = !this.showBorehole;
+    }
+
+    public void ShowCollar()
+    {
+        this.showCollar = !this.showCollar;
+    }
+
+    public void ShowTarget()
+    {
+        this.showTarget = !this.showTarget;
     }
 }

@@ -1,0 +1,62 @@
+﻿@inject IStateService storageService
+
+<EditForm Model="@this.Collar" OnValidSubmit="AddToProject" class="mt-4">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group flex-sm-column">
+        <label class="text-center font-weight-bold d-block">Collar Name</label>
+        <InputText @bind-Value="@this.Collar.Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label class="text-center font-weight-bold d-block">Easting</label>
+        <InputNumber @bind-Value="@this.Collar.Easting" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label class="text-center font-weight-bold d-block">Northing</label>
+        <InputNumber @bind-Value="@this.Collar.Northing" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label class="text-center font-weight-bold d-block">Elevation</label>
+        <InputNumber @bind-Value="@this.Collar.Elevation" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success offset-4">
+        Create
+    </button>
+
+    @if (this.isCreated)
+    {
+        <div class="text-center mt-2">
+            <alert class="text-success font-weight-bold">Collar Created!</alert>
+        </div>
+    }
+</EditForm>
+
+<hr style="border:0;height:1.5px;background-color: rgb(230, 230, 230); width:80%;" />
+
+@code {
+    private CollarDTO Collar { get; set; } = new CollarDTO();
+
+    private bool isCreated { get; set; } = false;
+
+    public void AddToProject()
+    {
+        CollarDTO collar = new CollarDTO
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = this.Collar.Name,
+            Easting = this.Collar.Easting,
+            Northing = this.Collar.Northing,
+            Elevation = this.Collar.Elevation,
+        };
+
+        this.storageService.Project.Collars.Add(collar);
+        this.isCreated = true;
+        this.StateHasChanged();
+        this.Collar.Name = null;
+        this.Collar.Easting = 0;
+        this.Collar.Northing = 0;
+        this.Collar.Elevation = 0;
+    }
+}

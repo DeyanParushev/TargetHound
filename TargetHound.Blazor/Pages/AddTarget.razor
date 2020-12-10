@@ -1,0 +1,57 @@
+﻿@inject IStateService stateService
+
+<EditForm Model="@this.Target" OnValidSubmit="AddToProject" class="mt-4">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group flex-sm-column">
+        <label class="text-center font-weight-bold d-block">Target Name</label>
+        <InputText @bind-Value="@this.Target.Name" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label class="text-center font-weight-bold d-block">Easting</label>
+        <InputNumber @bind-Value="@this.Target.Easting" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label class="text-center font-weight-bold d-block">Northing</label>
+        <InputNumber @bind-Value="@this.Target.Northing" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label class="text-center font-weight-bold d-block">Elevation</label>
+        <InputNumber @bind-Value="@this.Target.Elevation" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success offset-4">
+        Create
+    </button>
+    @if (this.isCreated)
+    {
+        <div class="text-center mt-2">
+            <alert class="text-center text-success font-weight-bold">Target Created</alert>
+        </div>
+    }
+</EditForm>
+
+<hr style="border:0;height:1.5px;background-color: rgb(230, 230, 230); width:80%;" />
+
+@code {
+    private TargetDTO Target { get; set; } = new TargetDTO();
+    private bool isCreated { get; set; } = false;
+
+    public void AddToProject()
+    {
+        TargetDTO target = new TargetDTO
+        {
+            Id = Guid.NewGuid().ToString(),
+            Name = this.Target.Name,
+            Easting = this.Target.Easting,
+            Northing = this.Target.Northing,
+            Elevation = this.Target.Elevation,
+        };
+
+        this.stateService.Project.Targets.Add(target);
+        this.StateHasChanged();
+        this.isCreated = true;
+    }
+}

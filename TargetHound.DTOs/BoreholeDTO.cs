@@ -1,6 +1,7 @@
 ﻿namespace TargetHound.DTOs
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
@@ -8,21 +9,22 @@
     {
         public BoreholeDTO()
         {
-            this.SurveyPoints = new List<SurveyPointDTO>();
+            this.SurveyPoints = new List<IPoint>();
         }
 
         public string Id { get; set; }
 
+        [Required]
+        [MinLength(5, ErrorMessage = "Name has to be between 5 and 20 characters!")]
+        [MaxLength(20, ErrorMessage = "Name has to be between 5 and 20 characters@")]
         public string Name { get; set; }
 
         public ContractorDTO Contractor { get; set; }
-
-        public string ProjectId { get; set; }
 
         public CollarDTO Collar { get; set; }
 
         public TargetDTO Target { get; set; }
 
-        public IList<SurveyPointDTO> SurveyPoints { get; set; }
+        public IList<IPoint> SurveyPoints { get; set; }
     }
 }

@@ -8,15 +8,18 @@
     {
         public string Id { get; set; }
 
-        [Required]
-        [MinLength(4)]
-        [MaxLength(40)]
+        [Required(ErrorMessage = "Name must be betweem 4 and 40 characters.")]
+        [MinLength(4, ErrorMessage = "Name must be betweem 4 and 40 characters.")]
+        [MaxLength(40, ErrorMessage = "Name must be betweem 4 and 40 characters.")]
         public string Name { get; set; }
         
+        [Range(0, int.MaxValue, ErrorMessage = "Depth must be a possitive number.")]
         public double Depth { get; set; }
         
+        [Range(0, 360, ErrorMessage = "Azimuith must be between 0 and 360 degrees.")]
         public double Azimuth { get; set; }
         
+        [Range(-90, 90, ErrorMessage = "Dip must be between -90 and 90 degrees.")]
         public double Dip { get; set; }
         
         [Required]

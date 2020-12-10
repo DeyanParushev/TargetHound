@@ -1,6 +1,7 @@
 ﻿namespace TargetHound.DTOs
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
@@ -16,8 +17,12 @@
 
         public string Id { get; set; }
 
+        [Required(ErrorMessage = "Name must be between 6 and 40 characters.")]
+        [MinLength(6, ErrorMessage = "Name must be between 6 and 40 characters.")]
+        [MaxLength(40, ErrorMessage = "Name must be between 6 and 40 characters.")]
         public string Name { get; set; }
 
+        [Required]
         public double MagneticDeclination { get; set; }
 
         public string ContractorName { get; set; }

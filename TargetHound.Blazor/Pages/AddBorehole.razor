@@ -1,44 +1,109 @@
-﻿@inject TargetHound.Calcualtions.StraightExtrapolationCalculator calculator
-@inject ILocalStorageService storageService
+﻿@inject TargetHound.Calcualtions.StraightExtrapolationCalculator straightCalculator
+@inject TargetHound.Calcualtions.Extrapolator extrapolator
+@inject IStateService storageService
 
-<EditForm Model="@Borehole" OnValidSubmit="AddToProject">
+<EditForm Model="@this.Borehole" OnValidSubmit="AddToProject" class="flex-column mt-4">
     <DataAnnotationsValidator />
     <ValidationSummary />
-    <div>
-        <label>Borehole Name</label>
-        <InputText id="name" @bind-Value="@Borehole.Name" />
 
-        <input type="text" name="name" value="" placeholder="@this.Name"/>
+    <div class="form-group flex-sm-column">
+        <label class="text-center font-weight-bold d-block">Name</label>
+        <InputText @bind-Value="@this.Borehole.Name" class="form-control" />
     </div>
+    <div class="form-group">
+        <label for="@CollarId" class="text-center font-weight-bold d-block">Choose Collar</label>
+        <InputSelect @bind-Value="@CollarId" class="form-control">
+            <option selected="selected">Collar...</option>
+            @foreach (var collar in this.Collars)
+            {
+                <option class="form-control" value="@collar.Id">@collar.Name</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        <label for="@TargetId" class="text-center font-weight-bold d-block">Choose Target</label>
+        <InputSelect @bind-Value="@TargetId" class="form-control">
+            <option selected="selected">Target...</option>
+            @foreach (var target in this.Targets)
+            {
+                <option class="form-control" value="@target.Id">@target.Name</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        <label class="text-center font-weight-bold d-block">Azimuth change</label>
+        <InputNumber @bind-Value="@this.AzimuthChange" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label class="text-center font-weight-bold d-block">Dip change</label>
+        <InputNumber @bind-Value="@this.DipChange" class="form-control" />
+    </div>
+
+    <button type="submit" class="btn btn-success offset-4">
+        Create
+    </button>
+    @if (this.isCreated)
+    {
+        <div class="text-center mt-2">
+            <alert class="text-success font-weight-bold">Borehole created</alert>
+        </div>
+    }
 </EditForm>
 
+<hr style="border:0;height:1.5px;background-color: rgb(230, 230, 230); width:80%;" />
+
 @code {
+    public bool IsStraight => this.AzimuthChange == 0 && this.DipChange == 0;
+
+    public double AzimuthChange { get; set; } = 0;
+
+    public double DipChange { get; set; } = 0;
 
     public BoreholeDTO Borehole { get; set; } = new BoreholeDTO();
 
-    public string Name { get; set; }
+    public string CollarId { get; set; }
 
-    public double CollarEasting { get; set; }
+    public string TargetId { get; set; }
 
-    public double CollarNorthing { get; set; }
+    public IEnumerable<CollarDTO> Collars { get; set; }
 
-    public double CollarElevation { get; set; }
+    public IEnumerable<TargetDTO> Targets { get; set; }
 
-    public double TargetEasting { get; set; }
+    public ProjectDTO Project { get; set; }
 
-    public double TargetNorthing { get; set; }
+    private bool isCreated { get; set; } = false;
 
-    public double TargetElevation { get; set; }
+    protected override async Task OnParametersSetAsync()
+    {
+        this.Project = this.storageService.Project;
+        this.Collars = this.Project.Collars;
+        this.Targets = this.Project.Targets;
+        return;
+    }
 
     public void AddToProject()
     {
+        BoreholeDTO borehole = new BoreholeDTO
+        {
+            Collar = this.Collars.FirstOrDefault(x => x.Id == this.CollarId),
+            Target = this.Targets.FirstOrDefault(x => x.Id == this.TargetId),
+            Name = this.Borehole.Name,
+            Id = Guid.NewGuid().ToString(),
+        };
 
-    }
+        if(this.IsStraight)
+        {
+            borehole.Collar.Azimuth = this.straightCalculator.GetInitialAzimuthAngle(borehole.Collar, borehole.Target);
+            borehole.Collar.Dip = this.straightCalculator.GetInitialDipAngle(borehole.Collar, borehole.Target);
+            borehole.SurveyPoints = this.extrapolator.GetStraightExtrapolation(borehole.Collar, borehole.Target);
+        }
+        else
+        {
 
-    protected override async Task OnInitializedAsync()
-    {
-        var project = await storageService.GetItemAsync<ProjectDTO>("localProject");
-        this.Name = project.Name;
-        return;
+        }
+
+        this.Project.Boreholes.Add(borehole);
     }
 }
+

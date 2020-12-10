@@ -2,22 +2,33 @@
 @page "/Planning/{projectId}"
 @inject HttpClient client
 @inject IJSRuntime jsRuntime
-@inject ILocalStorageService storageService
+@inject IStateService stateService
 
-<div class="row bg-transparent">
-    <select>
-        @if (project != null)
-        }
-            @for (int i = 0; i < 5; i++)
-            {
-                <option value="value + @i">@i</option>
-            }
+<div class="row bg-light mx-0 px-0">
+    <select class="custom-select" value="this.Borehole">
+        @if (this.project != null)
         {
+            <option value="New">New borehole</option>
+
+            @foreach (var borehole in this.project.Boreholes)
+            {
+                <option value="@borehole.Id">@borehole.Name</option>
+            }
+        }
+        else
+        {
+            <option>New</option>
+        }
     </select>
 </div>
 
-<div class="3dContainer">
+<div class="p-0 m-0 flex-row">
+    <section class="sidebar p-0 m-0">
+        <Infobox/>
+    </section>
 
+    <div class="3dContainer p-0 m-0">
+    </div>
 </div>
 
 
@@ -31,8 +42,9 @@
     [Parameter]
     public double Declination { get; set; }
 
+    public BoreholeDTO Borehole { get; set; }
+
     private ProjectDTO project = null;
-    public string BoreholeId { get; set; }
     private IJSObjectReference jsModule;
 
     protected override async Task OnInitializedAsync()
@@ -51,7 +63,7 @@
             };
         }
 
-        await storageService.SetItemAsync<ProjectDTO>("localProject", this.project);
+        this.stateService.Project = this.project;
     }
 
     protected override void OnAfterRender(bool firstRender)

@@ -6,6 +6,7 @@ namespace TargetHound.Blazor
     using System;
     using System.Net.Http;
     using System.Threading.Tasks;
+    using TargetHound.Blazor.Services;
     using TargetHound.Calcualtions;
 
     public class Program
@@ -18,7 +19,7 @@ namespace TargetHound.Blazor
             builder.Services
                 .AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
-            builder.Services.AddBlazoredLocalStorage();
+            builder.Services.AddSingleton<IStateService, StateService>();
             builder.Services.AddTransient<AngleConverter>();
             builder.Services.AddTransient<StraightExtrapolationCalculator>();
             builder.Services.AddTransient<CurveExtrapolationCalculator>();
