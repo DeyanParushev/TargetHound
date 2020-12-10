@@ -8,9 +8,9 @@
     {
         private AngleConverter angleConverter;
 
-        public StraightExtrapolationCalculator()
+        public StraightExtrapolationCalculator(AngleConverter angleConverter)
         {
-            this.angleConverter = new AngleConverter();
+            this.angleConverter = angleConverter;
         }
 
         public double GetStraightHoleLength(IPoint startPoint, IPoint endPoint)

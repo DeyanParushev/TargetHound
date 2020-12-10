@@ -12,6 +12,9 @@
         private readonly double azimuthChange;
         private readonly double dipChange;
         private StraightExtrapolationCalculator straightCalculator;
+        private readonly CoordinatesSetter coordinatesSetter;
+        private readonly Extrapolator extrapolator;
+        private IPoint sameVectorLengthPoint;
 
         public CurveExtrapolationCalculator(IList<IPoint> borehole, IPoint target)
         {
@@ -19,44 +22,46 @@
             this.target = target;
         }
 
-        public CurveExtrapolationCalculator(IPoint collar, IPoint target, double azimuthChange, double dipChange)
+        public CurveExtrapolationCalculator(
+            StraightExtrapolationCalculator straightExtrapolationCalculator,
+            CoordinatesSetter coordinatesSetter,
+            Extrapolator extrapolator,
+            IPoint collar,
+            IPoint target,
+            double azimuthChange,
+            double dipChange)
         {
             this.target = target;
-            this.straightCalculator = new StraightExtrapolationCalculator();
-
+            this.straightCalculator = straightExtrapolationCalculator;
+            this.coordinatesSetter = coordinatesSetter;
+            this.extrapolator = extrapolator;
             if (collar.Dip == 0 && collar.Azimuth == 0)
             {
                 collar.Azimuth = this.straightCalculator.GetInitialAzimuthAngle(collar, target);
                 collar.Dip = this.straightCalculator.GetInitialDipAngle(collar, target);
             }
 
-            Extrapolator extrapolator = new Extrapolator();
             this.borehole = extrapolator.GetCurvedExtrapolaton(collar, azimuthChange, dipChange);
             this.dipChange = dipChange;
             this.azimuthChange = azimuthChange;
+            this.sameVectorLengthPoint = this.GetSameVectorLengthPoint();
         }
 
         public double GetInitialAzimuth()
         {
-            IPoint sameVectorLengthPoint = this.GetSameVectorLengthPoint();
-
-            double collarAzimuth = this.straightCalculator.GetInitialAzimuthAngle(this.borehole[0], sameVectorLengthPoint);
+            double collarAzimuth = this.straightCalculator.GetInitialAzimuthAngle(this.borehole[0], this.sameVectorLengthPoint);
             return collarAzimuth;
         }
 
         public double GetDistance()
         {
-            IPoint sameVectorLengthPoint = this.GetSameVectorLengthPoint();
-
-            double vectorLength = this.straightCalculator.GetStraightHoleLength(this.borehole[0], sameVectorLengthPoint);
+            double vectorLength = this.straightCalculator.GetStraightHoleLength(this.borehole[0], this.sameVectorLengthPoint);
             return vectorLength;
         }
 
         public double GetInitialDip()
         {
-            IPoint sameVectorLengthPoint = this.GetSameVectorLengthPoint();
-
-            double collarDip = this.straightCalculator.GetInitialDipAngle(this.borehole[0], sameVectorLengthPoint);
+            double collarDip = this.straightCalculator.GetInitialDipAngle(this.borehole[0], this.sameVectorLengthPoint);
             return collarDip;
         }
 
@@ -84,8 +89,8 @@
                 Dip = startStation.Dip + (dipChangePerMeter * (depthChange / 2)),
             };
 
-            CoordinatesSetter coordinatesSetter = new CoordinatesSetter();
-            coordinatesSetter.SetBottomStationUTMCoortinates(startStation, midStation);
+
+            this.coordinatesSetter.SetBottomStationUTMCoortinates(startStation, midStation);
 
 
             while (Math.Abs(depthChange) > 0.001)
@@ -116,6 +121,31 @@
             }
 
             return midStation;
+        }
+
+        // TODO: finish the algorithm for curve boreholes
+        private void FindInitialAzimuthAndDip(IPoint collar, IPoint target)
+        {
+            double initialAzimuthToSameVector =
+                this.straightCalculator.GetInitialAzimuthAngle(collar, this.sameVectorLengthPoint);
+            double initialDipToSameVector =
+                this.straightCalculator.GetInitialDipAngle(collar, this.sameVectorLengthPoint);
+
+            double straightAzimuth = this.straightCalculator.GetInitialAzimuthAngle(collar, target);
+            double straightDip = this.straightCalculator.GetInitialDipAngle(collar, target);
+
+            double collarDipChange = straightDip - initialDipToSameVector;
+            double collarAzimuthChange = straightAzimuth - initialAzimuthToSameVector;
+
+
+            while (true)
+            {
+                collar.Azimuth = straightAzimuth - collarAzimuthChange;
+                collar.Dip = straightDip - collarDipChange;
+
+                this.extrapolator.GetCurvedExtrapolaton(collar, this.azimuthChange, this.dipChange);
+
+            }
         }
     }
 }

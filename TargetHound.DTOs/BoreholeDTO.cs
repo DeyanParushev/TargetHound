@@ -9,7 +9,7 @@
     {
         public BoreholeDTO()
         {
-            this.SurveyPoints = new List<IPoint>();
+            this.SurveyPoints = new List<SurveyPointDTO>();
         }
 
         public string Id { get; set; }
@@ -25,6 +25,6 @@
 
         public TargetDTO Target { get; set; }
 
-        public IList<IPoint> SurveyPoints { get; set; }
+        public IList<SurveyPointDTO> SurveyPoints { get; set; }
     }
 }

@@ -3,28 +3,26 @@
 @inject HttpClient client
 @inject IJSRuntime jsRuntime
 @inject IStateService stateService
+@inject NavigationManager navigator
 
 <div class="row bg-light mx-0 px-0">
-    <select class="custom-select" value="this.Borehole">
-        @if (this.project != null)
-        {
-            <option value="New">New borehole</option>
-
-            @foreach (var borehole in this.project.Boreholes)
-            {
-                <option value="@borehole.Id">@borehole.Name</option>
-            }
-        }
-        else
-        {
-            <option>New</option>
-        }
-    </select>
+    <div class="form-group">
+        <EditForm Model="@Borehole">
+            <label for="@this.Borehole" class="text-center font-weight-bold d-block"></label>
+            <InputSelect @bind-Value="@this.Borehole" class="form-control">
+                <option selected="selected">Borehole...</option>
+                @foreach (var borehole in this.Boreholes)
+                {
+                    <option class="form-control" value="@borehole.Id" @onclick="RenderBorehole">@borehole.Name</option>
+                }
+            </InputSelect>
+        </EditForm>
+    </div>
 </div>
 
 <div class="p-0 m-0 flex-row">
     <section class="sidebar p-0 m-0">
-        <Infobox/>
+        <Infobox />
     </section>
 
     <div class="3dContainer p-0 m-0">
@@ -33,6 +31,10 @@
 
 
 @code {
+    private ProjectDTO project = null;
+    private ICollection<BoreholeDTO> Boreholes { get; set; }
+    private IJSObjectReference jsModule;
+
     [Parameter]
     public string ProjectId { get; set; }
 
@@ -44,8 +46,12 @@
 
     public BoreholeDTO Borehole { get; set; }
 
-    private ProjectDTO project = null;
-    private IJSObjectReference jsModule;
+    protected override async Task OnParametersSetAsync()
+    {
+        this.Boreholes = this.project.Boreholes;
+        this.Borehole = new BoreholeDTO();
+        return;
+    }
 
     protected override async Task OnInitializedAsync()
     {
@@ -53,6 +59,7 @@
         {
             this.project = await client.GetFromJsonAsync<ProjectDTO>($"api/ProjectApi/{ProjectId}");
             this.jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/app.js");
+
         }
         else
         {
@@ -63,11 +70,23 @@
             };
         }
 
-        this.stateService.Project = this.project;
+        if (this.project == null)
+        {
+            this.navigator.NavigateTo("/Error");
+        }
+        else
+        {
+            this.stateService.Project = this.project;
+        }
     }
 
     protected override void OnAfterRender(bool firstRender)
     {
         this.jsModule.InvokeVoidAsync("render", this.project).GetAwaiter();
+    }
+
+    public void RenderBorehole()
+    {
+        Console.WriteLine(this.Borehole);
     }
 }

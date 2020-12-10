@@ -15,9 +15,9 @@
         protected IPoint pointOnTargetElevation;
         protected IPoint closestHorizontalPoint;
 
-        public PlaneDistanceCalculator(IList<IPoint> borehole, IPoint target)
+        public PlaneDistanceCalculator(IList<IPoint> borehole, IPoint target, CoordinatesSetter coordinatesSetter)
         {
-            this.coordinateSetter = new CoordinatesSetter();
+            this.coordinateSetter = coordinatesSetter;
             this.target = target;
             this.borehole = borehole;
 

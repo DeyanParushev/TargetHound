@@ -53,5 +53,10 @@
         this.stateService.Project.Targets.Add(target);
         this.StateHasChanged();
         this.isCreated = true;
+
+        this.Target.Name = null;
+        this.Target.Easting = 0;
+        this.Target.Northing = 0;
+        this.Target.Elevation = 0;
     }
 }

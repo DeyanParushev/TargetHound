@@ -13,10 +13,10 @@
         private double ratioFactor = 0;
         private double measuredDepth;
 
-        public CoordinatesSetter()
+        public CoordinatesSetter(CurveCalculator curveCalculator, AngleConverter angleConverter)
         {
-            this.curveCalculator = new CurveCalculator();
-            this.angleConverter = new AngleConverter();
+            this.curveCalculator = curveCalculator;
+            this.angleConverter = angleConverter;
         }
 
         public void SetBottomStationUTMCoortinates(IPoint topStation, IPoint bottomStation)

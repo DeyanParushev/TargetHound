@@ -92,7 +92,7 @@
             Id = Guid.NewGuid().ToString(),
         };
 
-        if(this.IsStraight)
+        if (this.IsStraight)
         {
             borehole.Collar.Azimuth = this.straightCalculator.GetInitialAzimuthAngle(borehole.Collar, borehole.Target);
             borehole.Collar.Dip = this.straightCalculator.GetInitialDipAngle(borehole.Collar, borehole.Target);
@@ -100,10 +100,11 @@
         }
         else
         {
-
+            // TODO: finish the algorythm for curved borehole;
         }
 
         this.Project.Boreholes.Add(borehole);
+        this.StateHasChanged();
     }
 }
 

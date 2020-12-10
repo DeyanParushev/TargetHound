@@ -2,6 +2,7 @@
 {
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using System;
     using System.Threading.Tasks;
     using TargetHound.DTOs;
     using TargetHound.Services.Interfaces;
@@ -21,8 +22,15 @@
         [Authorize]
         public async Task<ActionResult<ProjectDTO>> GetProject(string projectId)
         {
-            var project = await this.projectService.GetProjectById<ProjectDTO>(projectId);
-            return project;
+            try
+            {
+                var project = await this.projectService.GetProjectById<ProjectDTO>(projectId);
+                return project;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
         }
     }
 }

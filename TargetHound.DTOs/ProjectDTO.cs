@@ -25,8 +25,6 @@
         [Required]
         public double MagneticDeclination { get; set; }
 
-        public string ContractorName { get; set; }
-
         public IList<BoreholeDTO> Boreholes { get; set; }
 
         public IList<TargetDTO> Targets { get; set; }

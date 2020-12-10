@@ -14,14 +14,14 @@
         private double extrapolationLength;
         private readonly StraightExtrapolationCalculator straightExtrapolation;
 
-        public Extrapolator(StraightExtrapolationCalculator straightExtrapolation, double extrapolation = 4000)
+        public Extrapolator(StraightExtrapolationCalculator straightExtrapolation, CoordinatesSetter coordinatesSetter, double extrapolation = 4000)
         {
-            this.coordinatesSetter = new CoordinatesSetter();
+            this.coordinatesSetter = coordinatesSetter;
             this.extrapolationLength = extrapolation;
             this.straightExtrapolation = straightExtrapolation;
         }
 
-        public ICollection<IPoint> GetStraightExtrapolation(
+        public IList<SurveyPointDTO> GetStraightExtrapolation(
             double startEasting,
             double startNorthing,
             double startElevation,
@@ -30,11 +30,11 @@
         {
             int extrapolationPointsCount = (int)Math.Ceiling((extrapolationLength / 30.0));
             double endSectionLength = extrapolationLength % 30.0;
-            List<IPoint> extrapolation = new List<IPoint>(extrapolationPointsCount + 1);
+            List<SurveyPointDTO> extrapolation = new List<SurveyPointDTO>(extrapolationPointsCount + 1);
 
             for (int i = 0; i < extrapolation.Capacity - 1; i++)
             {
-                IPoint surveyStation = new SurveyPointDTO();
+                SurveyPointDTO surveyStation = new SurveyPointDTO();
 
                 if (i == 0)
                 {
@@ -57,7 +57,7 @@
                 extrapolation.Add(surveyStation);
             }
 
-            IPoint lastStation = new SurveyPointDTO
+            SurveyPointDTO lastStation = new SurveyPointDTO
             {
                 Depth = extrapolation[extrapolation.Count - 1].Depth + (endSectionLength == 0 ? 30 : endSectionLength),
                 Azimuth = startAzimuth,
@@ -114,17 +114,17 @@
             return extrapolation;
         }
 
-        public IList<IPoint> GetStraightExtrapolation(IPoint collar, IPoint target)
+        public IList<SurveyPointDTO> GetStraightExtrapolation(IPoint collar, IPoint target)
         {
             double straightLength = this.straightExtrapolation.GetStraightHoleLength(collar, target);
 
             int extrapolationPointsCount = (int)Math.Ceiling((extrapolationLength / StationSeparationDistance));
             double endSectionLength = extrapolationLength % StationSeparationDistance;
-            List<IPoint> extrapolation = new List<IPoint>(extrapolationPointsCount + 1);
+            List<SurveyPointDTO> extrapolation = new List<SurveyPointDTO>(extrapolationPointsCount + 1);
 
             for (int i = 0; i < extrapolationPointsCount; i++)
             {
-                IPoint surveyStation = new SurveyPointDTO();
+                SurveyPointDTO surveyStation = new SurveyPointDTO();
 
                 if (i == 0)
                 {
@@ -147,7 +147,7 @@
                 extrapolation.Add(surveyStation);
             }
 
-            IPoint lastStation = new SurveyPointDTO
+            SurveyPointDTO lastStation = new SurveyPointDTO
             {
                 Depth = extrapolation[extrapolation.Count - 1].Depth + (endSectionLength == 0 ? 30 : endSectionLength),
                 Azimuth = extrapolation[extrapolation.Count - 1].Azimuth,
@@ -160,7 +160,7 @@
             return extrapolation;
         }
 
-        public ICollection<IPoint> GetCurvedExtrapolaton(
+        public IList<IPoint> GetCurvedExtrapolaton(
             double startEasting,
             double startNorthing,
             double startElevation,

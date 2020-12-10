@@ -83,10 +83,14 @@
 
         public async Task<T> GetProjectById<T>(string projectId)
         {
-            return this.dbContext.Projects
-                .Where(x => x.Id == projectId)
+            this.CheckProjectExists(projectId);
+
+            var project = this.dbContext.Projects
+                .Where(x => x.Id == projectId && x.IsDeleted == false)
                 .To<T>()
                 .FirstOrDefault();
+            
+            return project;
         }
 
         public async Task<bool> IsUserIdSameWithProjectAdminId(string userId, string projectId)

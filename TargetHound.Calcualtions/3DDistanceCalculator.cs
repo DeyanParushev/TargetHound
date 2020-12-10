@@ -10,8 +10,8 @@
     {
         private IPoint closestSpacialPoint;
 
-        public _3DDistanceCalculator(IList<IPoint> borehole, IPoint target)
-            : base(borehole, target)
+        public _3DDistanceCalculator(IList<IPoint> borehole, IPoint target, CoordinatesSetter coordinatesSetter)
+            : base(borehole, target, coordinatesSetter)
         {
             this.ClosestSpacialPoint();
         }

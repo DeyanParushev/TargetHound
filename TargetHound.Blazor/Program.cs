@@ -1,6 +1,5 @@
 namespace TargetHound.Blazor
 {
-    using Blazored.LocalStorage;
     using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
     using Microsoft.Extensions.DependencyInjection;
     using System;
@@ -27,6 +26,7 @@ namespace TargetHound.Blazor
             builder.Services.AddTransient<_3DDistanceCalculator>();
             builder.Services.AddTransient<CoordinatesSetter>();
             builder.Services.AddTransient<CurveCalculator>();
+            builder.Services.AddTransient<Extrapolator>();
             await builder.Build().RunAsync();
         }
     }
