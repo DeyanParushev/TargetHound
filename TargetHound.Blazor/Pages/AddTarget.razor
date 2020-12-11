@@ -37,7 +37,14 @@
 
 @code {
     private TargetDTO Target { get; set; } = new TargetDTO();
+
     private bool isCreated { get; set; } = false;
+
+    [CascadingParameter]
+    public bool RefreshIsRequested { get; set; }
+
+    [Parameter]
+    public Action<bool> Refresh { get; set; }
 
     public void AddToProject()
     {
@@ -58,5 +65,8 @@
         this.Target.Easting = 0;
         this.Target.Northing = 0;
         this.Target.Elevation = 0;
+
+        this.RefreshIsRequested = true;
+        this.Refresh?.Invoke(this.RefreshIsRequested);
     }
 }

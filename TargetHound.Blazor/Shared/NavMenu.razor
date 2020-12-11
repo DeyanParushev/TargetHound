@@ -10,13 +10,6 @@
             @if (showMenu)
             {
                 <NavLink class="nav-link">
-                    <span class="btn btn-primary btn-block dropdown-toggle" aria-hidden="true" @onclick="ShowBorehole">Create Borehole</span>
-                </NavLink>
-                @if (showBorehole)
-                {
-                    <TargetHound.Blazor.Pages.AddBorehole />
-                }
-                <NavLink class="nav-link">
                     <span class="btn btn-primary btn-block dropdown-toggle" aria-hidden="true" @onclick="ShowCollar">Create Collar</span>
                 </NavLink>
                 @if (this.showCollar)
@@ -26,9 +19,20 @@
                 <NavLink class="nav-link">
                     <span class="btn btn-primary btn-block dropdown-toggle" aria-hidden="true" @onclick="ShowTarget">Create Target</span>
                 </NavLink>
-                @if(this.showTarget)
+                @if (this.showTarget)
                 {
-                    <TargetHound.Blazor.Pages.AddTarget/>
+                    <CascadingValue Value="this.RefreshIsRequested">
+                        <TargetHound.Blazor.Pages.AddTarget />
+                    </CascadingValue>
+                }
+                <NavLink class="nav-link">
+                    <span class="btn btn-primary btn-block dropdown-toggle" aria-hidden="true" @onclick="ShowBorehole">Create Borehole</span>
+                </NavLink>
+                @if (showBorehole)
+                {
+                    <CascadingValue Value="this.RefreshIsRequested">
+                        <TargetHound.Blazor.Pages.AddBorehole Refresh="@this.Refresh" />
+                    </CascadingValue>
                 }
             }
         </li>
@@ -48,12 +52,18 @@
 
 @code {
     private bool collapseNavMenu = true;
+   
     private bool showMenu;
+    
     private bool showBorehole;
+    
     private bool showTarget;
+    
     private bool showCollar;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    protected bool RefreshIsRequested { get; set; } = false;
 
     private void ToggleNavMenu()
     {
@@ -78,5 +88,14 @@
     public void ShowTarget()
     {
         this.showTarget = !this.showTarget;
+    }
+
+    public void Refresh(bool refresh)
+    {
+        if (refresh)
+        {
+            this.RefreshIsRequested = !refresh;
+            this.StateHasChanged();
+        }
     }
 }

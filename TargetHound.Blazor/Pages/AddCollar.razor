@@ -40,6 +40,12 @@
 
     private bool isCreated { get; set; } = false;
 
+    [CascadingParameter]
+    public bool RefreshIsRequested { get; set; }
+
+    [Parameter]
+    public Action<bool> Refresh { get; set; }
+
     public void AddToProject()
     {
         CollarDTO collar = new CollarDTO
@@ -54,9 +60,13 @@
         this.storageService.Project.Collars.Add(collar);
         this.isCreated = true;
         this.StateHasChanged();
+       
         this.Collar.Name = null;
         this.Collar.Easting = 0;
         this.Collar.Northing = 0;
         this.Collar.Elevation = 0;
+
+        this.RefreshIsRequested = true;
+        this.Refresh?.Invoke(this.RefreshIsRequested);
     }
 }

@@ -43,7 +43,7 @@
     <button type="submit" class="btn btn-success offset-4">
         Create
     </button>
-    @if (this.isCreated)
+    @if (this.IsCreated)
     {
         <div class="text-center mt-2">
             <alert class="text-success font-weight-bold">Borehole created</alert>
@@ -54,6 +54,8 @@
 <hr style="border:0;height:1.5px;background-color: rgb(230, 230, 230); width:80%;" />
 
 @code {
+    private bool IsCreated { get; set; } = false;
+
     public bool IsStraight => this.AzimuthChange == 0 && this.DipChange == 0;
 
     public double AzimuthChange { get; set; } = 0;
@@ -72,7 +74,11 @@
 
     public ProjectDTO Project { get; set; }
 
-    private bool isCreated { get; set; } = false;
+    [CascadingParameter]
+    public bool RefreshIsRequested { get; set; }
+
+    [Parameter]
+    public Action<bool> Refresh { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {
@@ -103,7 +109,10 @@
             // TODO: finish the algorythm for curved borehole;
         }
 
-        this.Project.Boreholes.Add(borehole);
+        this.IsCreated = true;
+        this.storageService.Project.Boreholes.Add(borehole);
+        this.RefreshIsRequested = true;
+        this.Refresh?.Invoke(this.RefreshIsRequested);
         this.StateHasChanged();
     }
 }
