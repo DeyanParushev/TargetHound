@@ -76,7 +76,7 @@
             this.project = this.stateService.Project;
         }
 
-        this.jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/app.js");
+        this.jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/app.js"); 
     }
 
     protected override async Task OnParametersSetAsync()
@@ -86,14 +86,12 @@
 
     protected override void OnAfterRender(bool firstRender)
     {
-        this.jsModule.InvokeVoidAsync("RenderProject", projectJson).GetAwaiter();
+        this.jsModule.InvokeVoidAsync("RenderProject", this.project).GetAwaiter();
 
         if (this.stateService.BoreholeToDisplayId != null)
         {
-            // borehole is undefined in JS
             BoreholeDTO borehole = this.stateService.Project.Boreholes.FirstOrDefault(x => x.Id == this.stateService.BoreholeToDisplayId);
             this.jsModule.InvokeVoidAsync("RenderBorehole", borehole).GetAwaiter();
-            Console.WriteLine(borehole.Id + "From blazor!!");
         }
     }
 
