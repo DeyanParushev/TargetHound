@@ -4,7 +4,7 @@
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
-    public class DrillRigDTO : IMapFrom<DrillRig>
+    public class DrillRigDTO : IMapFrom<DrillRig>, IMapTo<DrillRig>
     {
         public string Id { get; set; }
 

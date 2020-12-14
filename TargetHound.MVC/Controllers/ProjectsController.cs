@@ -15,6 +15,8 @@
     using TargetHound.SharedViewModels.InputModels;
     using TargetHound.SharedViewModels.ViewModels;
 
+    [RequireHttps]
+    [AutoValidateAntiforgeryToken]
     public class ProjectsController : Controller
     {
         private readonly IProjectService projectService;

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using TargetHound.DataModels;
 
     public interface IProjectService
     {
@@ -32,5 +33,7 @@
         public Task<bool> IsUserIdSameWithProjectAdminId(string userId, string projectId);
        
         public Task<bool> IsUserInProject(string userId, string projectId);
+        
+        public Task SaveProject(Project project);
     }
 }

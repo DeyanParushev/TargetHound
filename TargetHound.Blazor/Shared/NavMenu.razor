@@ -1,5 +1,8 @@
-﻿<div class="top-row navbar bg-primary" style="padding:0">
-    <h4 class="text-center font-weight-bold"><a href="/Home/Index" class="stretched-link">Target Hound</a></h4>
+﻿@inject IStateService stateService
+@inject HttpClient client
+
+<div class="nav my-5" style="padding:0">
+    <h4 class="text-center font-weight-bold container-fluid"><a href="/Home/Index" class="text-white">Target Hound</a></h4>
 </div>
 <div class="@NavMenuCssClass= bg-primary overflow-auto vh-100" @onclick="ToggleNavMenu">
     <ul class="nav flex-column bg-primary">
@@ -37,10 +40,8 @@
             }
         </li>
 
-        <li class="">
-            <NavLink class="dropdown" href="/Save">
-                <a class="btn btn-primary btn-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Save</a>
-            </NavLink>
+        <li class="" @onclick="SaveProject">
+            <TargetHound.Blazor.Pages.Save SaveSuccess="@this.SaveSuccess" />
         </li>
         <li class="">
             <NavLink class="dropdown" href="/Export">
@@ -52,18 +53,20 @@
 
 @code {
     private bool collapseNavMenu = true;
-   
+
     private bool showMenu;
-    
+
     private bool showBorehole;
-    
+
     private bool showTarget;
-    
+
     private bool showCollar;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     protected bool RefreshIsRequested { get; set; } = false;
+
+    public bool SaveSuccess { get; set; }
 
     private void ToggleNavMenu()
     {
@@ -97,5 +100,13 @@
             this.RefreshIsRequested = !refresh;
             this.StateHasChanged();
         }
+    }
+
+    public async Task SaveProject()
+    {
+        var project = this.stateService.Project;
+        var result = await this.client.PostAsJsonAsync<ProjectDTO>($"api/ProjectApi/Save", project);
+
+        Console.WriteLine(result);
     }
 }

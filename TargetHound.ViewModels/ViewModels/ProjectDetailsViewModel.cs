@@ -12,7 +12,7 @@
 
         public int UserCount { get; set; }
 
-        public string CurrentContractorName { get; set; }
+        public string CurrentContractorName { get; set; } = string.Empty;
 
         public ICollection<DrillRigViewModel> Machines { get; set; }
 

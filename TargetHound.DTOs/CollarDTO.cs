@@ -4,7 +4,7 @@
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
-    public class CollarDTO : IPoint, IMapFrom<Collar>
+    public class CollarDTO : IPoint, IMapFrom<Collar>, IMapTo<Collar>
     {
         public string Id { get; set; }
 

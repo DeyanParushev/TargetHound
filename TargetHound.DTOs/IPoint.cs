@@ -3,7 +3,7 @@
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
-    public interface IPoint : IMapFrom<SurveyPoint>
+    public interface IPoint : IMapFrom<SurveyPoint>, IMapTo<SurveyPoint>
     {
         public double Depth { get; set; }
 

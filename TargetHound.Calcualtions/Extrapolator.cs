@@ -118,7 +118,7 @@
         {
             double straightLength = this.straightExtrapolation.GetStraightHoleLength(collar, target);
 
-            int extrapolationPointsCount = (int)Math.Ceiling((extrapolationLength / StationSeparationDistance));
+            int extrapolationPointsCount = (int)Math.Ceiling((straightLength / StationSeparationDistance));
             double endSectionLength = extrapolationLength % StationSeparationDistance;
             List<SurveyPointDTO> extrapolation = new List<SurveyPointDTO>(extrapolationPointsCount + 1);
 

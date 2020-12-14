@@ -18,6 +18,8 @@ namespace TargetHound.MVC
     using TargetHound.Services.Messages;
     using SendgridEmailInAspNetCore.Services;
     using TargetHound.DTOs;
+    using AutoMapper;
+    using System.Text.Json;
 
     public class Startup
     {
@@ -43,7 +45,15 @@ namespace TargetHound.MVC
                 configure.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
             })
                 .AddRazorRuntimeCompilation();
-            
+
+            services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.PropertyNameCaseInsensitive = new JsonSerializerOptions().PropertyNameCaseInsensitive;
+            });
+
+            services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
+
+            services.AddAutoMapper(typeof(Startup));
             services.AddTransient<IProjectService, ProjectService>();
             services.AddTransient<ICountriesService, CountriesService>();
             services.AddTransient<IUserService, UserService>();
@@ -55,7 +65,6 @@ namespace TargetHound.MVC
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddServerSideBlazor();
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -84,6 +93,7 @@ namespace TargetHound.MVC
 
             app.UseRouting();
 
+            app.UseResponseCaching();
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();

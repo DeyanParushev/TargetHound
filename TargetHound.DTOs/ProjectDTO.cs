@@ -5,7 +5,7 @@
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
-    public class ProjectDTO : IMapFrom<Project>
+    public class ProjectDTO : IMapFrom<Project>, IMapTo<Project>
     {
         public ProjectDTO()
         {

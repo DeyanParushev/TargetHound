@@ -15,6 +15,7 @@
     using TargetHound.Services.Messages;
     using TargetHound.MVC.Areas.Identity.Pages.Account;
 
+    [RequireHttps]
     public class ClientsController : Controller
     {
         private readonly IClientService clientService;

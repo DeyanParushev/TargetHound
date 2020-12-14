@@ -89,7 +89,7 @@
                 .Where(x => x.Id == projectId && x.IsDeleted == false)
                 .To<T>()
                 .FirstOrDefault();
-            
+
             return project;
         }
 
@@ -160,7 +160,7 @@
             return contractorName;
         }
 
-        public async Task<ICollection<T>> GetBoreholesAsync<T> (string projectId)
+        public async Task<ICollection<T>> GetBoreholesAsync<T>(string projectId)
         {
             this.CheckProjectExists(projectId);
 
@@ -207,6 +207,23 @@
             project.Name = projectName;
             project.MagneticDeclination = magneticDeclination;
             project.CountryId = countryId;
+
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task SaveProject(Project project)
+        {
+            var projectEntity =
+                this.dbContext.Projects.SingleOrDefault(x => x.Id == project.Id && x.IsDeleted == false);
+
+            if (projectEntity == null)
+            {
+                this.dbContext.Projects.Add(project);
+            }
+            else
+            {
+                this.dbContext.Update<Project>(project);
+            }
 
             await this.dbContext.SaveChangesAsync();
         }

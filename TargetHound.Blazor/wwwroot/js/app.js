@@ -8,14 +8,15 @@ export function RenderProject(project) {
 }
 
 export function RenderBorehole(borehole) {
-    RenderScene();
+    //ShowBorehole(borehole);
+    console.log(borehole.name);
 }
 
 function RenderScene() {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth * 0.85, window.innerHeight * 0.9);
+    renderer.setSize(window.innerWidth * 0.8, window.innerHeight * 0.9);
     document.body.appendChild(renderer.domElement);
 
     const cubeGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
@@ -24,6 +25,50 @@ function RenderScene() {
     scene.add(cube);
 
     AddArrows(scene)
+    camera.position.z = 5;
+
+    var container = document.getElementsByClassName("3dContainer")[0];
+    while (container.lastElementChild) {
+        container.removeChild(container.lastElementChild);
+    }
+
+    var orbitControlls = new OrbitControlls.OrbitControls(camera, container);
+
+    var objects = [camera];
+    var dragControls = new DragControlls.DragControls(objects, camera, container);
+    dragControls.addEventListener('dragstart', function () { orbitControlls.enabled = false; });
+    dragControls.addEventListener('dragend', function () { orbitControlls.enabled = true; });
+
+    container.appendChild(renderer.domElement);
+    animate();
+    function animate() {
+        cube.rotation.x += 0.01;
+        cube.rotation.y += 0.01;
+        cube.rotation.z += 0.01;
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+        orbitControlls.update();
+    }
+}
+
+function ShowBorehole() {
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth * 0.8, window.innerHeight * 0.9);
+    document.body.appendChild(renderer.domElement);
+
+    const cubeGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+    const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
+    scene.add(cube);
+
+    AddArrows(scene)
+
+    //if (borehole !== undefined) {
+    //    //DrawBorehole(scene, borehole);
+    //    console.log(borehole);
+    //}
 
     camera.position.z = 5;
 
@@ -75,7 +120,28 @@ function AddArrows(scene) {
 
 function AddPlane(scene) {
     var geo = new THREE.PlaneBufferGeometry(1000, 1000, 8, 8);
-    var mat = new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: 0.9, side: THREE.DoubleSide});
+    var mat = new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: 0.9, side: THREE.DoubleSide });
     var plane = new THREE.Mesh(geo, mat);
     scene.add(plane);
+}
+
+function DrawBorehole(scene, borehole) {
+    const collar = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+    const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x375A7F });
+    const cube = new THREE.Mesh(collar, cubeMaterial);
+    scene.add(cube);
+
+    borehole.surveyPoints.forEach(x => AddPoint(scene, borehole.collar, x));
+}
+
+function AddPoint(scene, collar, point) {
+    var pointGeometry = new THREE.SphereGeometry(1, 16, 16, 6, 6, 6, 6);
+    var pointMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    var sphere = new THREE.Mesh(pointGeometry, pointMaterial);
+
+    sphere.position.x = 0 + (collar.easting - point.easting);
+    sphere.position.y = 0 + (collar.norhing - point.norhing);
+    sphere.position.z = 0 + (collar.elevation - point.elevation);
+
+    scene.add(sphere);
 }

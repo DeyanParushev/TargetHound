@@ -4,7 +4,7 @@
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
-    public class TargetDTO : IPoint, IMapFrom<Target>
+    public class TargetDTO : IPoint, IMapFrom<Target>, IMapTo<Target>
     {
         public string Id { get; set; }
 

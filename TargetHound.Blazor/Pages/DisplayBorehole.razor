@@ -3,7 +3,7 @@
 
 @if (this.Display == "One")
 {
-    <EditForm Model="@this.BoreholeId" OnValidSubmit="DisplayBorehole" class="container-fluid row">
+    <EditForm Model="@this.BoreholeId" OnValidSubmit="DisplayHole" class="container-fluid row">
         <DataAnnotationsValidator />
         <ValidationSummary />
         <InputSelect @bind-Value="@this.BoreholeId" class="form-control col-8">
@@ -50,7 +50,7 @@ else if (this.Display == "Many")
     [Parameter]
     public Action<bool> Refresh { get; set; }
 
-    public void DisplayBorehole()
+    public void DisplayHole()
     {
         this.stateService.BoreholeToDisplayId = this.BoreholeId;
         this.RefreshIsRequested = true;

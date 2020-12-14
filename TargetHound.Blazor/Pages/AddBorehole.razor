@@ -103,6 +103,11 @@
             borehole.Collar.Azimuth = this.straightCalculator.GetInitialAzimuthAngle(borehole.Collar, borehole.Target);
             borehole.Collar.Dip = this.straightCalculator.GetInitialDipAngle(borehole.Collar, borehole.Target);
             borehole.SurveyPoints = this.extrapolator.GetStraightExtrapolation(borehole.Collar, borehole.Target);
+
+            foreach (var point in borehole.SurveyPoints)
+            {
+                point.Id = Guid.NewGuid().ToString();
+            }
         }
         else
         {

@@ -5,7 +5,7 @@
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
-    public class BoreholeDTO : IMapFrom<Borehole>
+    public class BoreholeDTO : IMapFrom<Borehole>, IMapTo<Borehole>
     {
         public BoreholeDTO()
         {

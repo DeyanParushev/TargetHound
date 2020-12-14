@@ -5,7 +5,7 @@
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
-    public class ContractorDTO : IMapFrom<Contractor>
+    public class ContractorDTO : IMapFrom<Contractor>, IMapTo<Contractor>
     {
         public string Id { get; set; }
 
