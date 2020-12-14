@@ -1,4 +1,5 @@
 👓 Project Introduction
+
 Target Hound is my defense project for ASP.NET Core MVC course at SoftUni (September - December 2020). The purpose of the app is to help geologists plan and manage their exploration projects. The projects is devided in two parts - Project managements system and Borehole planning system.
 The project management system is built fully on ASP.Net Core MVC. While the Borehole planning relies on Blazor Wasm.
 
@@ -56,8 +57,6 @@ Data Validation, both Client-side and Server-side
 
 Data Validation in the Models and Input View Models
 
-Custom Validation Attributes
-
 Bootstrap
 
 jQuery
@@ -65,7 +64,7 @@ jQuery
 THREE.js
 
 Database diagram:
-
+https://github.com/DeyanParushev/TargetHound/blob/main/DatabaseDiagram.png
 
 License
 
