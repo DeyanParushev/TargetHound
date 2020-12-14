@@ -64,7 +64,7 @@ jQuery
 THREE.js
 
 Database diagram:
-
+https://github.com/DeyanParushev/TargetHound/blob/main/DatabaseDiagram.png
 
 License
 
