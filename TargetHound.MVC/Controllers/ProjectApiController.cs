@@ -2,12 +2,13 @@
 {
     using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using System;
-    using System.Net.Http.Json;
     using System.Threading.Tasks;
     using TargetHound.DataModels;
     using TargetHound.DTOs;
+    using TargetHound.Services.Automapper;
     using TargetHound.Services.Interfaces;
 
     [RequireHttps]
@@ -16,19 +17,19 @@
     public class ProjectApiController : ControllerBase
     {
         private readonly IProjectService projectService;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly IMapper mapper;
 
-        public ProjectApiController(IProjectService projectService, IMapper mapper)
+        public ProjectApiController(IProjectService projectService, UserManager<ApplicationUser> userManager)
         {
             this.projectService = projectService;
-            this.mapper = mapper;
+            this.userManager = userManager;
+            this.mapper = AutoMapperConfig.MapperInstance;
         }
 
         [HttpGet("{projectId}")]
         [Authorize]
         [Produces("application/json")]
-        [ProducesResponseType(200)]
-        [ProducesResponseType(400)]
         public async Task<ActionResult<ProjectDTO>> GetProject(string projectId)
         {
             try
@@ -44,12 +45,27 @@
 
         [HttpPost, Route("Save")]
         [Authorize]
-        public async Task<IActionResult> PutProject(JsonContent project)
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> PutProject(ProjectDTO project)
         {
-            //var projectDataModel = this.mapper.Map<Project>(inputProject);
-
-            ////await this.projectService.SaveProject(projectDataModel);
-            return this.StatusCode(200);
+            try
+            {
+                if (this.ModelState.IsValid)
+                {
+                    var userId = this.userManager.GetUserId(this.User);
+                    var projectDataModel = this.mapper.Map<ProjectDTO, Project>(project);
+                    await this.projectService.SaveProject(projectDataModel, userId);
+                    return this.StatusCode(200);
+                }
+                else
+                {
+                    return this.StatusCode(422);
+                }
+            }
+            catch (Exception ex)
+            {
+                return this.StatusCode(500);
+            }
         }
     }
 }

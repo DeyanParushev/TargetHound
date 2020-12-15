@@ -1,15 +1,10 @@
-﻿
-<NavLink class="dropdown" @onclick="ShowMessage">
-    <a class="btn btn-primary btn-block" role="button" aria-haspopup="true" aria-expanded="false">Save</a>
-</NavLink>
-
-@if (!this.SaveSuccess && this.ShowSection)
+﻿@if (!this.SaveSuccess)
 {
     <p class="text-danger font-weight-bold my-3 text-center">
         Save Unsuccessfull!
     </p>
 }
-else if(!this.SaveSuccess && this.ShowSection)
+else if(!this.SaveSuccess)
 {
     <p class="text-success font-weight-bold my-3 text-center">
         Save Successfull!
@@ -19,11 +14,4 @@ else if(!this.SaveSuccess && this.ShowSection)
 @code {
     [Parameter]
     public bool SaveSuccess { get; set; } = true;
-
-    public bool ShowSection { get; set; }
-
-    public void ShowMessage()
-    {
-        this.ShowSection = !this.ShowSection;
-    }
 }

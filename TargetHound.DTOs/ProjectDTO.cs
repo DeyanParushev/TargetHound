@@ -17,9 +17,9 @@
 
         public string Id { get; set; }
 
-        [Required(ErrorMessage = "Name must be between 6 and 40 characters.")]
-        [MinLength(6, ErrorMessage = "Name must be between 6 and 40 characters.")]
-        [MaxLength(40, ErrorMessage = "Name must be between 6 and 40 characters.")]
+        [Required(ErrorMessage = "Name must be between 5 and 40 characters.")]
+        [MinLength(5, ErrorMessage = "Name must be between 5 and 40 characters.")]
+        [MaxLength(40, ErrorMessage = "Name must be between 5 and 40 characters.")]
         public string Name { get; set; }
 
         [Required]

@@ -1,5 +1,6 @@
-﻿@inject IStateService stateService
-@inject HttpClient client
+﻿@inject HttpClient client
+@inject IStateService stateService
+@inject IJSRuntime jsRuntime
 
 <div class="nav my-5" style="padding:0">
     <h4 class="text-center font-weight-bold container-fluid"><a href="/Home/Index" class="text-white">Target Hound</a></h4>
@@ -41,12 +42,22 @@
         </li>
 
         <li class="" @onclick="SaveProject">
-            <TargetHound.Blazor.Pages.Save SaveSuccess="@this.SaveSuccess" />
+            <NavLink class="dropdown">
+                <button type="submit" class="btn btn-block btn-primary">Save</button>
+            </NavLink>
+            @if (this.ShowSaveMessage)
+            {
+                <TargetHound.Blazor.Pages.Save SaveSuccess="@this.SaveSuccess" />
+            }
         </li>
         <li class="">
-            <NavLink class="dropdown" href="/Export">
-                <a class="btn btn-primary btn-block dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Export</a>
-            </NavLink>
+            <EditForm Model="@this.Project" OnInvalidSubmit="ExportProject">
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <NavLink class="dropdown">
+                    <a class="btn btn-primary btn-block dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Export</a>
+                </NavLink>
+            </EditForm>
         </li>
     </ul>
 </div>
@@ -62,11 +73,17 @@
 
     private bool showCollar;
 
+    private bool ShowSaveMessage;
+
+    private IJSObjectReference jsModule;
+
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     protected bool RefreshIsRequested { get; set; } = false;
 
     public bool SaveSuccess { get; set; }
+
+    public ProjectDTO Project { get; set; } = new ProjectDTO();
 
     private void ToggleNavMenu()
     {
@@ -107,6 +124,14 @@
         var project = this.stateService.Project;
         var result = await this.client.PostAsJsonAsync<ProjectDTO>($"api/ProjectApi/Save", project);
 
-        Console.WriteLine(result);
+        if (result.IsSuccessStatusCode)
+        {
+            this.SaveSuccess = true;
+        }
+    }
+
+    public async Task ExportProject()
+    {
+
     }
 }

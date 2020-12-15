@@ -34,6 +34,6 @@
        
         public Task<bool> IsUserInProject(string userId, string projectId);
         
-        public Task SaveProject(Project project);
+        public Task SaveProject(Project project, string userId);
     }
 }

@@ -211,18 +211,19 @@
             await this.dbContext.SaveChangesAsync();
         }
 
-        public async Task SaveProject(Project project)
+        public async Task SaveProject(Project project, string userId)
         {
-            var projectEntity =
-                this.dbContext.Projects.SingleOrDefault(x => x.Id == project.Id && x.IsDeleted == false);
+            this.CheckUserExists(userId);
 
-            if (projectEntity == null)
+            var projectModel = this.dbContext.Projects.FirstOrDefault(x => x.Id == project.Id && x.IsDeleted == false); 
+
+            if (projectModel == null)
             {
                 this.dbContext.Projects.Add(project);
             }
             else
             {
-                this.dbContext.Update<Project>(project);
+                this.dbContext.Entry(projectModel).CurrentValues.SetValues(project);
             }
 
             await this.dbContext.SaveChangesAsync();
