@@ -44,7 +44,7 @@
 
         [HttpPost, Route("Save")]
         [Authorize]
-        public async Task<IActionResult> PutProject(JsonContent project)
+        public async Task<IActionResult> PutProject(ProjectDTO project)
         {
             //var projectDataModel = this.mapper.Map<Project>(inputProject);
 

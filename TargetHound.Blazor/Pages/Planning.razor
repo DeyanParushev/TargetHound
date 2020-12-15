@@ -1,5 +1,6 @@
 ﻿@page "/Planning/{name}/{declination:double}/"
 @page "/Planning/{projectId}"
+
 @inject HttpClient client
 @inject IJSRuntime jsRuntime
 @inject IStateService stateService
@@ -32,13 +33,11 @@
 </div>
 
 @code {
-    private ProjectDTO project = null;
+    private ProjectDTO Project = null;
 
     private IJSObjectReference jsModule;
 
     protected bool RefreshIsRequested { get; set; } = false;
-
-    public string BoreholeId { get; set; } = "DefaultValue";
 
     public IList<BoreholeDTO> Boreholes { get; set; } = new List<BoreholeDTO>();
 
@@ -57,32 +56,29 @@
     {
         if (this.stateService.IsInitialLoading && this.ProjectId != null)
         {
-            this.project = await client.GetFromJsonAsync<ProjectDTO>($"api/ProjectApi/{ProjectId}");
+            this.Project = await client.GetFromJsonAsync<ProjectDTO>($"api/ProjectApi/{ProjectId}");
 
-            this.stateService.Project = this.project;
+            this.stateService.Project = this.Project;
             this.stateService.IsInitialLoading = false;
         }
         else if (this.stateService.IsInitialLoading && this.ProjectId == null)
         {
-            this.project = new ProjectDTO
+            this.Project = new ProjectDTO
             {
+                Id = Guid.NewGuid().ToString(),
                 Name = this.Name,
                 MagneticDeclination = this.Declination,
             };
-            this.stateService.Project = this.project;
+            this.stateService.Project = this.Project;
             this.stateService.IsInitialLoading = false;
         }
         else
         {
-            this.project = this.stateService.Project;
+            this.Project = this.stateService.Project;
         }
-
+        Console.WriteLine(this.Project.Name);
+        Console.WriteLine(this.Project.Id);
         this.jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/app.js");
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        this.Boreholes = this.project.Boreholes;
     }
 
     protected override void OnAfterRender(bool firstRender)
@@ -95,7 +91,7 @@
         }
         else
         {
-            this.jsModule.InvokeVoidAsync("RenderProject", this.project).GetAwaiter();
+            this.jsModule.InvokeVoidAsync("RenderProject", this.Project).GetAwaiter();
         }
     }
 

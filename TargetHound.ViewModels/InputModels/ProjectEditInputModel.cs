@@ -17,6 +17,8 @@
 
         public ICollection<CountryViewModel> Countries { get; set; }
 
+        [Required]
+        [Range(1, 220)]
         public int CountryId { get; set; }
 
         [Required]
