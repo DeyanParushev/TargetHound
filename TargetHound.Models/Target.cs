@@ -36,10 +36,13 @@
 
         public double Dip { get; set; }
 
+        [Required]
         public double Easting { get; set; }
 
+        [Required]
         public double Northing { get; set; }
 
+        [Required]
         public double Elevation { get; set; }
     }
 }

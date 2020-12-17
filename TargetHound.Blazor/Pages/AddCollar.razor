@@ -50,23 +50,27 @@
     {
         CollarDTO collar = new CollarDTO
         {
-            Id = Guid.NewGuid().ToString(),
             Name = this.Collar.Name,
             Easting = this.Collar.Easting,
             Northing = this.Collar.Northing,
             Elevation = this.Collar.Elevation,
+            ProjectId = this.storageService.Project.Id,
         };
 
         this.storageService.Project.Collars.Add(collar);
         this.isCreated = true;
         this.StateHasChanged();
-       
+        this.ClearForm();
+
+        this.RefreshIsRequested = true;
+        this.Refresh?.Invoke(this.RefreshIsRequested);
+    }
+
+    private void ClearForm()
+    {
         this.Collar.Name = null;
         this.Collar.Easting = 0;
         this.Collar.Northing = 0;
         this.Collar.Elevation = 0;
-
-        this.RefreshIsRequested = true;
-        this.Refresh?.Invoke(this.RefreshIsRequested);
     }
 }

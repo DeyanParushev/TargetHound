@@ -411,15 +411,80 @@ namespace TargetHound.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Doglegs",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    DoglegAngle = table.Column<double>(type: "float", nullable: false),
+                    DoglegSeverity = table.Column<double>(type: "float", nullable: false),
+                    ToolFace = table.Column<double>(type: "float", nullable: false),
+                    RatioFactor = table.Column<double>(type: "float", nullable: false),
+                    BoreholeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Doglegs", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SurveyPoints",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Depth = table.Column<double>(type: "float", nullable: false),
+                    Azimuth = table.Column<double>(type: "float", nullable: false),
+                    Dip = table.Column<double>(type: "float", nullable: false),
+                    Easting = table.Column<double>(type: "float", nullable: false),
+                    Northing = table.Column<double>(type: "float", nullable: false),
+                    Elevation = table.Column<double>(type: "float", nullable: false),
+                    MagneticField = table.Column<int>(type: "int", nullable: true),
+                    BoreholeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    BoreholeId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SurveyPoints", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Targets",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    BoreholeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    ProjectId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Depth = table.Column<double>(type: "float", nullable: false),
+                    Azimuth = table.Column<double>(type: "float", nullable: false),
+                    Dip = table.Column<double>(type: "float", nullable: false),
+                    Easting = table.Column<double>(type: "float", nullable: false),
+                    Northing = table.Column<double>(type: "float", nullable: false),
+                    Elevation = table.Column<double>(type: "float", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Targets", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Targets_Projects_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Boreholes",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     ContractorId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     ProjectId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CollarId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    TargetId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TargetId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
                     CollarId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
@@ -450,93 +515,10 @@ namespace TargetHound.Data.Migrations
                         principalTable: "Projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Doglegs",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    DoglegAngle = table.Column<double>(type: "float", nullable: false),
-                    DoglegSeverity = table.Column<double>(type: "float", nullable: false),
-                    ToolFace = table.Column<double>(type: "float", nullable: false),
-                    RatioFactor = table.Column<double>(type: "float", nullable: false),
-                    BoreholeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Doglegs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Doglegs_Boreholes_BoreholeId",
-                        column: x => x.BoreholeId,
-                        principalTable: "Boreholes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SurveyPoints",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Depth = table.Column<double>(type: "float", nullable: false),
-                    Azimuth = table.Column<double>(type: "float", nullable: false),
-                    Dip = table.Column<double>(type: "float", nullable: false),
-                    Easting = table.Column<double>(type: "float", nullable: false),
-                    Northing = table.Column<double>(type: "float", nullable: false),
-                    Elevation = table.Column<double>(type: "float", nullable: false),
-                    MagneticField = table.Column<int>(type: "int", nullable: true),
-                    BoreholeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    BoreholeId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_SurveyPoints", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_SurveyPoints_Boreholes_BoreholeId",
-                        column: x => x.BoreholeId,
-                        principalTable: "Boreholes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_SurveyPoints_Boreholes_BoreholeId1",
-                        column: x => x.BoreholeId1,
-                        principalTable: "Boreholes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Targets",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    BoreholeId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    ProjectId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Depth = table.Column<double>(type: "float", nullable: false),
-                    Azimuth = table.Column<double>(type: "float", nullable: false),
-                    Dip = table.Column<double>(type: "float", nullable: false),
-                    Easting = table.Column<double>(type: "float", nullable: false),
-                    Northing = table.Column<double>(type: "float", nullable: false),
-                    Elevation = table.Column<double>(type: "float", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Targets", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Targets_Boreholes_BoreholeId",
-                        column: x => x.BoreholeId,
-                        principalTable: "Boreholes",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Targets_Projects_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "Projects",
+                        name: "FK_Boreholes_Targets_TargetId",
+                        column: x => x.TargetId,
+                        principalTable: "Targets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -628,6 +610,11 @@ namespace TargetHound.Data.Migrations
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Boreholes_TargetId",
+                table: "Boreholes",
+                column: "TargetId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ClientInvitations_ClientId",
                 table: "ClientInvitations",
                 column: "ClientId");
@@ -695,9 +682,7 @@ namespace TargetHound.Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Targets_BoreholeId",
                 table: "Targets",
-                column: "BoreholeId",
-                unique: true,
-                filter: "[BoreholeId] IS NOT NULL");
+                column: "BoreholeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Targets_ProjectId",
@@ -713,10 +698,74 @@ namespace TargetHound.Data.Migrations
                 name: "IX_UsersProjects_ProjectId",
                 table: "UsersProjects",
                 column: "ProjectId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Doglegs_Boreholes_BoreholeId",
+                table: "Doglegs",
+                column: "BoreholeId",
+                principalTable: "Boreholes",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_SurveyPoints_Boreholes_BoreholeId",
+                table: "SurveyPoints",
+                column: "BoreholeId",
+                principalTable: "Boreholes",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.SetNull);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_SurveyPoints_Boreholes_BoreholeId1",
+                table: "SurveyPoints",
+                column: "BoreholeId1",
+                principalTable: "Boreholes",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Targets_Boreholes_BoreholeId",
+                table: "Targets",
+                column: "BoreholeId",
+                principalTable: "Boreholes",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropForeignKey(
+                name: "FK_Projects_AspNetUsers_AdminId",
+                table: "Projects");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Projects_Clients_ClientId",
+                table: "Projects");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Boreholes_Collars_CollarId",
+                table: "Boreholes");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Boreholes_Collars_CollarId1",
+                table: "Boreholes");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Boreholes_Contractors_ContractorId",
+                table: "Boreholes");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Boreholes_Projects_ProjectId",
+                table: "Boreholes");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Targets_Projects_ProjectId",
+                table: "Targets");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Boreholes_Targets_TargetId",
+                table: "Boreholes");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -751,16 +800,16 @@ namespace TargetHound.Data.Migrations
                 name: "SurveyPoints");
 
             migrationBuilder.DropTable(
-                name: "Targets");
-
-            migrationBuilder.DropTable(
                 name: "UsersProjects");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "Boreholes");
+                name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Clients");
 
             migrationBuilder.DropTable(
                 name: "Collars");
@@ -772,13 +821,13 @@ namespace TargetHound.Data.Migrations
                 name: "Projects");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "Countries");
 
             migrationBuilder.DropTable(
-                name: "Clients");
+                name: "Targets");
+
+            migrationBuilder.DropTable(
+                name: "Boreholes");
         }
     }
 }

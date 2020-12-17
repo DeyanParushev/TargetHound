@@ -1,6 +1,7 @@
 ﻿namespace TargetHound.DataModels
 {
     using System;
+    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
     using TargetHound.DataModels.Interfaces;
@@ -13,10 +14,13 @@
         }
         public string Id { get; set; }
 
+        [Required]
         public double Depth { get; set; }
 
+        [Required]
         public double Azimuth { get; set; }
 
+        [Required]
         public double Dip { get; set; }
 
         public double Easting { get; set; }

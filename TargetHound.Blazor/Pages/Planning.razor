@@ -76,15 +76,15 @@
         {
             this.Project = this.stateService.Project;
         }
-       
+
         this.jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/app.js");
     }
 
     protected override void OnAfterRender(bool firstRender)
     {
-        if (this.stateService.BoreholeToDisplayId != null)
+        if (this.stateService.BoreholeToDisplayName != null)
         {
-            BoreholeDTO borehole = this.stateService.Project.Boreholes.FirstOrDefault(x => x.Id == this.stateService.BoreholeToDisplayId);
+            BoreholeDTO borehole = this.stateService.Project.Boreholes.FirstOrDefault(x => x.Id == this.stateService.BoreholeToDisplayName);
             var result = this.jsModule.InvokeVoidAsync("RenderBorehole", borehole).GetAwaiter();
             Console.WriteLine(result);
         }

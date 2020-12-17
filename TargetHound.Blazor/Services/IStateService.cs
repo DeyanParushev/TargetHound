@@ -11,6 +11,6 @@
 
         public bool IsInitialLoading { get; set; }
 
-        public string BoreholeToDisplayId { get; set; }
+        public string BoreholeToDisplayName { get; set; }
     }
 }

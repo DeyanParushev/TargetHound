@@ -28,7 +28,7 @@
 
         public virtual Project Project { get; set; }
 
-        public bool IsDeleted { get; set; }
+        public bool IsDeleted { get; set; } = false;
 
         public double Depth { get; set; }
 
@@ -36,10 +36,13 @@
 
         public double Dip { get; set; }
 
+        [Required]
         public double Easting { get; set; }
 
+        [Required]
         public double Northing { get; set; }
 
+        [Required]
         public double Elevation { get; set; }
     }
 }

@@ -16,6 +16,12 @@
             Northing = 9_022_962.00,
             Elevation = 530.00,
         };
+        private readonly CoordinatesSetter coordinatesSetter;
+
+        public CoordinatesSetterTests(CoordinatesSetter coordinatesSetter)
+        {
+            this.coordinatesSetter = coordinatesSetter;
+        }
 
         [TestCase(15, 331.20, -89.7, 659_866.0334)]
         [TestCase(15, 270, -88, 659_865.7906)]
@@ -27,9 +33,8 @@
         public void SetEastingTest(double bottomDepth, double bottomAzimuth, double bottomDip, double expectedBottomEasting)
         {
             SurveyPointDTO bottomStation = new SurveyPointDTO { Depth = bottomDepth, Azimuth = bottomAzimuth, Dip = bottomDip };
-            CoordinatesSetter coordinatesSetter = new CoordinatesSetter();
            
-            coordinatesSetter.SetBottomStationUTMCoortinates(this.topStation, bottomStation);
+            this.coordinatesSetter.SetBottomStationUTMCoortinates(this.topStation, bottomStation);
 
             double bottomEasting = bottomStation.Easting;
             Assert.AreEqual(expectedBottomEasting.ToString(), bottomEasting.ToString("F4"));
@@ -45,9 +50,8 @@
         public void SetNorthingTest(double bottomDepth, double bottomAzimuth, double bottomDip, double expectedBottomEasting)
         {
             SurveyPointDTO bottomStation = new SurveyPointDTO { Depth = bottomDepth, Azimuth = bottomAzimuth, Dip = bottomDip };
-            CoordinatesSetter coordinatesSetter = new CoordinatesSetter();
            
-            coordinatesSetter.SetBottomStationUTMCoortinates(this.topStation, bottomStation);
+            this.coordinatesSetter.SetBottomStationUTMCoortinates(this.topStation, bottomStation);
 
             double bottomNorthing = bottomStation.Northing;
             Assert.AreEqual(expectedBottomEasting.ToString("F4"), bottomNorthing.ToString("F4"));
@@ -63,9 +67,8 @@
         public void SetElevationTest(double bottomDepth, double bottomAzimuth, double bottomDip, double expectedBottomEasting)
         {
             SurveyPointDTO bottomStation = new SurveyPointDTO { Depth = bottomDepth, Azimuth = bottomAzimuth, Dip = bottomDip };
-            CoordinatesSetter coordinatesSetter = new CoordinatesSetter();
            
-            coordinatesSetter.SetBottomStationUTMCoortinates(this.topStation, bottomStation);
+            this.coordinatesSetter.SetBottomStationUTMCoortinates(this.topStation, bottomStation);
 
             double bottomElevation = bottomStation.Elevation;
             Assert.AreEqual(expectedBottomEasting.ToString("F2"), bottomElevation.ToString("F2"));

@@ -1,5 +1,6 @@
 ﻿namespace TargetHound.Services
 {
+    using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -87,6 +88,7 @@
 
             var project = this.dbContext.Projects
                 .Where(x => x.Id == projectId && x.IsDeleted == false)
+                .AsNoTracking()
                 .To<T>()
                 .FirstOrDefault();
 
@@ -199,7 +201,11 @@
             return targets;
         }
 
-        public async Task EditProjectAsync(string projectId, string projectName, double magneticDeclination, int countryId)
+        public async Task EditProjectAsync(
+            string projectId, 
+            string projectName, 
+            double magneticDeclination, 
+            int countryId)
         {
             this.CheckProjectExists(projectId);
 
@@ -215,15 +221,16 @@
         {
             this.CheckUserExists(userId);
 
-            var projectModel = this.dbContext.Projects.FirstOrDefault(x => x.Id == project.Id && x.IsDeleted == false); 
+            var projectModel = 
+                this.dbContext.Projects.FirstOrDefault(x => x.Id == project.Id && x.IsDeleted == false);
 
-            if (projectModel == null)
+            if(projectModel == null) 
             {
                 this.dbContext.Projects.Add(project);
             }
             else
             {
-                this.dbContext.Entry(projectModel).CurrentValues.SetValues(project);
+                this.dbContext.Entry(projectModel.Boreholes).CurrentValues.SetValues(project.Boreholes);
             }
 
             await this.dbContext.SaveChangesAsync();

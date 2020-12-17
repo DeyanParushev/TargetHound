@@ -50,11 +50,11 @@
     {
         TargetDTO target = new TargetDTO
         {
-            Id = Guid.NewGuid().ToString(),
             Name = this.Target.Name,
             Easting = this.Target.Easting,
             Northing = this.Target.Northing,
             Elevation = this.Target.Elevation,
+            ProjectId = this.stateService.Project.Id,
         };
 
         this.stateService.Project.Targets.Add(target);

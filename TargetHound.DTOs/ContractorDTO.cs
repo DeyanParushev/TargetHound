@@ -1,5 +1,6 @@
 ﻿namespace TargetHound.DTOs
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using TargetHound.DataModels;
@@ -7,6 +8,10 @@
 
     public class ContractorDTO : IMapFrom<Contractor>, IMapTo<Contractor>
     {
+        public ContractorDTO()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
         public string Id { get; set; }
 
         [Required(ErrorMessage = "Name must be between 3 and 40 characters.")]

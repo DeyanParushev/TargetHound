@@ -3,14 +3,14 @@
 
 @if (this.Display == "One")
 {
-    <EditForm Model="@this.BoreholeId" OnValidSubmit="DisplayHole" class="container-fluid row">
+    <EditForm Model="@this.Boreholes" OnValidSubmit="DisplayHole" class="container-fluid row">
         <DataAnnotationsValidator />
         <ValidationSummary />
-        <InputSelect @bind-Value="@this.BoreholeId" class="form-control col-8">
+        <InputSelect @bind-Value="@this.BoreholeName" class="form-control col-8">
             <option selected="selected" value="@string.Empty"> -- Select Borehole -- </option>
             @foreach (var borehole in this.Boreholes)
                 {
-                <option value="@borehole.Id">@borehole.Name</option>
+                <option value="@borehole.Name">@borehole.Name</option>
                 }
         </InputSelect>
         <button type="submit" class="btn btn-primary col-2 offset-1">Show</button>
@@ -19,14 +19,14 @@
 else if (this.Display == "Many")
 {
     // TODO: make a multiple choise collection
-    <EditForm Model="@this.BoreholeIds" class="container-fluid row">
+    <EditForm Model="@this.BoreholeNames" class="container-fluid row">
         <DataAnnotationsValidator />
         <ValidationSummary />
-        <InputSelect @bind-Value="this.BoreholeId" class="form-control col-8">
+        <InputSelect @bind-Value="this.BoreholeName" class="form-control col-8">
             <option selected="selected" value="@string.Empty"> -- Select Boreholes -- </option>
             @foreach (var borehole in this.Boreholes)
                 {
-                    <option value="@borehole.Id">@borehole.Name</option>
+                    <option value="@borehole.Name">@borehole.Name</option>
                 }
         </InputSelect>
         <button class="btn btn-primary col-2 offset-1">Show</button>
@@ -40,9 +40,9 @@ else if (this.Display == "Many")
     [Parameter]
     public IList<BoreholeDTO> Boreholes { get; set; } = new List<BoreholeDTO>();
 
-    public ICollection<string> BoreholeIds { get; set; } = new List<string>();
+    public ICollection<string> BoreholeNames { get; set; } = new List<string>();
 
-    public string BoreholeId { get; set; } = string.Empty;
+    public string BoreholeName { get; set; } = string.Empty;
 
     [CascadingParameter]
     public bool RefreshIsRequested { get; set; }
@@ -52,7 +52,7 @@ else if (this.Display == "Many")
 
     public void DisplayHole()
     {
-        this.stateService.BoreholeToDisplayId = this.BoreholeId;
+        this.stateService.BoreholeToDisplayName = this.BoreholeName;
         this.RefreshIsRequested = true;
         this.Refresh?.Invoke(this.RefreshIsRequested);
         this.StateHasChanged();

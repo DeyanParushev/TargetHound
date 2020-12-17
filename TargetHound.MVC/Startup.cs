@@ -34,7 +34,7 @@ namespace TargetHound.MVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<TargetHoundContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))) ;
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                .AddRoles<ApplicationRole>()

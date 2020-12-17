@@ -1,12 +1,22 @@
 ﻿namespace TargetHound.DTOs
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
     public class TargetDTO : IPoint, IMapFrom<Target>, IMapTo<Target>
     {
+        public TargetDTO()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+
         public string Id { get; set; }
+
+        public string ProjectId { get; set; }
+
+        public string BoreholeId { get; set; }
 
         [Required(ErrorMessage = "Name must be betweem 4 and 40 characters.")]
         [MinLength(4, ErrorMessage = "Name must be betweem 4 and 40 characters.")]

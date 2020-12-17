@@ -1,5 +1,6 @@
 ﻿namespace TargetHound.DTOs
 {
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using TargetHound.DataModels;
@@ -9,6 +10,7 @@
     {
         public ProjectDTO()
         {
+            this.Id = Guid.NewGuid().ToString();
             this.Boreholes = new List<BoreholeDTO>();
             this.Collars = new List<CollarDTO>();
             this.Targets = new List<TargetDTO>();

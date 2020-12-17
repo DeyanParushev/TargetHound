@@ -8,6 +8,12 @@
     public class StraightExtrapolationCalculatorTests
     {
         private IPoint collar = new CollarDTO { Easting = 659_866.0000, Northing = 9_022_962.0000, Elevation = 530.0000 };
+        private readonly StraightExtrapolationCalculator straightExtrapolation;
+
+        public StraightExtrapolationCalculatorTests(StraightExtrapolationCalculator straightExtrapolation)
+        {
+            this.straightExtrapolation = straightExtrapolation;
+        }
 
         [TestCase(660_011.77, 9_023_008.37, -811.72, 1350.4117)]
         // Only east change
@@ -29,9 +35,7 @@
         {
             TargetDTO target = new TargetDTO { Easting = targetEasting, Northing = targetNorthing, Elevation = targetElevation };
 
-            StraightExtrapolationCalculator extrapolator = new StraightExtrapolationCalculator();
-
-            Assert.AreEqual(expectedLength.ToString("F4"), extrapolator.GetStraightHoleLength(this.collar, target).ToString("F4"));
+            Assert.AreEqual(expectedLength.ToString("F4"), this.straightExtrapolation.GetStraightHoleLength(this.collar, target).ToString("F4"));
         }
 
         // Vertical hole 
@@ -52,8 +56,7 @@
         {
             TargetDTO target = new TargetDTO { Easting = targetEasting, Northing = targetNorthing, Elevation = targetElevation };
 
-            StraightExtrapolationCalculator extrapolator = new StraightExtrapolationCalculator();
-            this.collar.Azimuth = extrapolator.GetInitialAzimuthAngle(this.collar, target);
+            this.collar.Azimuth = this.straightExtrapolation.GetInitialAzimuthAngle(this.collar, target);
 
             Assert.AreEqual(expectedAzimuth.ToString("F4"), this.collar.Azimuth.ToString("F4"));
         }
@@ -82,8 +85,7 @@
         {
             TargetDTO target = new TargetDTO { Easting = targetEasting, Northing = targetNorthing, Elevation = targetElevation };
 
-            StraightExtrapolationCalculator extrapolator = new StraightExtrapolationCalculator();
-            this.collar.Dip = extrapolator.GetInitialDipAngle(this.collar, target);
+            this.collar.Dip = this.straightExtrapolation.GetInitialDipAngle(this.collar, target);
 
             Assert.AreEqual(expectedDip.ToString("F4"), this.collar.Dip.ToString("F4"));
         }

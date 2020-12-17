@@ -10,7 +10,16 @@
         // TODO: Test for positively inclined boreholes
         private IPoint collar = new CollarDTO { Easting = 659_866, Northing = 9_022_962, Elevation = 530, Depth = 0 };
         private IPoint negativeTarget = new TargetDTO { Easting = 659_300, Northing = 9_022_400, Elevation = -811 };
-        private Extrapolator curveExtrapolator = new Extrapolator();
+        private readonly PlaneDistanceCalculator planeDistanceCalculator;
+        private readonly Extrapolator extrapolator;
+
+        public PlaneDistanceCalculatorTests(
+            PlaneDistanceCalculator planeDistanceCalculator,
+            Extrapolator extrapolator)
+        {
+            this.planeDistanceCalculator = planeDistanceCalculator;
+            this.extrapolator = extrapolator;
+        }
 
         [TestCase(225.18, -59.2, 0, 0, 1.8038841065563065)]
         [TestCase(225.18, -59.2, 0.2, 0, 72.13142077526004)]
@@ -37,9 +46,8 @@
         {
             collar.Azimuth = startAzimuth;
             collar.Dip = startDip;
-            IList<IPoint> borehole = this.curveExtrapolator.GetCurvedExtrapolaton(collar, azimuthChange, dipChange);
-            PlaneDistanceCalculator distanceCalculator = new PlaneDistanceCalculator(borehole, this.negativeTarget);
-            double horiozntalDistanceOtTargetElevation = distanceCalculator.GetHorizontalDistanceOnTargetElevation();
+            IList<IPoint> borehole = this.extrapolator.GetCurvedExtrapolaton(collar, azimuthChange, dipChange);
+            double horiozntalDistanceOtTargetElevation = this.planeDistanceCalculator.GetHorizontalDistanceOnTargetElevation();
 
             Assert.AreEqual(distance, horiozntalDistanceOtTargetElevation);
         }
@@ -65,9 +73,8 @@
         {
             collar.Azimuth = startAzimuth;
             collar.Dip = startDip;
-            IList<IPoint> borehole = this.curveExtrapolator.GetCurvedExtrapolaton(collar, azimuthChange, dipChange);
-            PlaneDistanceCalculator distanceCalculator = new PlaneDistanceCalculator(borehole, this.negativeTarget);
-            double verticalDistance = distanceCalculator.GetVerticalDistance();
+            IList<IPoint> borehole = this.extrapolator.GetCurvedExtrapolaton(collar, azimuthChange, dipChange);
+            double verticalDistance = this.planeDistanceCalculator.GetVerticalDistance();
 
             Assert.AreEqual(distance, verticalDistance);
         }
@@ -94,9 +101,8 @@
         {
             collar.Azimuth = startAzimuth;
             collar.Dip = startDip;
-            IList<IPoint> borehole = this.curveExtrapolator.GetCurvedExtrapolaton(collar, azimuthChange, dipChange);
-            PlaneDistanceCalculator distanceCalculator = new PlaneDistanceCalculator(borehole, this.negativeTarget);
-            double minimumHorizontalDistance = distanceCalculator.GetMinimumHorizontalDistance();
+            IList<IPoint> borehole = this.extrapolator.GetCurvedExtrapolaton(collar, azimuthChange, dipChange);
+            double minimumHorizontalDistance = this.planeDistanceCalculator.GetMinimumHorizontalDistance();
 
             Assert.AreEqual(distance, minimumHorizontalDistance);
         }

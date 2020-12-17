@@ -16,6 +16,7 @@
         [Key]
         public string Id { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
         [ForeignKey("Contractor")]
@@ -36,7 +37,7 @@
         [ForeignKey("Target")]
         public string TargetId { get; set; }
 
-        public virtual Target Targets { get; set; }
+        public virtual Target Target { get; set; }
 
         public virtual IList<SurveyPoint> SurveyPoints { get; set; }
 

@@ -11,22 +11,22 @@
         <InputText @bind-Value="@this.Borehole.Name" class="form-control" />
     </div>
     <div class="form-group">
-        <label for="@CollarId" class="text-center font-weight-bold d-block">Choose Collar</label>
-        <InputSelect @bind-Value="@CollarId" class="form-control">
+        <label for="@CollarName" class="text-center font-weight-bold d-block">Choose Collar</label>
+        <InputSelect @bind-Value="@CollarName" class="form-control">
             <option selected="selected">Collar...</option>
             @foreach (var collar in this.Collars)
             {
-                <option class="form-control" value="@collar.Id">@collar.Name</option>
+                <option class="form-control" value="@collar.Name">@collar.Name</option>
             }
         </InputSelect>
     </div>
     <div class="form-group">
-        <label for="@TargetId" class="text-center font-weight-bold d-block">Choose Target</label>
-        <InputSelect @bind-Value="@TargetId" class="form-control">
+        <label for="@TargetName" class="text-center font-weight-bold d-block">Choose Target</label>
+        <InputSelect @bind-Value="@TargetName" class="form-control">
             <option selected="selected">Target...</option>
             @foreach (var target in this.Targets)
             {
-                <option class="form-control" value="@target.Id">@target.Name</option>
+                <option class="form-control" value="@target.Name">@target.Name</option>
             }
         </InputSelect>
     </div>
@@ -53,10 +53,12 @@
 
 <hr style="border:0;height:1.5px;background-color: rgb(230, 230, 230); width:80%;" />
 
-@code {
+@code
+{
+
     private bool IsCreated { get; set; } = false;
 
-    public bool IsStraight => this.AzimuthChange == 0 && this.DipChange == 0;
+    private bool IsStraight => this.AzimuthChange == 0 && this.DipChange == 0;
 
     public double AzimuthChange { get; set; } = 0;
 
@@ -64,9 +66,9 @@
 
     public BoreholeDTO Borehole { get; set; } = new BoreholeDTO();
 
-    public string CollarId { get; set; }
+    public string CollarName { get; set; }
 
-    public string TargetId { get; set; }
+    public string TargetName { get; set; }
 
     public IEnumerable<CollarDTO> Collars { get; set; }
 
@@ -85,6 +87,7 @@
         this.Project = this.storageService.Project;
         this.Collars = this.Project.Collars;
         this.Targets = this.Project.Targets;
+
         return;
     }
 
@@ -92,11 +95,13 @@
     {
         BoreholeDTO borehole = new BoreholeDTO
         {
-            Collar = this.Collars.FirstOrDefault(x => x.Id == this.CollarId),
-            Target = this.Targets.FirstOrDefault(x => x.Id == this.TargetId),
+            Collar = this.Collars.FirstOrDefault(x => x.Name == this.CollarName),
+            Target = this.Targets.FirstOrDefault(x => x.Name == this.TargetName),
             Name = this.Borehole.Name,
-            Id = Guid.NewGuid().ToString(),
+            ProjectId = this.Project.Id,
         };
+
+        borehole.Target.BoreholeId = borehole.Id;
 
         if (this.IsStraight)
         {

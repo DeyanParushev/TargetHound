@@ -10,7 +10,14 @@
         // TODO: Test for possitively inclined boreholes
         private IPoint collar = new CollarDTO { Easting = 659_866, Northing = 9_022_962, Elevation = 530, Depth = 0 };
         private IPoint negativeTarget = new TargetDTO { Easting = 659_300, Northing = 9_022_400, Elevation = -811 };
-        private Extrapolator curveExtrapolator = new Extrapolator();
+        private Extrapolator curveExtrapolator;
+        private readonly _3DDistanceCalculator distanceCalculator;
+
+        public _3DDistanceCalculatorTests(Extrapolator extrapolator, _3DDistanceCalculator distanceCalculator)
+        {
+            this.curveExtrapolator = extrapolator;
+            this.distanceCalculator = distanceCalculator;
+        }
 
         [TestCase(225.18, -59.25, 0, 0, 0.36150725910973086)]
         [TestCase(225.18, -59.25, 0.2, 0, 71.882843672247134)]
@@ -35,9 +42,8 @@
             collar.Azimuth = startAzimuth;
             collar.Dip = startDip;
             IList<IPoint> borehole = this.curveExtrapolator.GetCurvedExtrapolaton(collar, azimuthChange, dipChange);
-            _3DDistanceCalculator distanceCalculator = new _3DDistanceCalculator(borehole, this.negativeTarget);
-
-            double minimumSpacialDistance = distanceCalculator.GetMinimumSpacialDistance();
+           
+            double minimumSpacialDistance = this.distanceCalculator.GetMinimumSpacialDistance();
 
             Assert.AreEqual(distance, minimumSpacialDistance);
         }

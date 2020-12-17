@@ -1,12 +1,20 @@
 ﻿namespace TargetHound.DTOs
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
     public class CollarDTO : IPoint, IMapFrom<Collar>, IMapTo<Collar>
     {
+        public CollarDTO()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+
         public string Id { get; set; }
+
+        public string ProjectId { get; set; }
 
         [Required(ErrorMessage = "Name must be bewtween 3 and 40 characters")]
         [MinLength(3, ErrorMessage = "Name must be between 3 and 40 characters.")]

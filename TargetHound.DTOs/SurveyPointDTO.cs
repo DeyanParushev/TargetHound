@@ -1,11 +1,17 @@
 ﻿namespace TargetHound.DTOs
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
     public class SurveyPointDTO : IPoint, IMapFrom<SurveyPoint>, IMapTo<SurveyPoint>
     {
+        public SurveyPointDTO()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+
         public string Id { get; set; }
 
         [Range(0, int.MaxValue, ErrorMessage = "Depth must be a possitive number.")]

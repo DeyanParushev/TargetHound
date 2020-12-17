@@ -1,11 +1,17 @@
 ﻿namespace TargetHound.DTOs
 {
+    using System;
     using System.ComponentModel.DataAnnotations;
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
     public class DrillRigDTO : IMapFrom<DrillRig>, IMapTo<DrillRig>
     {
+        public DrillRigDTO()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+
         public string Id { get; set; }
 
         [Required(ErrorMessage = "Name must be between 3 and 20 characters.")]
