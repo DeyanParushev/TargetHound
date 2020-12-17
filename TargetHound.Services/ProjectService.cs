@@ -20,26 +20,27 @@
             this.dbContext = dbContext;
         }
 
-        public async Task CreateAsync(string userId, string projectName, double magneticDeclination, int countryId)
+        public async Task CreateAsync(
+            string userId,
+            string projectName,
+            double magneticDeclination,
+            int countryId)
         {
-            var user = this.dbContext.ApplicationUsers.
-                FirstOrDefault(x => x.Id == userId);
+            this.CheckUserExists(userId);
 
-            if (user == null)
+            if (this.dbContext.UsersProjects.Any(x => x.Project.Name == projectName && x.ApplicationUserId == userId))
             {
-                return;
+                throw new ArgumentException("You are already part of a project with this name");
             }
 
-            if (user.UserProjects.Any(x => x.Project.Name == projectName))
-            {
-                return;
-            }
+            var clientId = this.dbContext.Users.SingleOrDefault(x => x.Id == userId)?.ClientId;
 
             Project project = new Project
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = projectName,
                 AdminId = userId,
+                ClientId = clientId,
                 MagneticDeclination = magneticDeclination,
                 CountryId = countryId,
                 CreatedOn = DateTime.UtcNow,
@@ -88,6 +89,7 @@
 
             var project = this.dbContext.Projects
                 .Where(x => x.Id == projectId && x.IsDeleted == false)
+                .Include(x => x.Boreholes)
                 .AsNoTracking()
                 .To<T>()
                 .FirstOrDefault();
@@ -202,9 +204,9 @@
         }
 
         public async Task EditProjectAsync(
-            string projectId, 
-            string projectName, 
-            double magneticDeclination, 
+            string projectId,
+            string projectName,
+            double magneticDeclination,
             int countryId)
         {
             this.CheckProjectExists(projectId);
@@ -221,16 +223,16 @@
         {
             this.CheckUserExists(userId);
 
-            var projectModel = 
-                this.dbContext.Projects.FirstOrDefault(x => x.Id == project.Id && x.IsDeleted == false);
+            var projectDataModel =
+                this.dbContext.Projects.SingleOrDefault(x => x.Id == project.Id && x.IsDeleted == false);
 
-            if(projectModel == null) 
+            if (projectDataModel == null)
             {
-                this.dbContext.Projects.Add(project);
+                await this.dbContext.Projects.AddAsync(project);
             }
             else
             {
-                this.dbContext.Entry(projectModel.Boreholes).CurrentValues.SetValues(project.Boreholes);
+
             }
 
             await this.dbContext.SaveChangesAsync();

@@ -10,7 +10,7 @@ using TargetHound.Data;
 namespace TargetHound.Data.Migrations
 {
     [DbContext(typeof(TargetHoundContext))]
-    [Migration("20201217150726_InitialCreate")]
+    [Migration("20201217171031_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -91,21 +91,29 @@
             var project = input.Project;
             var userId = this.userManager.GetUserId(this.User);
 
-            if (userId != null)
+            try
             {
-                await this.projectService.CreateAsync(userId, project.Name, project.MagneticDeclination, project.CountryId);
-                ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-                await this.userManager.AddToRoleAsync(user, SiteIdentityRoles.ProjectAdmin);
-                return this.RedirectToAction("Load");
+                if (userId != null)
+                {
+                    await this.projectService.CreateAsync(userId, project.Name, project.MagneticDeclination, project.CountryId);
+                    ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+                    await this.userManager.AddToRoleAsync(user, SiteIdentityRoles.ProjectAdmin);
+                    return this.RedirectToAction("Load");
+                }
+
+                var projectModel = new ProjectDTO
+                {
+                    Name = input.Project.Name,
+                    MagneticDeclination = input.Project.MagneticDeclination,
+                };
+
+                return this.Redirect($"/Planning/{projectModel.Name}/{projectModel.MagneticDeclination}/");
             }
-
-            var projectModel = new ProjectDTO
+            catch (Exception ex)
             {
-                Name = input.Project.Name,
-                MagneticDeclination = input.Project.MagneticDeclination,
-            };
-
-            return this.Redirect($"/Planning/{projectModel.Name}/{projectModel.MagneticDeclination}/");
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                return this.Redirect("Error");
+            }
         }
 
         [Authorize(Roles = SiteIdentityRoles.ProjectAdmin)]

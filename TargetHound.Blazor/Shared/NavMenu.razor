@@ -41,11 +41,11 @@
             }
         </li>
 
-        <li class="" @onclick="SaveProject">
+        <li class="">
             <NavLink class="dropdown">
-                <button type="submit" class="btn btn-block btn-primary">Save</button>
+                <button type="submit" class="btn btn-block btn-primary" @onclick="SaveProject">Save</button>
             </NavLink>
-            @if (this.SaveSuccess)
+            @if (this.ShowSaveMessage)
             {
                 <TargetHound.Blazor.Pages.Save SaveSuccess="@this.SaveSuccess" />
             }
@@ -124,7 +124,7 @@
         var project = this.stateService.Project;
         var result = await this.client.PostAsJsonAsync<ProjectDTO>($"api/ProjectApi/Save", project);
         this.ShowSaveMessage = true;
-        
+
         if (result.IsSuccessStatusCode)
         {
             this.SaveSuccess = true;

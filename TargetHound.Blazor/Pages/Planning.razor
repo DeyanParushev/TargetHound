@@ -19,7 +19,7 @@
 
     <div class="col-6 p-0 mx-1">
         <CascadingValue Value="@this.RefreshIsRequested">
-            <DisplayBorehole Display="@this.Select" Boreholes="@this.Boreholes" Refresh="@this.Refresh" />
+            <DisplayBorehole Display="@this.Select" Refresh="@this.Refresh" Boreholes="@this.Boreholes"/>
         </CascadingValue>
     </div>
 </div>
@@ -69,12 +69,18 @@
                 Name = this.Name,
                 MagneticDeclination = this.Declination,
             };
+
             this.stateService.Project = this.Project;
             this.stateService.IsInitialLoading = false;
         }
         else
         {
             this.Project = this.stateService.Project;
+        }
+
+        if(this.Project.Boreholes.Count > 0)
+        {
+            this.Boreholes = this.Project.Boreholes;
         }
 
         this.jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/app.js");
@@ -84,7 +90,7 @@
     {
         if (this.stateService.BoreholeToDisplayName != null)
         {
-            BoreholeDTO borehole = this.stateService.Project.Boreholes.FirstOrDefault(x => x.Id == this.stateService.BoreholeToDisplayName);
+            BoreholeDTO borehole = this.stateService.Project.Boreholes.FirstOrDefault(x => x.Name == this.stateService.BoreholeToDisplayName);
             var result = this.jsModule.InvokeVoidAsync("RenderBorehole", borehole).GetAwaiter();
             Console.WriteLine(result);
         }
