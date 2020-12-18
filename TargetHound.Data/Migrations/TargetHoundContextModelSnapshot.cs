@@ -253,9 +253,6 @@ namespace TargetHound.Data.Migrations
                     b.Property<string>("CollarId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("CollarId1")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("ContractorId")
                         .HasColumnType("nvarchar(450)");
 
@@ -276,13 +273,13 @@ namespace TargetHound.Data.Migrations
 
                     b.HasIndex("CollarId");
 
-                    b.HasIndex("CollarId1");
-
                     b.HasIndex("ContractorId");
 
                     b.HasIndex("ProjectId");
 
-                    b.HasIndex("TargetId");
+                    b.HasIndex("TargetId")
+                        .IsUnique()
+                        .HasFilter("[TargetId] IS NOT NULL");
 
                     b.ToTable("Boreholes");
                 });
@@ -606,7 +603,7 @@ namespace TargetHound.Data.Migrations
                         .HasColumnType("float");
 
                     b.Property<string>("BoreholeId")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Depth")
                         .HasColumnType("float");
@@ -635,8 +632,6 @@ namespace TargetHound.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BoreholeId");
 
                     b.HasIndex("ProjectId");
 
@@ -749,13 +744,9 @@ namespace TargetHound.Data.Migrations
             modelBuilder.Entity("TargetHound.DataModels.Borehole", b =>
                 {
                     b.HasOne("TargetHound.DataModels.Collar", "Collar")
-                        .WithMany()
-                        .HasForeignKey("CollarId")
-                        .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("TargetHound.DataModels.Collar", null)
                         .WithMany("Boreholes")
-                        .HasForeignKey("CollarId1");
+                        .HasForeignKey("CollarId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TargetHound.DataModels.Contractor", "Contractor")
                         .WithMany("Boreholes")
@@ -768,8 +759,8 @@ namespace TargetHound.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("TargetHound.DataModels.Target", "Target")
-                        .WithMany()
-                        .HasForeignKey("TargetId")
+                        .WithOne("Borehole")
+                        .HasForeignKey("TargetHound.DataModels.Borehole", "TargetId")
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Collar");
@@ -895,17 +886,10 @@ namespace TargetHound.Data.Migrations
 
             modelBuilder.Entity("TargetHound.DataModels.Target", b =>
                 {
-                    b.HasOne("TargetHound.DataModels.Borehole", "Borehole")
-                        .WithMany()
-                        .HasForeignKey("BoreholeId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
                     b.HasOne("TargetHound.DataModels.Project", "Project")
                         .WithMany("Targets")
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Borehole");
 
                     b.Navigation("Project");
                 });
@@ -988,6 +972,11 @@ namespace TargetHound.Data.Migrations
                     b.Navigation("ProjectUsers");
 
                     b.Navigation("Targets");
+                });
+
+            modelBuilder.Entity("TargetHound.DataModels.Target", b =>
+                {
+                    b.Navigation("Borehole");
                 });
 #pragma warning restore 612, 618
         }

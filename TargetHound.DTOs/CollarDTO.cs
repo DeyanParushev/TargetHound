@@ -1,6 +1,7 @@
 ﻿namespace TargetHound.DTOs
 {
     using System;
+    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
@@ -23,25 +24,25 @@
 
         [Range(0, int.MaxValue, ErrorMessage = "Depth can`t be a negative number.")]
         public double Depth { get; set; }
-       
+
         [Range(0, 360, ErrorMessage = "Azimuth must be between 0 and 360 degrees.")]
         public double Azimuth { get; set; }
-        
+
         [Range(-90, 90, ErrorMessage = "Dip must be between -90 and 90 degrees.")]
         public double Dip { get; set; }
-        
+
         [Required]
         public double Easting { get; set; }
-        
+
         [Required]
         public double Northing { get; set; }
-        
+
         [Required]
         public double Elevation { get; set; }
 
         public bool Equals(CollarDTO other)
         {
-            if(this.Northing == other.Northing && this.Easting == other.Easting && this.Northing == other.Northing)
+            if (this.Northing == other.Northing && this.Easting == other.Easting && this.Northing == other.Northing)
             {
                 return true;
             }

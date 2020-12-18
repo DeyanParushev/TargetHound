@@ -12,6 +12,7 @@
         public Collar()
         {
             this.Id = Guid.NewGuid().ToString();
+            this.Boreholes = new HashSet<Borehole>();
         }
 
         [Key]
@@ -21,12 +22,12 @@
         [MaxLength(30)]
         public string Name { get; set; }
 
-        public ICollection<Borehole> Boreholes { get; set; }
-
         [ForeignKey("Project")]
         public string ProjectId { get; set; }
 
         public virtual Project Project { get; set; }
+
+        public virtual ICollection<Borehole> Boreholes { get; set; }
 
         public bool IsDeleted { get; set; } = false;
 

@@ -89,8 +89,6 @@
 
             var project = this.dbContext.Projects
                 .Where(x => x.Id == projectId && x.IsDeleted == false)
-                .Include(x => x.Boreholes)
-                .AsNoTracking()
                 .To<T>()
                 .FirstOrDefault();
 
@@ -225,6 +223,22 @@
 
             var projectDataModel =
                 this.dbContext.Projects.SingleOrDefault(x => x.Id == project.Id && x.IsDeleted == false);
+
+            if (projectDataModel == null)
+            {
+                this.dbContext.Projects.Add(project);
+            }
+            else
+            {
+                this.dbContext
+                    .ChangeTracker
+                    .Entries()
+                    .Select(x => x.State)
+                    .ToList()
+                    .ForEach(x => x = EntityState.Modified);
+
+                this.dbContext.Projects.Update(project);
+            }
 
             await this.dbContext.SaveChangesAsync();
         }

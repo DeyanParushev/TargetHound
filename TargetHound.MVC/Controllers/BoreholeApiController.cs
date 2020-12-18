@@ -10,57 +10,38 @@
     using TargetHound.DTOs;
     using TargetHound.Services;
     using TargetHound.Services.Automapper;
-    using TargetHound.Services.Interfaces;
 
     [RequireHttps]
     [ApiController]
     [Route("api/[controller]")]
-    public class ProjectApiController : ControllerBase
+    public class BoreholeApiController : ControllerBase
     {
-        private readonly IProjectService projectService;
+        private readonly IBoreholeService boreholeService;
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IMapper mapper;
+        private IMapper mapper;
 
-        public ProjectApiController(
-            IProjectService projectService, 
+        public BoreholeApiController(
+            IBoreholeService boreholeService, 
             UserManager<ApplicationUser> userManager)
         {
-            this.projectService = projectService;
+            this.boreholeService = boreholeService;
             this.userManager = userManager;
             this.mapper = AutoMapperConfig.MapperInstance;
         }
 
-        [HttpGet("{projectId}")]
-        [Authorize]
-        [Produces("application/json")]
-        public async Task<ActionResult<ProjectDTO>> GetProject(string projectId)
-        {
-            try
-            {
-                var project = await this.projectService.GetProjectById<ProjectDTO>(projectId);
-                project.CurrentUserId = this.userManager.GetUserId(this.User);
-                return project;
-            }
-            catch (Exception ex)
-            {
-                return null;
-            }
-        }
-
-        [HttpPut, Route("Save")]
+        [HttpPost, Route("Save")]
         [Authorize]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> PutProject(ProjectDTO projectInput)
+        public async Task<IActionResult> PutProject(BoreholeDTO borehole)
         {
             try
             {
                 if (this.ModelState.IsValid)
                 {
                     var userId = this.userManager.GetUserId(this.User);
-                    var project = this.mapper.Map<Project>(projectInput);
+                    var boreholeDataModel = this.mapper.Map<BoreholeDTO, Borehole>(borehole);
 
-                    //TODO: fix saving the project
-                    await this.projectService.SaveProject(project, userId);
+                    await this.boreholeService.UpdateBoreholes(borehole.ProjectId, userId, boreholeDataModel);
                     return this.StatusCode(200);
                 }
                 else
@@ -68,7 +49,7 @@
                     return this.StatusCode(422);
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 return this.StatusCode(500);
             }

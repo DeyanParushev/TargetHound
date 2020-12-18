@@ -24,6 +24,12 @@
         [MaxLength(40, ErrorMessage = "Name must be between 5 and 40 characters.")]
         public string Name { get; set; }
 
+        public string AdminId { get; set; }
+
+        public int CountryId { get; set; }
+
+        public string ClientId { get; set; }
+
         public string CurrentUserId { get; set; }
 
         [Required]

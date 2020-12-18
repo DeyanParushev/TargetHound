@@ -64,14 +64,19 @@
                 .WithOne(x => x.Client)
                 .OnDelete(DeleteBehavior.SetNull);
 
+            modelBuilder.Entity<Collar>()
+                .HasMany(x => x.Boreholes)
+                .WithOne(x => x.Collar)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Borehole>()
+                .HasOne(x => x.Target)
+                .WithOne(x => x.Borehole)
+                .OnDelete(DeleteBehavior.Restrict);
+
             modelBuilder.Entity<Borehole>()
                 .HasMany<SurveyPoint>()
                 .WithOne(x => x.Borehole)
-                .OnDelete(DeleteBehavior.SetNull);
-
-            modelBuilder.Entity<Collar>()
-                .HasMany<Borehole>()
-                .WithOne(x => x.Collar)
                 .OnDelete(DeleteBehavior.SetNull);
 
             base.OnModelCreating(modelBuilder);

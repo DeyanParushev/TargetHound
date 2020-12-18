@@ -16,8 +16,6 @@
 
         public string ProjectId { get; set; }
 
-        public string BoreholeId { get; set; }
-
         [Required(ErrorMessage = "Name must be betweem 4 and 40 characters.")]
         [MinLength(4, ErrorMessage = "Name must be betweem 4 and 40 characters.")]
         [MaxLength(40, ErrorMessage = "Name must be betweem 4 and 40 characters.")]

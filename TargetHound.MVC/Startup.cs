@@ -35,7 +35,7 @@ namespace TargetHound.MVC
         {
             services.AddDbContext<TargetHoundContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), 
-                ServiceLifetime.Singleton);
+                ServiceLifetime.Scoped);
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                .AddRoles<ApplicationRole>()
@@ -62,6 +62,9 @@ namespace TargetHound.MVC
             services.AddTransient<IEmailSender, SendGridEmailSender>();
             services.AddTransient<IClientInvitationsService, ClientInvitationsService>();
             services.AddTransient<IContractorService, ContractorService>();
+            services.AddTransient<ICollarService, CollarService>();
+            services.AddTransient<ITargetService, TargetService>();
+            services.AddTransient<IBoreholeService, BoreholeService>();
 
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();

@@ -19,17 +19,18 @@
         [MaxLength(30)]
         public string Name { get; set; }
 
-        [ForeignKey("Borehole")]
-        public string BoreholeId { get; set; }
-
-        public virtual Borehole Borehole { get; set; }
-
         public bool IsDeleted { get; set; }
 
         [ForeignKey("Project")]
         public string ProjectId { get; set; }
 
         public virtual Project Project { get; set; }
+
+        [ForeignKey("Borehole")]
+        public string BoreholeId { get; set; }
+
+        public virtual Borehole Borehole { get; set; }
+
         public double Depth { get; set; }
 
         public double Azimuth { get; set; }

@@ -1,6 +1,7 @@
 ﻿@inject TargetHound.Calcualtions.StraightExtrapolationCalculator straightCalculator
 @inject TargetHound.Calcualtions.Extrapolator extrapolator
 @inject IStateService storageService
+@inject HttpClient client
 
 <EditForm Model="@this.Borehole" OnValidSubmit="AddToProject" class="flex-column mt-4">
     <DataAnnotationsValidator />
@@ -43,10 +44,17 @@
     <button type="submit" class="btn btn-success offset-4">
         Create
     </button>
+
     @if (this.IsCreated)
     {
         <div class="text-center mt-2">
-            <alert class="text-success font-weight-bold">Borehole created</alert>
+            <alert class="text-success font-weight-bold">Collar Created!</alert>
+        </div>
+    }
+    else if (this.ShowMessage)
+    {
+        <div class="text-center mt-2">
+            <alert class="text-danger">@this.ErrorMessage</alert>
         </div>
     }
 </EditForm>
@@ -55,6 +63,9 @@
 
 @code
 {
+    private bool ShowMessage { get; set; } = false;
+
+    private string ErrorMessage { get; set; }
 
     private bool IsCreated { get; set; } = false;
 
@@ -101,8 +112,6 @@
             ProjectId = this.Project.Id,
         };
 
-        borehole.Target.BoreholeId = borehole.Id;
-
         if (this.IsStraight)
         {
             borehole.Collar.Azimuth = this.straightCalculator.GetInitialAzimuthAngle(borehole.Collar, borehole.Target);
@@ -119,8 +128,40 @@
             // TODO: finish the algorythm for curved borehole;
         }
 
-        this.IsCreated = true;
-        this.storageService.Project.Boreholes.Add(borehole);
+        this.ShowMessage = true;
+
+        if (this.Project.Boreholes.Any(x => x.Name == borehole.Name))
+        {
+            this.IsCreated = false;
+            this.ErrorMessage = "A borehole with the same name already exists.";
+        }
+        else if (this.Project.Boreholes.Any(x => x.Equals(borehole)))
+        {
+            this.IsCreated = false;
+            this.ErrorMessage = "A borehole with these collar and target already exists.";
+        }
+        else
+        {
+            this.SendBorehole(borehole);
+        }
+
+
+    }
+
+    private async Task SendBorehole(BoreholeDTO borehole)
+    {
+        var response = await this.client.PostAsJsonAsync<BoreholeDTO>($"api/BoreholeApi/Save", borehole);
+
+        if (response.IsSuccessStatusCode)
+        {
+            this.IsCreated = true;
+            this.storageService.Project.Boreholes.Add(borehole);
+        }
+        else
+        {
+            this.IsCreated = false;
+        }
+
         this.RefreshIsRequested = true;
         this.Refresh?.Invoke(this.RefreshIsRequested);
         this.StateHasChanged();
