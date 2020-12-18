@@ -54,6 +54,38 @@
             return this.View(viewModel);
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create(ProjectCountryInputModel input)
+        {
+            var project = input.Project;
+            var userId = this.userManager.GetUserId(this.User);
+
+            try
+            {
+                if (userId != null)
+                {
+                    await this.projectService.CreateAsync(userId, project.Name, project.MagneticDeclination, project.CountryId);
+                    ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+                    await this.userManager.AddToRoleAsync(user, SiteIdentityRoles.ProjectAdmin);
+                    
+                    return this.RedirectToAction("Load");
+                }
+
+                var projectModel = new ProjectDTO
+                {
+                    Name = input.Project.Name,
+                    MagneticDeclination = input.Project.MagneticDeclination,
+                };
+
+                return this.Redirect($"/Planning/{projectModel.Name}/{projectModel.MagneticDeclination}/");
+            }
+            catch (Exception ex)
+            {
+                this.ModelState.AddModelError(string.Empty, ex.Message);
+                return this.Redirect("Error");
+            }
+        }
+
         [Authorize]
         public async Task<IActionResult> Load()
         {
@@ -82,37 +114,6 @@
             {
                 this.ModelState.AddModelError(string.Empty, "You are not part of this project.");
                 return this.View("Error");
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Create(ProjectCountryInputModel input)
-        {
-            var project = input.Project;
-            var userId = this.userManager.GetUserId(this.User);
-
-            try
-            {
-                if (userId != null)
-                {
-                    await this.projectService.CreateAsync(userId, project.Name, project.MagneticDeclination, project.CountryId);
-                    ApplicationUser user = await this.userManager.GetUserAsync(this.User);
-                    await this.userManager.AddToRoleAsync(user, SiteIdentityRoles.ProjectAdmin);
-                    return this.RedirectToAction("Load");
-                }
-
-                var projectModel = new ProjectDTO
-                {
-                    Name = input.Project.Name,
-                    MagneticDeclination = input.Project.MagneticDeclination,
-                };
-
-                return this.Redirect($"/Planning/{projectModel.Name}/{projectModel.MagneticDeclination}/");
-            }
-            catch (Exception ex)
-            {
-                this.ModelState.AddModelError(string.Empty, ex.Message);
-                return this.Redirect("Error");
             }
         }
 

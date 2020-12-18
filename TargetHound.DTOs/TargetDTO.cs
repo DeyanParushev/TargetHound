@@ -5,7 +5,7 @@
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
-    public class TargetDTO : IPoint, IMapFrom<Target>, IMapTo<Target>
+    public class TargetDTO : IPoint, IMapFrom<Target>, IMapTo<Target>, IEquatable<TargetDTO>
     {
         public TargetDTO()
         {
@@ -40,5 +40,15 @@
         
         [Required]
         public double Elevation { get; set; }
+
+        public bool Equals(TargetDTO other)
+        {
+            if (this.Northing == other.Northing && this.Easting == other.Easting && this.Northing == other.Northing)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

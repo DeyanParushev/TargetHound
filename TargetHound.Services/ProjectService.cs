@@ -226,15 +226,6 @@
             var projectDataModel =
                 this.dbContext.Projects.SingleOrDefault(x => x.Id == project.Id && x.IsDeleted == false);
 
-            if (projectDataModel == null)
-            {
-                await this.dbContext.Projects.AddAsync(project);
-            }
-            else
-            {
-
-            }
-
             await this.dbContext.SaveChangesAsync();
         }
 

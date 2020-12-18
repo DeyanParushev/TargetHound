@@ -1,4 +1,4 @@
-﻿@inject IStateService stateService
+﻿@inject IStateService storageService
 
 <EditForm Model="@this.Target" OnValidSubmit="AddToProject" class="mt-4">
     <DataAnnotationsValidator />
@@ -28,7 +28,13 @@
     @if (this.isCreated)
     {
         <div class="text-center mt-2">
-            <alert class="text-center text-success font-weight-bold">Target Created</alert>
+            <alert class="text-success font-weight-bold">Collar Created!</alert>
+        </div>
+    }
+    else if (this.ShowMessage)
+    {
+        <div class="text-center mt-2">
+            <alert class="text-danger">@this.ErrorMessage</alert>
         </div>
     }
 </EditForm>
@@ -39,6 +45,10 @@
     private TargetDTO Target { get; set; } = new TargetDTO();
 
     private bool isCreated { get; set; } = false;
+
+    public string ErrorMessage { get; set; }
+
+    public bool ShowMessage { get; set; }
 
     [CascadingParameter]
     public bool RefreshIsRequested { get; set; }
@@ -54,19 +64,40 @@
             Easting = this.Target.Easting,
             Northing = this.Target.Northing,
             Elevation = this.Target.Elevation,
-            ProjectId = this.stateService.Project.Id,
+            ProjectId = this.storageService.Project.Id,
         };
 
-        this.stateService.Project.Targets.Add(target);
-        this.StateHasChanged();
-        this.isCreated = true;
+        this.ShowMessage = true;
 
+        if (this.storageService.Project.Targets.Any(x => x.Equals(target)))
+        {
+            this.isCreated = false;
+            this.ErrorMessage = "A target with the same coordinates already exists in this project.";
+        }
+        else if (this.storageService.Project.Targets.Any(x => x.Name == target.Name))
+        {
+            this.isCreated = false;
+            this.ErrorMessage = "A target with this name exists in this project.";
+        }
+        else
+        {
+            this.storageService.Project.Targets.Add(target);
+            this.isCreated = true;
+
+            this.ClearForm();
+
+            this.RefreshIsRequested = true;
+            this.Refresh?.Invoke(this.RefreshIsRequested);
+        }
+
+        this.StateHasChanged();
+    }
+
+    private void ClearForm()
+    {
         this.Target.Name = null;
         this.Target.Easting = 0;
         this.Target.Northing = 0;
         this.Target.Elevation = 0;
-
-        this.RefreshIsRequested = true;
-        this.Refresh?.Invoke(this.RefreshIsRequested);
     }
 }

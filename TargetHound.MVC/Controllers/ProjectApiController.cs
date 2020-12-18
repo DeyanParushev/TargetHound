@@ -5,6 +5,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using TargetHound.DataModels;
     using TargetHound.DTOs;
@@ -35,6 +36,7 @@
             try
             {
                 var project = await this.projectService.GetProjectById<ProjectDTO>(projectId);
+                project.CurrentUserId = this.userManager.GetUserId(this.User);
                 return project;
             }
             catch (Exception ex)
@@ -43,18 +45,18 @@
             }
         }
 
-        [HttpPost, Route("Save")]
+        [HttpPut, Route("Save")]
         [Authorize]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> PutProject(ProjectDTO project)
+        public async Task<IActionResult> PutProject(ProjectDTO projectInput)
         {
             try
             {
                 if (this.ModelState.IsValid)
                 {
                     var userId = this.userManager.GetUserId(this.User);
-                    var projectDataModel = this.mapper.Map<ProjectDTO, Project>(project);
-                    await this.projectService.SaveProject(projectDataModel, userId);
+                    var project = this.mapper.Map<ProjectDTO, Project>(projectInput);
+                    await this.projectService.SaveProject(project, userId);
                     return this.StatusCode(200);
                 }
                 else

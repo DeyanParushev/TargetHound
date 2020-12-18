@@ -31,6 +31,12 @@
             <alert class="text-success font-weight-bold">Collar Created!</alert>
         </div>
     }
+    else if (this.ShowMessage)
+    {
+        <div class="text-center mt-2">
+            <alert class="text-danger">@this.ErrorMessage</alert>
+        </div>
+    }
 </EditForm>
 
 <hr style="border:0;height:1.5px;background-color: rgb(230, 230, 230); width:80%;" />
@@ -39,6 +45,10 @@
     private CollarDTO Collar { get; set; } = new CollarDTO();
 
     private bool isCreated { get; set; } = false;
+
+    public string ErrorMessage { get; set; }
+
+    public bool ShowMessage { get; set; } = false;
 
     [CascadingParameter]
     public bool RefreshIsRequested { get; set; }
@@ -57,13 +67,30 @@
             ProjectId = this.storageService.Project.Id,
         };
 
-        this.storageService.Project.Collars.Add(collar);
-        this.isCreated = true;
-        this.StateHasChanged();
-        this.ClearForm();
+        this.ShowMessage = true;
 
-        this.RefreshIsRequested = true;
-        this.Refresh?.Invoke(this.RefreshIsRequested);
+        if (this.storageService.Project.Collars.Any(x => x.Equals(collar)))
+        {
+            this.isCreated = false;
+            this.ErrorMessage = "A collar with the same coordinates already exists in this project.";
+        }
+        else if (this.storageService.Project.Collars.Any(x => x.Name == collar.Name))
+        {
+            this.isCreated = false;
+            this.ErrorMessage = "A collar with this name exists in this project.";
+        }
+        else
+        {
+            this.storageService.Project.Collars.Add(collar);
+            this.isCreated = true;
+
+            this.ClearForm();
+
+            this.RefreshIsRequested = true;
+            this.Refresh?.Invoke(this.RefreshIsRequested);
+        }
+
+        this.StateHasChanged();
     }
 
     private void ClearForm()

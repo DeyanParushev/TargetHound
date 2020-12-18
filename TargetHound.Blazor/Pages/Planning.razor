@@ -58,6 +58,7 @@
         {
             this.Project = await client.GetFromJsonAsync<ProjectDTO>($"api/ProjectApi/{ProjectId}");
 
+            this.stateService.UserId = Project.CurrentUserId;
             this.stateService.Project = this.Project;
             this.stateService.IsInitialLoading = false;
         }

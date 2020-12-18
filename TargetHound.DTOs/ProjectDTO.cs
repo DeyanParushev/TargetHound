@@ -24,6 +24,8 @@
         [MaxLength(40, ErrorMessage = "Name must be between 5 and 40 characters.")]
         public string Name { get; set; }
 
+        public string CurrentUserId { get; set; }
+
         [Required]
         public double MagneticDeclination { get; set; }
 

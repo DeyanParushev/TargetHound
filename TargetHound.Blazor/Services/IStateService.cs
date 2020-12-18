@@ -12,5 +12,7 @@
         public bool IsInitialLoading { get; set; }
 
         public string BoreholeToDisplayName { get; set; }
+        
+        public bool IsNewProject { get; set; }
     }
 }

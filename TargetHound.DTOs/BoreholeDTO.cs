@@ -6,7 +6,7 @@
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
-    public class BoreholeDTO : IMapFrom<Borehole>, IMapTo<Borehole>
+    public class BoreholeDTO : IMapFrom<Borehole>, IMapTo<Borehole>, IEquatable<BoreholeDTO>
     {
         public BoreholeDTO()
         {
@@ -30,5 +30,15 @@
         public TargetDTO Target { get; set; }
 
         public IList<SurveyPointDTO> SurveyPoints { get; set; }
+
+        public bool Equals(BoreholeDTO other)
+        {
+            if(this.Collar == other.Collar && this.Target == other.Target)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

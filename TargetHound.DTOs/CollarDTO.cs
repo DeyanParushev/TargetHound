@@ -5,7 +5,7 @@
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
 
-    public class CollarDTO : IPoint, IMapFrom<Collar>, IMapTo<Collar>
+    public class CollarDTO : IPoint, IMapFrom<Collar>, IMapTo<Collar>, IEquatable<CollarDTO>
     {
         public CollarDTO()
         {
@@ -38,5 +38,15 @@
         
         [Required]
         public double Elevation { get; set; }
+
+        public bool Equals(CollarDTO other)
+        {
+            if(this.Northing == other.Northing && this.Easting == other.Easting && this.Northing == other.Northing)
+            {
+                return true;
+            }
+
+            return false;
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿@inject HttpClient client
 @inject IStateService stateService
 @inject IJSRuntime jsRuntime
+@inject NavigationManager navigationManager
 
 <div class="nav my-5" style="padding:0">
     <h4 class="text-center font-weight-bold container-fluid"><a href="/Home/Index" class="text-white">Target Hound</a></h4>
@@ -121,11 +122,20 @@
 
     public async Task SaveProject()
     {
-        var project = this.stateService.Project;
-        var result = await this.client.PostAsJsonAsync<ProjectDTO>($"api/ProjectApi/Save", project);
-        this.ShowSaveMessage = true;
+        var result = new HttpResponseMessage();
 
-        if (result.IsSuccessStatusCode)
+        if (this.stateService.UserId == null)
+        {
+            this.navigationManager.NavigateTo(this.client.BaseAddress + "Identity/Account/Login/", true);
+        }
+        else
+        {
+            var project = this.stateService.Project;
+            result = await this.client.PutAsJsonAsync<ProjectDTO>($"api/ProjectApi/Save", project);
+            this.ShowSaveMessage = true;
+        }
+
+        if (result.StatusCode == HttpStatusCode.OK)
         {
             this.SaveSuccess = true;
         }
