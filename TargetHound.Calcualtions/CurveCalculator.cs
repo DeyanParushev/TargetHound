@@ -14,7 +14,7 @@
 
         public double GetDoglegAngle(IPoint topStation, IPoint bottomStation)
         {
-            if(this.IsStraightSection(topStation, bottomStation))
+            if (this.IsStraightSection(topStation, bottomStation))
             {
                 return 0;
             }
@@ -23,10 +23,9 @@
             SurveyPointDTO preparedBottomStation = this.PrepareAngles(bottomStation);
 
             // acos(cos(I2 – I1) – sinI1 sinI2 (1-cos(A2-A1 DL acos( cos(I ))) 
-            double doglegInRadians = Math.Acos(
-                Math.Sin(preparedTopStation.Dip) * Math.Sin(preparedBottomStation.Dip)
-                * Math.Cos(preparedBottomStation.Azimuth - preparedTopStation.Azimuth)
-                + Math.Cos(preparedTopStation.Dip) * Math.Cos(preparedBottomStation.Dip));
+            double doglegInRadians = Math.Acos((Math.Sin(preparedTopStation.Dip) * Math.Sin(preparedBottomStation.Dip)
+                * Math.Cos(preparedBottomStation.Azimuth - preparedTopStation.Azimuth))
+                + (Math.Cos(preparedTopStation.Dip) * Math.Cos(preparedBottomStation.Dip)));
 
             double dogleg = this.angleConverter.ConvertRadiansToAngle(doglegInRadians);
             return dogleg;
@@ -45,7 +44,7 @@
 
         public double GetToolFace(IPoint topStation, IPoint bottomStation)
         {
-            if(topStation.Dip == 90 || topStation.Dip == -90)
+            if (topStation.Dip == 90 || topStation.Dip == -90)
             {
                 return bottomStation.Azimuth;
             }
@@ -56,12 +55,7 @@
             double doglegAngle = this.GetDoglegAngle(topStation, bottomStation);
             double doglegInRadians = this.angleConverter.ConvertAngleToRadians(doglegAngle);
 
-            //double topEquationPart =
-            //    Math.Sin(preparedBottomStation.Dip) - (Math.Sin(preparedTopStation.Dip) * Math.Cos(doglegInRadians));
-            //double bottomEquationPart = Math.Cos(preparedTopStation.Dip) * Math.Sin(doglegInRadians);
-            
-            // Working Excel formulae
-            double topEquationPart = Math.Cos(preparedTopStation.Dip) * Math.Cos(doglegInRadians)
+            double topEquationPart = (Math.Cos(preparedTopStation.Dip) * Math.Cos(doglegInRadians))
                 - Math.Cos(preparedBottomStation.Dip);
 
             double bottomEquationPart = Math.Sin(preparedTopStation.Dip) * Math.Sin(doglegInRadians);
@@ -69,15 +63,15 @@
             double toolFaceInRadians = Math.Acos(Math.Round(topEquationPart / bottomEquationPart, 10));
             double toolFaceInAngle = this.angleConverter.ConvertRadiansToAngle(toolFaceInRadians);
 
-            if(toolFaceInAngle == 360)
+            if (toolFaceInAngle == 360)
             {
                 toolFaceInAngle = 0;
                 return toolFaceInAngle;
             }
 
-            if(this.IsLeftTurn(topStation, bottomStation))
+            if (this.IsLeftTurn(topStation, bottomStation))
             {
-                if(this.AzimuthChangeIsGreaterThanHalfTurn(topStation, bottomStation))
+                if (this.AzimuthChangeIsGreaterThanHalfTurn(topStation, bottomStation))
                 {
                     return toolFaceInAngle;
                 }
@@ -88,7 +82,7 @@
             }
             else
             {
-                if(this.AzimuthChangeIsGreaterThanHalfTurn(topStation, bottomStation))
+                if (this.AzimuthChangeIsGreaterThanHalfTurn(topStation, bottomStation))
                 {
                     return 360 - toolFaceInAngle;
                 }
@@ -101,7 +95,7 @@
 
         public double GetRatioFactor(IPoint topStation, IPoint bottomStation)
         {
-            if(this.IsStraightSection(topStation, bottomStation))
+            if (this.IsStraightSection(topStation, bottomStation))
             {
                 return 1;
             }
@@ -136,7 +130,7 @@
 
         private bool IsStraightSection(IPoint topStation, IPoint bottomStation)
         {
-            return topStation.Azimuth == bottomStation.Azimuth &&  topStation.Dip == bottomStation.Dip;
+            return topStation.Azimuth == bottomStation.Azimuth && topStation.Dip == bottomStation.Dip;
         }
     }
 }

@@ -1,11 +1,12 @@
 ﻿namespace SendgridEmailInAspNetCore.Services
 {
-    using SendGrid;
-    using SendGrid.Helpers.Errors.Model;
-    using SendGrid.Helpers.Mail;
     using System;
     using System.Net;
     using System.Threading.Tasks;
+    using SendGrid;
+    using SendGrid.Helpers.Errors.Model;
+    using SendGrid.Helpers.Mail;
+
     using TargetHound.Services.Messages;
 
     public class SendGridEmailSender : IEmailSender
@@ -19,8 +20,8 @@
         }
 
         public async Task SendEmailAsync(
-            string sender, 
-            string senderName, 
+            string sender,
+            string senderName,
             string receiver,
             string receiverName,
             string subject,
@@ -45,4 +46,3 @@
         }
     }
 }
-

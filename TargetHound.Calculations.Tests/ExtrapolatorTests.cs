@@ -1,16 +1,17 @@
 ﻿namespace TargetHound.Calculations.Tests
 {
-    using NUnit.Framework;
     using System;
     using System.Collections.Generic;
 
+    using NUnit.Framework;
+    
     using TargetHound.Calcualtions;
     using TargetHound.DTOs;
 
     public class ExtrapolatorTests
     {
-        private IPoint collar = new CollarDTO { Easting = 659_866, Northing = 9_022_962, Elevation = 530, Depth = 0, Azimuth = 45, Dip = -75 };
         private readonly Extrapolator extrapolator;
+        private IPoint collar = new CollarDTO { Easting = 659_866, Northing = 9_022_962, Elevation = 530, Depth = 0, Azimuth = 45, Dip = -75 };
 
         public ExtrapolatorTests(Extrapolator extrapolator)
         {
@@ -46,7 +47,7 @@
         [TestCase(564)]
         public void GetStraightExtrapolationMultipleVariablesOverloadTests(double depth)
         {
-            List<IPoint> extrapolation = (List<IPoint>)extrapolator.GetStraightExtrapolation(
+            List<IPoint> extrapolation = (List<IPoint>)this.extrapolator.GetStraightExtrapolation(
                 this.collar.Easting,
                 this.collar.Northing,
                 this.collar.Elevation,
@@ -63,7 +64,7 @@
         [TestCase(300, 0.5, 0.5)]
         public void GetCurvedExtrapolationObjectVariableOverload(double depth, double aziChange, double dipChange)
         {
-            List<IPoint> extrapolation =(List<IPoint>)this.extrapolator.GetCurvedExtrapolaton(this.collar, aziChange, dipChange);
+            List<IPoint> extrapolation = (List<IPoint>)this.extrapolator.GetCurvedExtrapolaton(this.collar, aziChange, dipChange);
             double expectedTotalAziChange = Math.Abs(extrapolation.Count * aziChange);
             double actualAzimuthChange = Math.Abs(extrapolation[0].Azimuth - extrapolation[extrapolation.Count - 1].Azimuth) + aziChange;
 

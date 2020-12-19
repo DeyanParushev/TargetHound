@@ -1,8 +1,8 @@
 ﻿namespace TargetHound.Calcualtions
 {
     using System;
-    using System.Linq;
     using System.Collections.Generic;
+    using System.Linq;
    
     using TargetHound.DTOs;
 
@@ -18,11 +18,11 @@
 
         public IPoint ClosestSpacialPoint()
         {
-            IPoint startStation = base.borehole.FirstOrDefault(x =>
-                this.LengthOfA3DLine(x, base.target) == base.borehole.Min(y => this.LengthOfA3DLine(y, base.target)));
+            IPoint startStation = borehole.FirstOrDefault(x =>
+                this.LengthOfA3DLine(x, target) == borehole.Min(y => this.LengthOfA3DLine(y, target)));
             int indexOfStartStation = borehole.IndexOf(startStation);
 
-            IPoint endStation = this.GetNextNearestStation(base.borehole, base.target, indexOfStartStation);
+            IPoint endStation = this.GetNextNearestStation(borehole, target, indexOfStartStation);
 
             if (endStation == null)
             {
@@ -93,7 +93,7 @@
                 middleStation.Azimuth = startStation.Azimuth + (azimuthChangePerMeter * (depthChange / 2));
                 middleStation.Dip = startStation.Dip + (dipChangePerMeter * (depthChange / 2));
 
-                base.coordinateSetter.SetBottomStationUTMCoortinates(startStation, middleStation);
+                coordinateSetter.SetBottomStationUTMCoortinates(startStation, middleStation);
             }
 
             this.closestSpacialPoint = middleStation;
@@ -102,7 +102,7 @@
 
         public double GetMinimumSpacialDistance()
         {
-            return this.LengthOfA3DLine(this.closestSpacialPoint, base.target);
+            return this.LengthOfA3DLine(this.closestSpacialPoint, this.target);
         }
 
         public double LengthOfA3DLine(IPoint startPoint, IPoint endPoint)

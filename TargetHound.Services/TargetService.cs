@@ -1,10 +1,10 @@
 ﻿namespace TargetHound.Services
 {
-    using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using TargetHound.Data;
     using TargetHound.DataModels;
     using TargetHound.Services.Interfaces;
@@ -44,11 +44,6 @@
                 {
                     this.dbContext.Targets.Add(target);
                 }
-                //else
-                //{
-                //    this.dbContext.Targets.Update(targetDataObject);
-                //    this.dbContext.Entry(target).State = EntityState.Modified;
-                //}
             }
 
             await this.dbContext.SaveChangesAsync();

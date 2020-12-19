@@ -33,7 +33,7 @@
 
         public bool Equals(BoreholeDTO other)
         {
-            if(this.Collar == other.Collar && this.Target == other.Target)
+            if (this.Collar == other.Collar && this.Target == other.Target)
             {
                 return true;
             }

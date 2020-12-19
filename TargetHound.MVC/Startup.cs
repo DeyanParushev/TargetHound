@@ -1,31 +1,33 @@
 namespace TargetHound.MVC
 {
+    using System.Reflection;
+    using System.Text.Json;
+    
+    using AutoMapper;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using System.Reflection;
-    using TargetHound.Services;
-    using TargetHound.Services.Interfaces;
+    using SendgridEmailInAspNetCore.Services;
+   
     using TargetHound.Data;
     using TargetHound.DataModels;
-    using TargetHound.Services.Automapper;
-    using TargetHound.MVC.Models;
-    using TargetHound.SharedViewModels.ViewModels;
-    using Microsoft.AspNetCore.Mvc;
-    using TargetHound.Services.Messages;
-    using SendgridEmailInAspNetCore.Services;
     using TargetHound.DTOs;
-    using AutoMapper;
-    using System.Text.Json;
+    using TargetHound.MVC.Models;
+    using TargetHound.Services;
+    using TargetHound.Services.Automapper;
+    using TargetHound.Services.Interfaces;
+    using TargetHound.Services.Messages;
+    using TargetHound.SharedViewModels.ViewModels;
 
     public class Startup
     {
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
@@ -34,7 +36,7 @@ namespace TargetHound.MVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<TargetHoundContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")), 
+                options => options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")), 
                 ServiceLifetime.Singleton);
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
@@ -88,9 +90,10 @@ namespace TargetHound.MVC
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                //// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseBlazorFrameworkFiles();

@@ -18,7 +18,6 @@
             Assert.AreEqual(expectedResult, angelConverter.ConverDipToInclination(dip));
         }
 
-
         [TestCase(90, 0)]
         [TestCase(45, -45)]
         [TestCase(0, -90)]

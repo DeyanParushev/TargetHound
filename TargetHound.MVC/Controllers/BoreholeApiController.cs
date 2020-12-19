@@ -1,17 +1,12 @@
 ﻿namespace TargetHound.MVC.Controllers
 {
+    using System.Threading.Tasks;
+  
     using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using System;
-    using System.Data;
-    using System.IO;
-    using System.Net;
-    using System.Net.Http;
-    using System.Net.Http.Headers;
-    using System.Text;
-    using System.Threading.Tasks;
+  
     using TargetHound.DataModels;
     using TargetHound.DTOs;
     using TargetHound.Services;
@@ -55,7 +50,7 @@
                     return this.StatusCode(422);
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 return this.StatusCode(500);
             }
@@ -75,14 +70,14 @@
 
                     var localFilePath = await this.boreholeService.ExportBoreholeAsync(borehole.ProjectId, userId, boreholeDataModel);
                     return this.Redirect(localFilePath);
-                    //return this.File(new UTF8Encoding().GetBytes(), "text/csv", borehole.Name + ".csv");
+                    //// return this.File(new UTF8Encoding().GetBytes(), "text/csv", borehole.Name + ".csv");
                 }
                 else
                 {
                     return this.StatusCode(422);
                 }
             }
-            catch (Exception ex)
+            catch
             {
                 return this.StatusCode(500);
             }

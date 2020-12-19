@@ -93,7 +93,7 @@
     [Parameter]
     public Action<bool> Refresh { get; set; }
 
-    protected override async Task OnParametersSetAsync()
+    protected override void OnParametersSet()
     {
         this.Project = this.storageService.Project;
         this.Collars = this.Project.Collars;
@@ -102,7 +102,7 @@
         return;
     }
 
-    public void AddToProject()
+    public async Task AddToProject()
     {
         BoreholeDTO borehole = new BoreholeDTO
         {
@@ -142,10 +142,8 @@
         }
         else
         {
-            this.SendBorehole(borehole);
+            await this.SendBorehole(borehole);
         }
-
-
     }
 
     private async Task SendBorehole(BoreholeDTO borehole)

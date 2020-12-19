@@ -7,6 +7,8 @@
 
     public class CoordinatesSetterTests
     {
+        private readonly CoordinatesSetter coordinatesSetter;
+
         private SurveyPointDTO topStation = new SurveyPointDTO
         {
             Depth = 0,
@@ -16,7 +18,6 @@
             Northing = 9_022_962.00,
             Elevation = 530.00,
         };
-        private readonly CoordinatesSetter coordinatesSetter;
 
         public CoordinatesSetterTests(CoordinatesSetter coordinatesSetter)
         {

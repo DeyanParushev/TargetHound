@@ -6,4 +6,10 @@
   <ItemGroup>
     <ProjectReference Include="..\TargetHound.DTOs\TargetHound.DTOs.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Update="PlaneDistanceCalculator.cs">
+      <ExcludeFromSourceAnalysis>True</ExcludeFromSourceAnalysis>
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
+  </ItemGroup>
 </Project>

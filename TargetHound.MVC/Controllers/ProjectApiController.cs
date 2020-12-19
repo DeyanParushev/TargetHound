@@ -1,14 +1,14 @@
 ﻿namespace TargetHound.MVC.Controllers
 {
+    using System.Threading.Tasks;
+    
     using AutoMapper;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using System;
-    using System.Threading.Tasks;
+   
     using TargetHound.DataModels;
     using TargetHound.DTOs;
-    using TargetHound.Services;
     using TargetHound.Services.Automapper;
     using TargetHound.Services.Interfaces;
 
@@ -22,7 +22,7 @@
         private readonly IMapper mapper;
 
         public ProjectApiController(
-            IProjectService projectService, 
+            IProjectService projectService,
             UserManager<ApplicationUser> userManager)
         {
             this.projectService = projectService;
@@ -41,7 +41,7 @@
                 project.CurrentUserId = this.userManager.GetUserId(this.User);
                 return project;
             }
-            catch (Exception ex)
+            catch
             {
                 return null;
             }
@@ -59,7 +59,7 @@
                     var userId = this.userManager.GetUserId(this.User);
                     var project = this.mapper.Map<Project>(projectInput);
 
-                    //TODO: fix saving the project
+                    ////TODO: fix saving the project
                     await this.projectService.SaveProject(project, userId);
                     return this.StatusCode(200);
                 }

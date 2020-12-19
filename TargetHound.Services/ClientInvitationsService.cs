@@ -18,7 +18,7 @@
 
         public async Task AddClientInvitationAssync(string clientId, string invitationEmail)
         {
-            if(!this.dbContext.Clients.Any(x => x.Id == clientId && x.IsDeleted == false))
+            if (!this.dbContext.Clients.Any(x => x.Id == clientId && x.IsDeleted == false))
             {
                 throw new NullReferenceException("Clietn does not exist.");
             }
@@ -42,10 +42,10 @@
                 throw new NullReferenceException("Clietn does not exist.");
             }
 
-            var invitation = this.dbContext.ClientInvitations.FirstOrDefault
-                (x => x.ClientId == clientId && x.Email == invitationEmail && x.IsAccepted == false);
-            
-            if(invitation == null)
+            var invitation = this.dbContext
+                .ClientInvitations
+                .FirstOrDefault(x => x.ClientId == clientId && x.Email == invitationEmail && x.IsAccepted == false);
+            if (invitation == null)
             {
                 throw new NullReferenceException("Invalid invitation");
             }

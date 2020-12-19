@@ -13,6 +13,4 @@
             return new TargetHoundContext(optionsBuilder.Options);
         }
     }
-
 }
-

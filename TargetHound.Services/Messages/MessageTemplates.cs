@@ -1,12 +1,12 @@
-﻿using System;
-
-namespace TargetHound.Services.Messages
+﻿namespace TargetHound.Services.Messages
 {
+    using System;
+    
     public static class MessageTemplates
     {
         public static string ClientInvitation(
-            string senderName, 
-            string clientName, 
+            string senderName,
+            string clientName,
             string linkToJoin)
         {
             return $"Hello {clientName}!! {senderName} has invited you to join his company on the " +
@@ -17,9 +17,9 @@ namespace TargetHound.Services.Messages
         }
 
         public static string ProjectInvitation(
-            string senderName, 
-            string receiverName, 
-            string projectName, 
+            string senderName,
+            string receiverName,
+            string projectName,
             string linkToJoin)
         {
             return $"Hello {receiverName}!! {senderName} has invited you to join his project: {projectName} " +

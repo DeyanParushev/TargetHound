@@ -7,12 +7,12 @@
 
     public class Extrapolator
     {
-        private CoordinatesSetter coordinatesSetter;
         private const double StationSeparationDistance = 30.0;
         private const double VerticalDip = -90;
         private const double FullCircle = 360;
-        private double extrapolationLength;
         private readonly StraightExtrapolationCalculator straightExtrapolation;
+        private CoordinatesSetter coordinatesSetter;
+        private double extrapolationLength;
 
         public Extrapolator(StraightExtrapolationCalculator straightExtrapolation, CoordinatesSetter coordinatesSetter, double extrapolation = 4000)
         {
@@ -28,8 +28,8 @@
             double startAzimuth,
             double startDip)
         {
-            int extrapolationPointsCount = (int)Math.Ceiling((extrapolationLength / 30.0));
-            double endSectionLength = extrapolationLength % 30.0;
+            int extrapolationPointsCount = (int)Math.Ceiling(this.extrapolationLength / 30.0);
+            double endSectionLength = this.extrapolationLength % 30.0;
             List<SurveyPointDTO> extrapolation = new List<SurveyPointDTO>(extrapolationPointsCount + 1);
 
             for (int i = 0; i < extrapolation.Capacity - 1; i++)
@@ -72,7 +72,7 @@
 
         public IList<IPoint> GetStraightExtrapolation(IPoint collar, double extrapolationLength)
         {
-            int extrapolationPointsCount = (int)Math.Ceiling((extrapolationLength / StationSeparationDistance));
+            int extrapolationPointsCount = (int)Math.Ceiling(extrapolationLength / StationSeparationDistance);
             double endSectionLength = extrapolationLength % StationSeparationDistance;
             List<IPoint> extrapolation = new List<IPoint>(extrapolationPointsCount + 1);
 
@@ -118,8 +118,8 @@
         {
             double straightLength = this.straightExtrapolation.GetStraightHoleLength(collar, target);
 
-            int extrapolationPointsCount = (int)Math.Ceiling((straightLength / StationSeparationDistance));
-            double endSectionLength = extrapolationLength % StationSeparationDistance;
+            int extrapolationPointsCount = (int)Math.Ceiling(straightLength / StationSeparationDistance);
+            double endSectionLength = this.extrapolationLength % StationSeparationDistance;
             List<SurveyPointDTO> extrapolation = new List<SurveyPointDTO>(extrapolationPointsCount + 1);
 
             for (int i = 0; i < extrapolationPointsCount; i++)
@@ -169,8 +169,8 @@
             double azimuthChange,
             double dipChange)
         {
-            int extrapolationPointsCount = (int)Math.Ceiling((extrapolationLength / StationSeparationDistance));
-            double endSectionLength = extrapolationLength % StationSeparationDistance;
+            int extrapolationPointsCount = (int)Math.Ceiling(this.extrapolationLength / StationSeparationDistance);
+            double endSectionLength = this.extrapolationLength % StationSeparationDistance;
             List<IPoint> extrapolation = new List<IPoint>(extrapolationPointsCount + 1);
 
             for (int i = 0; i < extrapolation.Capacity - 1; i++)
@@ -207,7 +207,7 @@
                     surveyStation.Azimuth -= FullCircle;
                 }
 
-                if(surveyStation.Azimuth < 0)
+                if (surveyStation.Azimuth < 0)
                 {
                     surveyStation.Azimuth += FullCircle;
                 }
@@ -233,8 +233,8 @@
             double azimuthChange,
             double dipChange)
         {
-            int extrapolationPointsCount = (int)Math.Ceiling((extrapolationLength / StationSeparationDistance));
-            double endSectionLength = extrapolationLength % StationSeparationDistance;
+            int extrapolationPointsCount = (int)Math.Ceiling(this.extrapolationLength / StationSeparationDistance);
+            double endSectionLength = this.extrapolationLength % StationSeparationDistance;
             List<IPoint> extrapolation = new List<IPoint>(extrapolationPointsCount + 1);
 
             for (int i = 0; i < extrapolation.Capacity - 1; i++)
@@ -259,7 +259,7 @@
                     this.coordinatesSetter.SetBottomStationUTMCoortinates(extrapolation[i - 1], surveyStation);
                 }
 
-                if(surveyStation.Dip < -90)
+                if (surveyStation.Dip < -90)
                 {
                     surveyStation.Dip += Math.Abs(2 * dipChange);
                     surveyStation.Azimuth += FullCircle / 2;
@@ -271,7 +271,7 @@
                     surveyStation.Azimuth -= FullCircle;
                 }
 
-                if(surveyStation.Azimuth < 0)
+                if (surveyStation.Azimuth < 0)
                 {
                     surveyStation.Azimuth += FullCircle;
                 }

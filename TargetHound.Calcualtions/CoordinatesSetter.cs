@@ -30,8 +30,9 @@
         private void SetEasting(IPoint topStation, IPoint bottomStation)
         {
             double eastDisplacement = this.measuredDepth * this.ratioFactor *
-                (Math.Sin(this.topInclinationRadians) * Math.Sin(this.angleConverter.ConvertAngleToRadians(topStation.Azimuth))
-                + Math.Sin(this.bottomInclinationRadians) * Math.Sin(this.angleConverter.ConvertAngleToRadians(bottomStation.Azimuth)));
+                ((Math.Sin(this.topInclinationRadians) * Math.Sin(this.angleConverter.ConvertAngleToRadians(topStation.Azimuth)))
+                + (Math.Sin(this.bottomInclinationRadians)
+                * Math.Sin(this.angleConverter.ConvertAngleToRadians(bottomStation.Azimuth))));
 
             bottomStation.Easting = topStation.Easting + eastDisplacement;
         }
@@ -39,8 +40,8 @@
         private void SetNorthing(IPoint topStation, IPoint bottomStation)
         {
             double northDspalcement = this.measuredDepth * this.ratioFactor *
-                (Math.Sin(this.topInclinationRadians) * Math.Cos(this.angleConverter.ConvertAngleToRadians(topStation.Azimuth))
-                + Math.Sin(this.bottomInclinationRadians) * Math.Cos(this.angleConverter.ConvertAngleToRadians(bottomStation.Azimuth)));
+                ((Math.Sin(this.topInclinationRadians) * Math.Cos(this.angleConverter.ConvertAngleToRadians(topStation.Azimuth)))
+                + (Math.Sin(this.bottomInclinationRadians) * Math.Cos(this.angleConverter.ConvertAngleToRadians(bottomStation.Azimuth))));
 
             bottomStation.Northing = topStation.Northing + northDspalcement;
         }

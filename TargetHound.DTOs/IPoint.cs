@@ -16,6 +16,5 @@
         public double Northing { get; set; }
 
         public double Elevation { get; set; }
-
     }
 }

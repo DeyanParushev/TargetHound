@@ -1,7 +1,7 @@
 ﻿namespace TargetHound.DataModels
 {
-    using Microsoft.AspNetCore.Identity;
     using System;
+    using Microsoft.AspNetCore.Identity;
 
     public class ApplicationRole : IdentityRole
     {

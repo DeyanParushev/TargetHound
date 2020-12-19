@@ -1,17 +1,19 @@
 ﻿namespace TargetHound.Calculations.Tests
 {
-    using NUnit.Framework;
     using System.Collections.Generic;
+
+    using NUnit.Framework;
+
     using TargetHound.Calcualtions;
     using TargetHound.DTOs;
 
     public class _3DDistanceCalculatorTests
     {
-        // TODO: Test for possitively inclined boreholes
+        //// TODO: Test for possitively inclined boreholes
+        private readonly _3DDistanceCalculator distanceCalculator;
         private IPoint collar = new CollarDTO { Easting = 659_866, Northing = 9_022_962, Elevation = 530, Depth = 0 };
         private IPoint negativeTarget = new TargetDTO { Easting = 659_300, Northing = 9_022_400, Elevation = -811 };
         private Extrapolator curveExtrapolator;
-        private readonly _3DDistanceCalculator distanceCalculator;
 
         public _3DDistanceCalculatorTests(Extrapolator extrapolator, _3DDistanceCalculator distanceCalculator)
         {
@@ -33,16 +35,17 @@
         [TestCase(150, -58, 0.2, -0.1, 872.62627134310048)]
         [TestCase(45.18, -80, 0, -1, 344.78388275388062)]
 
-        public void GetMinimumSpacialDistnceTests(double startAzimuth,
+        public void GetMinimumSpacialDistnceTests(
+            double startAzimuth,
             double startDip,
             double azimuthChange,
             double dipChange,
             double distance)
         {
-            collar.Azimuth = startAzimuth;
-            collar.Dip = startDip;
-            IList<IPoint> borehole = this.curveExtrapolator.GetCurvedExtrapolaton(collar, azimuthChange, dipChange);
-           
+            this.collar.Azimuth = startAzimuth;
+            this.collar.Dip = startDip;
+            IList<IPoint> borehole = this.curveExtrapolator.GetCurvedExtrapolaton(this.collar, azimuthChange, dipChange);
+
             double minimumSpacialDistance = this.distanceCalculator.GetMinimumSpacialDistance();
 
             Assert.AreEqual(distance, minimumSpacialDistance);

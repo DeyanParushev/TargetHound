@@ -1,17 +1,19 @@
 ﻿namespace TargetHound.Calculations.Tests
 {
-    using NUnit.Framework;
     using System.Collections.Generic;
+    
+    using NUnit.Framework;
+
     using TargetHound.Calcualtions;
     using TargetHound.DTOs;
 
     public class PlaneDistanceCalculatorTests
     {
-        // TODO: Test for positively inclined boreholes
-        private IPoint collar = new CollarDTO { Easting = 659_866, Northing = 9_022_962, Elevation = 530, Depth = 0 };
-        private IPoint negativeTarget = new TargetDTO { Easting = 659_300, Northing = 9_022_400, Elevation = -811 };
+        //// TODO: Test for positively inclined boreholes
         private readonly PlaneDistanceCalculator planeDistanceCalculator;
         private readonly Extrapolator extrapolator;
+        private IPoint collar = new CollarDTO { Easting = 659_866, Northing = 9_022_962, Elevation = 530, Depth = 0 };
+        private IPoint negativeTarget = new TargetDTO { Easting = 659_300, Northing = 9_022_400, Elevation = -811 };
 
         public PlaneDistanceCalculatorTests(
             PlaneDistanceCalculator planeDistanceCalculator,
@@ -44,9 +46,9 @@
             double dipChange,
             double distance)
         {
-            collar.Azimuth = startAzimuth;
-            collar.Dip = startDip;
-            IList<IPoint> borehole = this.extrapolator.GetCurvedExtrapolaton(collar, azimuthChange, dipChange);
+            this.collar.Azimuth = startAzimuth;
+            this.collar.Dip = startDip;
+            IList<IPoint> borehole = this.extrapolator.GetCurvedExtrapolaton(this.collar, azimuthChange, dipChange);
             double horiozntalDistanceOtTargetElevation = this.planeDistanceCalculator.GetHorizontalDistanceOnTargetElevation();
 
             Assert.AreEqual(distance, horiozntalDistanceOtTargetElevation);
@@ -65,15 +67,16 @@
         [TestCase(227, -58, -0.1, -0.1, -80.714633227580975)]
         [TestCase(227, -58, 0.1, 0.1, 179.82150510108147)]
         [TestCase(150, -58, 0.2, -0.1, 934.81646593782784)]
-        public void GetVerticalDistnceTests(double startAzimuth,
+        public void GetVerticalDistnceTests(
+            double startAzimuth,
             double startDip,
             double azimuthChange,
             double dipChange,
             double distance)
         {
-            collar.Azimuth = startAzimuth;
-            collar.Dip = startDip;
-            IList<IPoint> borehole = this.extrapolator.GetCurvedExtrapolaton(collar, azimuthChange, dipChange);
+            this.collar.Azimuth = startAzimuth;
+            this.collar.Dip = startDip;
+            IList<IPoint> borehole = this.extrapolator.GetCurvedExtrapolaton(this.collar, azimuthChange, dipChange);
             double verticalDistance = this.planeDistanceCalculator.GetVerticalDistance();
 
             Assert.AreEqual(distance, verticalDistance);
@@ -93,19 +96,19 @@
         [TestCase(150, -58, 0.2, -0.1, 765.59156776651571)]
         [TestCase(45.18, -80, 0, -1, 0.32263131272401185)]
 
-        public void GetMinimumHorizontalDistnceTests(double startAzimuth,
+        public void GetMinimumHorizontalDistnceTests(
+            double startAzimuth,
             double startDip,
             double azimuthChange,
             double dipChange,
             double distance)
         {
-            collar.Azimuth = startAzimuth;
-            collar.Dip = startDip;
-            IList<IPoint> borehole = this.extrapolator.GetCurvedExtrapolaton(collar, azimuthChange, dipChange);
+            this.collar.Azimuth = startAzimuth;
+            this.collar.Dip = startDip;
+            IList<IPoint> borehole = this.extrapolator.GetCurvedExtrapolaton(this.collar, azimuthChange, dipChange);
             double minimumHorizontalDistance = this.planeDistanceCalculator.GetMinimumHorizontalDistance();
 
             Assert.AreEqual(distance, minimumHorizontalDistance);
         }
-
     }
 }

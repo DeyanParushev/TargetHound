@@ -1,18 +1,15 @@
 ﻿namespace TargetHound.MVC.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
     using System.Net.Http;
     using System.Threading.Tasks;
-    using TargetHound.Data;
-
+   
+    using Microsoft.AspNetCore.Mvc;
+    
     [RequireHttps]
     public class CountriesController : Controller
     {
-        private readonly TargetHoundContext dbContext;
-
-        public CountriesController(TargetHoundContext dbContext)
+        public CountriesController()
         {
-            this.dbContext = dbContext;
         }
 
         public async Task<IActionResult> GetAll()

@@ -12,7 +12,7 @@
 @code {
     public BoreholeDTO Borehole { get; set; }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         this.Borehole =
             this.stateService

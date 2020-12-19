@@ -7,13 +7,13 @@
 
     public class CurveExtrapolationCalculator
     {
-        private IList<IPoint> borehole;
-        private IPoint target;
         private readonly double azimuthChange;
         private readonly double dipChange;
-        private StraightExtrapolationCalculator straightCalculator;
         private readonly CoordinatesSetter coordinatesSetter;
         private readonly Extrapolator extrapolator;
+        private IList<IPoint> borehole;
+        private IPoint target;
+        private StraightExtrapolationCalculator straightCalculator;
         private IPoint sameVectorLengthPoint;
 
         public CurveExtrapolationCalculator(IList<IPoint> borehole, IPoint target)
@@ -69,10 +69,10 @@
         {
             double straightLineToTarget = this.straightCalculator.GetStraightHoleLength(this.borehole[0], this.target);
             IPoint startStation =
-                borehole.LastOrDefault(x =>
+                this.borehole.LastOrDefault(x =>
                     this.straightCalculator.GetStraightHoleLength(this.borehole[0], x) <= straightLineToTarget);
             IPoint endStation =
-                borehole.FirstOrDefault(x =>
+                this.borehole.FirstOrDefault(x =>
                     this.straightCalculator.GetStraightHoleLength(this.borehole[0], x) >= straightLineToTarget);
 
             double depthChange = endStation.Depth - startStation.Depth;
@@ -89,9 +89,7 @@
                 Dip = startStation.Dip + (dipChangePerMeter * (depthChange / 2)),
             };
 
-
             this.coordinatesSetter.SetBottomStationUTMCoortinates(startStation, midStation);
-
 
             while (Math.Abs(depthChange) > 0.001)
             {
@@ -116,7 +114,7 @@
                 midStation.Azimuth = startStation.Azimuth + (azimuthChangePerMeter * (depthChange / 2));
                 midStation.Dip = startStation.Dip + (dipChangePerMeter * (depthChange / 2));
 
-                coordinatesSetter.SetBottomStationUTMCoortinates(startStation, midStation);
+                this.coordinatesSetter.SetBottomStationUTMCoortinates(startStation, midStation);
                 straightDistanceToMidPoitn = this.straightCalculator.GetStraightHoleLength(this.borehole[0], midStation);
             }
 
@@ -137,14 +135,12 @@
             double collarDipChange = straightDip - initialDipToSameVector;
             double collarAzimuthChange = straightAzimuth - initialAzimuthToSameVector;
 
-
             while (true)
             {
                 collar.Azimuth = straightAzimuth - collarAzimuthChange;
                 collar.Dip = straightDip - collarDipChange;
 
                 this.extrapolator.GetCurvedExtrapolaton(collar, this.azimuthChange, this.dipChange);
-
             }
         }
     }

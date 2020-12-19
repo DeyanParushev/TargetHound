@@ -1,19 +1,19 @@
 ﻿namespace TargetHound.MVC.Controllers
 {
+    using System;
+    using System.Threading.Tasks;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
-    using System;
-    using System.Threading.Tasks;
-
     using TargetHound.DataModels;
     using TargetHound.MVC.Areas.Identity;
-    using TargetHound.Services.Interfaces;
-    using TargetHound.SharedViewModels.ViewModels;
-    using TargetHound.SharedViewModels.InputModels;
-    using TargetHound.Services.Messages;
     using TargetHound.MVC.Areas.Identity.Pages.Account;
+    using TargetHound.Services.Interfaces;
+    using TargetHound.Services.Messages;
+    using TargetHound.SharedViewModels.InputModels;
+    using TargetHound.SharedViewModels.ViewModels;
 
     [RequireHttps]
     public class ClientsController : Controller
@@ -67,6 +67,7 @@
                     this.ModelState.AddModelError(string.Empty, "You are not client admin.");
                     return this.View("Error");
                 }
+
                 return this.View(clientInfo);
             }
             catch (Exception ex)
@@ -109,7 +110,7 @@
         }
 
         [Authorize]
-        public async Task<IActionResult> Create()
+        public IActionResult Create()
         {
             var client = new ClientCreateInputModel();
             return this.View(client);

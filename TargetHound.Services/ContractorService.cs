@@ -32,7 +32,7 @@
 
         private void CheckContractorExists(string contractorId)
         {
-            if(!this.dbContext.Contractors.Any(x => x.Id == contractorId && x.IsDeleted == false))
+            if (!this.dbContext.Contractors.Any(x => x.Id == contractorId && x.IsDeleted == false))
             {
                 throw new NullReferenceException("Contractor does not exist!");
             }

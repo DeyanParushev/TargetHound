@@ -1,9 +1,9 @@
 ﻿namespace TargetHound.Calcualtions
 {
     using System;
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Collections.Generic;
    
     using TargetHound.DTOs;
 
@@ -21,8 +21,12 @@
             this.target = target;
             this.borehole = borehole;
 
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             this.SetClosestHorizontalPointAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             this.SetPointOnTargetElevationAsync();
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
         public double GetHorizontalDistanceOnTargetElevation()
@@ -44,6 +48,18 @@
             double verticalDistance = this.closestHorizontalPoint.Elevation - this.target.Elevation;
 
             return verticalDistance;
+        }
+
+        protected virtual IPoint GetNextNearestStation(IList<IPoint> borehole, IPoint target, int indexOfNearestPoint)
+        {
+            IList<IPoint> boreholeCopy = borehole.Select(x => x).ToList();
+            boreholeCopy.RemoveAt(indexOfNearestPoint);
+
+            IPoint nextNearestPoint = boreholeCopy.FirstOrDefault(
+                x => this.GetPlaneLineBetweenPoints(x, target) ==
+                boreholeCopy.Min(y => this.GetPlaneLineBetweenPoints(y, target)));
+
+            return nextNearestPoint;
         }
 
         private async Task SetPointOnTargetElevationAsync()
@@ -109,8 +125,8 @@
                 IPoint tempStation = new SurveyPointDTO
                 {
                     Depth = nextStation.Depth + elevationFromStartToTarget,
-                    Azimuth = nextStation.Azimuth + azimuthChangePerMeter * elevationFromStartToTarget,
-                    Dip = nextStation.Dip + dipChangePerMeter * elevationFromStartToTarget
+                    Azimuth = nextStation.Azimuth + (azimuthChangePerMeter * elevationFromStartToTarget),
+                    Dip = nextStation.Dip + (dipChangePerMeter * elevationFromStartToTarget),
                 };
 
                 this.coordinateSetter.SetBottomStationUTMCoortinates(nextStation, tempStation);
@@ -175,8 +191,8 @@
 
             while (Math.Abs(depthChange) > 0.001)
             {
-                double startStationDistance = this.GetPlaneLineBetweenPoints(startStation, target);
-                double endStationDistance = this.GetPlaneLineBetweenPoints(endStation, target);
+                double startStationDistance = this.GetPlaneLineBetweenPoints(startStation, this.target);
+                double endStationDistance = this.GetPlaneLineBetweenPoints(endStation, this.target);
 
                 if (startStationDistance < endStationDistance)
                 {
@@ -208,21 +224,9 @@
         private double GetPlaneLineBetweenPoints(IPoint firstStation, IPoint secondStation)
         {
             double horizontalDistance =
-                Math.Sqrt(Math.Pow(firstStation.Easting - secondStation.Easting, 2) + (Math.Pow(firstStation.Northing - secondStation.Northing, 2)));
+                Math.Sqrt(Math.Pow(firstStation.Easting - secondStation.Easting, 2) + Math.Pow(firstStation.Northing - secondStation.Northing, 2));
 
             return horizontalDistance;
-        }
-
-        protected virtual IPoint GetNextNearestStation(IList<IPoint> borehole, IPoint target, int indexOfNearestPoint)
-        {
-            IList<IPoint> boreholeCopy = borehole.Select(x => x).ToList();
-            boreholeCopy.RemoveAt(indexOfNearestPoint);
-
-            IPoint nextNearestPoint = boreholeCopy.FirstOrDefault(
-                x => this.GetPlaneLineBetweenPoints(x, target) ==
-                boreholeCopy.Min(y => this.GetPlaneLineBetweenPoints(y, target)));
-
-            return nextNearestPoint;
         }
     }
 }

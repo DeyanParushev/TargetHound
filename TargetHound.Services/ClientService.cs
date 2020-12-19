@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using TargetHound.Data;
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
@@ -38,9 +39,7 @@
 
         public async Task<string> GetClientAdminIdAsync(string clientId)
         {
-            string adminId = this.dbContext.
-                Clients.SingleOrDefault(x => x.Id == clientId)?.AdminId;
-
+            string adminId = this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId)?.AdminId;
             return adminId;
         }
 
@@ -60,7 +59,7 @@
             this.CheckIfUserExists(userId);
 
             var client = this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId && x.IsDeleted == false);
-           
+
             client.AdminId = userId;
             var user = this.dbContext.ApplicationUsers.SingleOrDefault(x => x.Id == userId && x.IsDeleted == false);
             user.ClientId = client.Id;

@@ -1,15 +1,17 @@
 ﻿namespace TargetHound.DataModels
 {
-    using Microsoft.AspNetCore.Identity;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations.Schema;
+    
+    using Microsoft.AspNetCore.Identity;
 
     public class ApplicationUser : IdentityUser
     {
         public ApplicationUser()
+            : base()
         {
-            base.Id = Guid.NewGuid().ToString();
+            this.Id = Guid.NewGuid().ToString();
             this.UserProjects = new HashSet<UserProject>();
         }
 

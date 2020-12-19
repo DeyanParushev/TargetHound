@@ -1,12 +1,12 @@
 ﻿namespace TargetHound.MVC.Controllers
 {
-    using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
-
     using System;
     using System.Security.Claims;
     using System.Threading.Tasks;
+
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Mvc;
 
     using TargetHound.DataModels;
     using TargetHound.DTOs;
@@ -24,7 +24,8 @@
         private readonly IUserService userService;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public ProjectsController(IProjectService projectService,
+        public ProjectsController(
+            IProjectService projectService,
             ICountriesService countriesService,
             IContractorService contractorService,
             IUserService userService,
@@ -67,7 +68,7 @@
                     await this.projectService.CreateAsync(userId, project.Name, project.MagneticDeclination, project.CountryId);
                     ApplicationUser user = await this.userManager.GetUserAsync(this.User);
                     await this.userManager.AddToRoleAsync(user, SiteIdentityRoles.ProjectAdmin);
-                    
+
                     return this.RedirectToAction("Load");
                 }
 
@@ -96,7 +97,7 @@
             {
                 project.AdminName = await this.projectService.GetProjectAdminName(project.Id);
                 project.IsCurrentUserAdmin = await this.projectService.IsUserIdSameWithProjectAdminId(userId, project.Id);
-            };
+            }
 
             return this.View(projects);
         }
@@ -185,7 +186,7 @@
             return this.View(users);
         }
 
-        //TODO: check the details after you have some data
+        //// TODO: check the details after you have some data
         [Authorize]
         public async Task<IActionResult> Details(string projectId)
         {
