@@ -20,7 +20,7 @@
                 @if (this.showCollar)
                 {
                     <CascadingValue Value="@this.RefreshIsRequested">
-                        <TargetHound.Blazor.Pages.AddCollar />
+                        <TargetHound.Blazor.Components.AddCollar />
                     </CascadingValue>
                 }
                 <NavLink class="nav-link">
@@ -29,7 +29,7 @@
                 @if (this.showTarget)
                 {
                     <CascadingValue Value="@this.RefreshIsRequested">
-                        <TargetHound.Blazor.Pages.AddTarget />
+                        <TargetHound.Blazor.Components.AddTarget />
                     </CascadingValue>
                 }
                 <NavLink class="nav-link">
@@ -38,7 +38,7 @@
                 @if (showBorehole)
                 {
                     <CascadingValue Value="@this.RefreshIsRequested">
-                        <TargetHound.Blazor.Pages.AddBorehole Refresh="@this.Refresh" />
+                        <TargetHound.Blazor.Components.AddBorehole Refresh="@this.Refresh" />
                     </CascadingValue>
                 }
             }
@@ -50,16 +50,18 @@
             </NavLink>
             @if (this.showSaveMessage)
             {
-                <TargetHound.Blazor.Pages.Save SaveSuccess="@this.SaveSuccess" />
+                <TargetHound.Blazor.Components.Save SaveSuccess="@this.SaveSuccess" />
             }
         </li>
         <li class="">
             <NavLink class="dropdown">
-                <span class="btn btn-primary btn-block dropdown-toggle" @onclick="@this.SaveProject">Export</span>
+                <span class="btn btn-primary btn-block dropdown-toggle" @onclick="@this.ExportBorehole">Export</span>
             </NavLink>
-            @if (this.showSaveMessage)
+            @if (this.ShowExport)
             {
-                <TargetHound.Blazor.Pages.Export />
+                <div>
+                    <TargetHound.Blazor.Components.Export/>
+                </div>
             }
         </li>
     </ul>

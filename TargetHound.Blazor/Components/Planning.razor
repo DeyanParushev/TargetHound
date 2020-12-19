@@ -19,13 +19,13 @@
 
     <div class="col-6 p-0 mx-1">
         <CascadingValue Value="@this.RefreshIsRequested">
-            <DisplayBorehole Display="@this.Select" Refresh="@this.Refresh" Boreholes="@this.Boreholes"/>
+            <TargetHound.Blazor.Components.DisplayBorehole Display="@this.Select" Refresh="@this.Refresh" Boreholes="@this.Boreholes" />
         </CascadingValue>
     </div>
 </div>
 <div class="p-0 m-0 flex-row">
     <section class="sidebar p-0 m-0">
-        <Infobox />
+        <TargetHound.Blazor.Components.Infobox />
     </section>
 
     <div class="3dContainer p-0 m-0">
@@ -79,7 +79,7 @@
             this.Project = this.stateService.Project;
         }
 
-        if(this.Project.Boreholes.Count > 0)
+        if (this.Project.Boreholes.Count > 0)
         {
             this.Boreholes = this.Project.Boreholes;
         }
@@ -101,11 +101,11 @@
         }
     }
 
-    public void Refresh(bool refresh)
+    public void Refresh(bool refreshComponent)
     {
-        if (refresh)
+        if (refreshComponent)
         {
-            this.RefreshIsRequested = !refresh;
+            this.RefreshIsRequested = !refreshComponent;
             this.StateHasChanged();
         }
     }

@@ -1,0 +1,46 @@
+﻿@implements IComponent
+@inject HttpClient client
+@inject IStateService stateService
+
+<EditForm Model="@this.Borehole">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <button class="btn btn-block btn-primary" @onclick="@this.ExportCsv">CSV</button>
+    <button class="btn btn-block btn-primary" @onclick="@this.ExportPdf">PDF</button>
+</EditForm>
+
+@code {
+    public BoreholeDTO Borehole { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.Borehole =
+            this.stateService
+            .Project
+            .Boreholes
+            .FirstOrDefault(x => x.Name == this.stateService.BoreholeToDisplayName);
+
+        if (this.Borehole == null)
+        {
+            this.Borehole = new BoreholeDTO();
+        }
+    }
+
+    private async Task ExportBorehole(string format)
+    {
+        var result = await this.client.PostAsJsonAsync<BoreholeDTO>($"api/BoreholeApi/Export{format}", this.Borehole);
+
+        var response = await result.Content.ReadAsStringAsync();
+        Console.WriteLine(response);
+    }
+
+    public async Task ExportCsv()
+    {
+        await this.ExportBorehole("Csv");
+    }
+
+    public async Task ExportPdf()
+    {
+        await this.ExportBorehole("Pdf");
+    }
+}

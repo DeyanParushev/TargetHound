@@ -41,7 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Pages\Export.razor" />
+    <None Include="Components\Export.razor" />
   </ItemGroup>
 
 </Project>

@@ -3,6 +3,7 @@
     using Microsoft.EntityFrameworkCore;
     using ServiceStack.Text;
     using System;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using TargetHound.Data;
@@ -35,7 +36,12 @@
             }
 
             var exportBorehole = CsvSerializer.SerializeToString(borehole.SurveyPoints);
-            return exportBorehole;
+            var rootFolder = @$"\wwwroot";
+            var rootAddress = @$"\FilesCSV\{borehole.Name}.csv";
+            var localAdress = Environment.CurrentDirectory + rootFolder + rootAddress;
+            await this.CreateCsvFile(exportBorehole, localAdress);
+
+            return rootAddress;
         }
 
         public async Task UpdateBoreholesAsync(string projectId, string userId, Borehole borehole)
@@ -79,6 +85,11 @@
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        private async Task CreateCsvFile(string content, string localAdress)
+        {
+            await File.WriteAllTextAsync(localAdress, content);
         }
     }
 }

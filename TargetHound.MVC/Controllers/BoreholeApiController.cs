@@ -4,6 +4,13 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using System;
+    using System.Data;
+    using System.IO;
+    using System.Net;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
+    using System.Text;
     using System.Threading.Tasks;
     using TargetHound.DataModels;
     using TargetHound.DTOs;
@@ -20,7 +27,7 @@
         private IMapper mapper;
 
         public BoreholeApiController(
-            IBoreholeService boreholeService, 
+            IBoreholeService boreholeService,
             UserManager<ApplicationUser> userManager)
         {
             this.boreholeService = boreholeService;
@@ -48,13 +55,13 @@
                     return this.StatusCode(422);
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 return this.StatusCode(500);
             }
         }
 
-        [HttpGet, Route("Export")]
+        [HttpPost, Route("ExportCsv")]
         [Authorize]
         [IgnoreAntiforgeryToken]
         public async Task<IActionResult> ExportProject(BoreholeDTO borehole)
@@ -66,15 +73,16 @@
                     var userId = this.userManager.GetUserId(this.User);
                     var boreholeDataModel = this.mapper.Map<BoreholeDTO, Borehole>(borehole);
 
-                    var export = await this.boreholeService.ExportBoreholeAsync(borehole.ProjectId, userId, boreholeDataModel);
-                    return File(new System.Text.UTF8Encoding().GetBytes(export), "text/csv", borehole.Name);
+                    var localFilePath = await this.boreholeService.ExportBoreholeAsync(borehole.ProjectId, userId, boreholeDataModel);
+                    return this.Redirect(localFilePath);
+                    //return this.File(new UTF8Encoding().GetBytes(), "text/csv", borehole.Name + ".csv");
                 }
                 else
                 {
                     return this.StatusCode(422);
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 return this.StatusCode(500);
             }
