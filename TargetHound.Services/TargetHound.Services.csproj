@@ -17,6 +17,7 @@
   <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="SendGrid" Version="9.21.2" />
+    <PackageReference Include="ServiceStack.Text" Version="5.10.2" />
   </ItemGroup>
 
   <ItemGroup>

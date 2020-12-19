@@ -4,7 +4,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using System;
     using System.Threading.Tasks;
     using TargetHound.DataModels;
     using TargetHound.DTOs;
@@ -41,7 +40,7 @@
                     var userId = this.userManager.GetUserId(this.User);
                     var boreholeDataModel = this.mapper.Map<BoreholeDTO, Borehole>(borehole);
 
-                    await this.boreholeService.UpdateBoreholes(borehole.ProjectId, userId, boreholeDataModel);
+                    await this.boreholeService.UpdateBoreholesAsync(borehole.ProjectId, userId, boreholeDataModel);
                     return this.StatusCode(200);
                 }
                 else
@@ -49,7 +48,33 @@
                     return this.StatusCode(422);
                 }
             }
-            catch (Exception ex)
+            catch
+            {
+                return this.StatusCode(500);
+            }
+        }
+
+        [HttpGet, Route("Export")]
+        [Authorize]
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> ExportProject(BoreholeDTO borehole)
+        {
+            try
+            {
+                if (this.ModelState.IsValid)
+                {
+                    var userId = this.userManager.GetUserId(this.User);
+                    var boreholeDataModel = this.mapper.Map<BoreholeDTO, Borehole>(borehole);
+
+                    var export = await this.boreholeService.ExportBoreholeAsync(borehole.ProjectId, userId, boreholeDataModel);
+                    return File(new System.Text.UTF8Encoding().GetBytes(export), "text/csv", borehole.Name);
+                }
+                else
+                {
+                    return this.StatusCode(422);
+                }
+            }
+            catch
             {
                 return this.StatusCode(500);
             }

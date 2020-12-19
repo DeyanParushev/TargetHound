@@ -1,6 +1,7 @@
 ﻿namespace TargetHound.Services
 {
     using Microsoft.EntityFrameworkCore;
+    using ServiceStack.Text;
     using System;
     using System.Linq;
     using System.Threading.Tasks;
@@ -16,7 +17,28 @@
             this.dbContext = dbContext;
         }
 
-        public async Task UpdateBoreholes(string projectId, string userId, Borehole borehole)
+        public async Task<string> ExportBoreholeAsync(string projectId, string userId, Borehole borehole)
+        {
+            if (!this.dbContext.Users.Any(x => x.Id == userId && x.IsDeleted == false))
+            {
+                throw new ArgumentNullException("User does not exist.");
+            }
+
+            if (!this.dbContext.Projects.Any(x => x.Id == projectId && x.IsDeleted == false))
+            {
+                throw new ArgumentNullException("Project does not exist.");
+            }
+
+            if (!this.dbContext.UsersProjects.Any(x => x.ApplicationUserId == userId && x.ProjectId == projectId))
+            {
+                throw new ArgumentException("User is not in the project.");
+            }
+
+            var exportBorehole = CsvSerializer.SerializeToString(borehole.SurveyPoints);
+            return exportBorehole;
+        }
+
+        public async Task UpdateBoreholesAsync(string projectId, string userId, Borehole borehole)
         {
             if (!this.dbContext.Users.Any(x => x.Id == userId && x.IsDeleted == false))
             {

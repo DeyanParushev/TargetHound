@@ -6,36 +6,38 @@
 <div class="nav my-5" style="padding:0">
     <h4 class="text-center font-weight-bold container-fluid"><a href="/Home/Index" class="text-white">Target Hound</a></h4>
 </div>
-<div class="@NavMenuCssClass= bg-primary overflow-auto vh-100" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass= bg-primary overflow-auto vh-100" @onclick="@this.ToggleNavMenu">
     <ul class="nav flex-column bg-primary">
         <li class="">
-            <NavLink class="dropdown" @onclick="ToggleMenu">
-                <a class="btn btn-primary dropdown-toggle btn-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Planning</a>
+            <NavLink class="dropdown" @onclick="@this.ToggleMenu">
+                <span class="btn btn-primary dropdown-toggle btn-block" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Planning</span>
             </NavLink>
             @if (showMenu)
             {
                 <NavLink class="nav-link">
-                    <span class="btn btn-primary btn-block dropdown-toggle" aria-hidden="true" @onclick="ShowCollar">Create Collar</span>
+                    <span class="btn btn-primary btn-block dropdown-toggle" aria-hidden="true" @onclick="@this.ShowCollar">Create Collar</span>
                 </NavLink>
                 @if (this.showCollar)
                 {
-                    <TargetHound.Blazor.Pages.AddCollar />
+                    <CascadingValue Value="@this.RefreshIsRequested">
+                        <TargetHound.Blazor.Pages.AddCollar />
+                    </CascadingValue>
                 }
                 <NavLink class="nav-link">
-                    <span class="btn btn-primary btn-block dropdown-toggle" aria-hidden="true" @onclick="ShowTarget">Create Target</span>
+                    <span class="btn btn-primary btn-block dropdown-toggle" aria-hidden="true" @onclick="@this.ShowTarget">Create Target</span>
                 </NavLink>
                 @if (this.showTarget)
                 {
-                    <CascadingValue Value="this.RefreshIsRequested">
+                    <CascadingValue Value="@this.RefreshIsRequested">
                         <TargetHound.Blazor.Pages.AddTarget />
                     </CascadingValue>
                 }
                 <NavLink class="nav-link">
-                    <span class="btn btn-primary btn-block dropdown-toggle" aria-hidden="true" @onclick="ShowBorehole">Create Borehole</span>
+                    <span class="btn btn-primary btn-block dropdown-toggle" aria-hidden="true" @onclick="@this.ShowBorehole">Create Borehole</span>
                 </NavLink>
                 @if (showBorehole)
                 {
-                    <CascadingValue Value="this.RefreshIsRequested">
+                    <CascadingValue Value="@this.RefreshIsRequested">
                         <TargetHound.Blazor.Pages.AddBorehole Refresh="@this.Refresh" />
                     </CascadingValue>
                 }
@@ -44,21 +46,21 @@
 
         <li class="">
             <NavLink class="dropdown">
-                <button type="submit" class="btn btn-block btn-primary" @onclick="SaveProject">Save</button>
+                <button type="submit" class="btn btn-block btn-primary" @onclick="@this.SaveProject">Save</button>
             </NavLink>
-            @if (this.ShowSaveMessage)
+            @if (this.showSaveMessage)
             {
                 <TargetHound.Blazor.Pages.Save SaveSuccess="@this.SaveSuccess" />
             }
         </li>
         <li class="">
-            <EditForm Model="@this.Project" OnInvalidSubmit="ExportProject">
-                <DataAnnotationsValidator />
-                <ValidationSummary />
-                <NavLink class="dropdown">
-                    <a class="btn btn-primary btn-block dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Export</a>
-                </NavLink>
-            </EditForm>
+            <NavLink class="dropdown">
+                <span class="btn btn-primary btn-block dropdown-toggle" @onclick="@this.SaveProject">Export</span>
+            </NavLink>
+            @if (this.showSaveMessage)
+            {
+                <TargetHound.Blazor.Pages.Export />
+            }
         </li>
     </ul>
 </div>
@@ -74,13 +76,16 @@
 
     private bool showCollar;
 
-    private bool ShowSaveMessage;
+
+    private bool showSaveMessage;
 
     private IJSObjectReference jsModule;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     protected bool RefreshIsRequested { get; set; } = false;
+
+    public bool ShowExport { get; set; } = false;
 
     public bool SaveSuccess { get; set; } = false;
 
@@ -104,6 +109,11 @@
     public void ShowCollar()
     {
         this.showCollar = !this.showCollar;
+    }
+
+    public void ExportBorehole()
+    {
+        this.ShowExport = !this.ShowExport;
     }
 
     public void ShowTarget()
@@ -132,17 +142,12 @@
         {
             var project = this.stateService.Project;
             result = await this.client.PutAsJsonAsync<ProjectDTO>($"api/ProjectApi/Save", project);
-            this.ShowSaveMessage = true;
+            this.showSaveMessage = true;
         }
 
         if (result.StatusCode == HttpStatusCode.OK)
         {
             this.SaveSuccess = true;
         }
-    }
-
-    public async Task ExportProject()
-    {
-
     }
 }
