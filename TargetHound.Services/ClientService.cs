@@ -69,6 +69,9 @@
 
         public async Task<T> GetClientInfoByAdminIdAsync<T>(string clientId, string adminId)
         {
+            this.CheckIfClientExists(clientId);
+            this.CheckIfUserExists(adminId);
+
             var clientInfo = this.dbContext.Clients
                 .Where(x => x.Id == clientId && x.AdminId == adminId)
                 .To<T>()
@@ -126,9 +129,9 @@
             this.CheckIfClientExists(clientId);
             this.CheckIfUserExists(userId);
 
-            return this.dbContext.Clients
-                .SingleOrDefault(x => x.Id == clientId && x.IsDeleted == false)
-                .AdminId == userId;
+            var client = this.dbContext.Clients
+                .SingleOrDefault(x => x.Id == clientId && x.IsDeleted == false);
+            return client?.AdminId == userId;
         }
 
         public async Task<bool> AsignUserToClientAsync(string userId, string clientId)
