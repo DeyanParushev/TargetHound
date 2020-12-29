@@ -19,8 +19,6 @@
 
         public async Task<ICollection<T>> GetDrillRigsAsync<T>(string contractorId)
         {
-            this.CheckContractorExists(contractorId);
-
             var machines = this.dbContext
                 .DrillRigs
                 .Where(x => x.Id == contractorId)

@@ -13,6 +13,9 @@
             <th>
                 <h4 class="font-weight-bold text-xl-center">Name</h4>
             </th>
+            <th>
+                <h4 class="font-weight-bold text-xl-center">Action</h4>
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -20,6 +23,9 @@
         <tr>
             <td>
                 @item.Name
+            </td>
+            <td>
+                <a class="btn btn-primary offset-3" asp-route-clientId="@item.Id" asp-controller="Clients" asp-action="Activate">Activate</a>
             </td>
         </tr>
 }

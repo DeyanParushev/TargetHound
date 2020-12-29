@@ -267,6 +267,15 @@
             return this.View(inactiveClients);
         }
 
+        [Authorize]
+        public async Task<IActionResult> Activate(string clientId)
+        {
+            string userId = this.userManager.GetUserId(this.User);
+            await this.clientService.ActivateClient(clientId, userId);
+            
+            return this.RedirectToAction("/All");
+        }
+
         // TODO: Check for correct redirection after deployment
         public async Task<IActionResult> Join(string clientId)
         {

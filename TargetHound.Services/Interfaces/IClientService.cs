@@ -30,5 +30,7 @@
         public Task<string> GetClientNameByIdAsync(string clientId);
         
         public Task<ICollection<T>> GetInactiveClientsAsync<T>(string userId);
+        
+        public Task ActivateClient(string clientId, string userId);
     }
 }

@@ -46,7 +46,7 @@
         public async Task<IEnumerable<T>> GetAllClientsByAdminIdAsync<T>(string userId)
         {
             var clientInfo = this.dbContext.Clients
-                .Where(x => x.AdminId == userId && x.IsDeleted == false)
+                .Where(x => x.AdminId == userId)
                 .To<T>()
                 .ToList();
 
@@ -70,11 +70,19 @@
         public async Task<T> GetClientInfoByAdminIdAsync<T>(string clientId, string adminId)
         {
             var clientInfo = this.dbContext.Clients
-                .Where(x => x.Id == clientId && x.AdminId == adminId && x.IsDeleted == false)
+                .Where(x => x.Id == clientId && x.AdminId == adminId)
                 .To<T>()
                 .FirstOrDefault();
 
             return clientInfo;
+        }
+
+        public async Task ActivateClient(string clientId, string userId)
+        {
+            var client = this.dbContext.Clients.FirstOrDefault(x => x.IsDeleted == true && x.Id == clientId);
+            client.IsDeleted = true;
+
+            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task<bool> ChangeClientNameAsync(string clientId, string clientName)
@@ -144,16 +152,6 @@
             if (!isUserAnAdmin)
             {
                 throw new ApplicationException("You are not admin for this client.");
-            }
-
-            var clientUsers = this.dbContext
-                .ApplicationUsers
-                .Where(x => x.ClientId == clientId && x.IsDeleted == false)
-                .ToList();
-
-            foreach (var user in clientUsers)
-            {
-                user.ClientId = null;
             }
 
             this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId).IsDeleted = true;
