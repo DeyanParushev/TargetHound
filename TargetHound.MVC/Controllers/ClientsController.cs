@@ -10,6 +10,8 @@
     using TargetHound.DataModels;
     using TargetHound.MVC.Areas.Identity;
     using TargetHound.MVC.Areas.Identity.Pages.Account;
+    using TargetHound.MVC.Models;
+    using TargetHound.MVC.Settings;
     using TargetHound.Services.Interfaces;
     using TargetHound.Services.Messages;
     using TargetHound.SharedViewModels.InputModels;
@@ -64,8 +66,8 @@
 
                 if (!userIsClientAdmin)
                 {
-                    this.ModelState.AddModelError(string.Empty, "You are not client admin.");
-                    return this.View("Error");
+                    this.ModelState.AddModelError(string.Empty, ClientControllerErrorMessages.ClientAdminError);
+                    return this.View(nameof(ErrorViewModel));
                 }
 
                 return this.View(clientInfo);
@@ -73,7 +75,7 @@
             catch (Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
-                return this.View("Error");
+                return this.View(nameof(ErrorViewModel));
             }
         }
 
@@ -88,24 +90,24 @@
 
                 if (!userIsClientAdmin)
                 {
-                    this.ModelState.AddModelError(string.Empty, "You are not a client Admin.");
-                    return this.View("Error");
+                    this.ModelState.AddModelError(string.Empty, ClientControllerErrorMessages.ClientAdminError);
+                    return this.View(nameof(ErrorViewModel));
                 }
 
                 var changeIsSuccess = await this.clientService.ChangeClientNameAsync(clientId, name);
 
                 if (!changeIsSuccess)
                 {
-                    this.ModelState.AddModelError(string.Empty, "There was a problem saving you data. We`ll notify the site admin.");
-                    return this.View("Error");
+                    this.ModelState.AddModelError(string.Empty, ClientControllerErrorMessages.ErrorSavingData);
+                    return this.View(nameof(ErrorViewModel));
                 }
 
-                return this.RedirectToAction("All");
+                return this.RedirectToAction(nameof(this.All));
             }
             catch (Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
-                return this.View("Error");
+                return this.View(nameof(ErrorViewModel));
             }
         }
 
@@ -130,16 +132,16 @@
 
                 if (!userIsAsigned)
                 {
-                    this.ModelState.AddModelError(string.Empty, "There was a problem asigning you as client Admin.");
-                    return this.View("Error");
+                    this.ModelState.AddModelError(string.Empty, ClientControllerErrorMessages.ErrorChangingAdmin);
+                    return this.View(nameof(ErrorViewModel));
                 }
 
-                return this.Redirect("/Clients/All");
+                return this.Redirect(nameof(this.All));
             }
             catch (Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
-                return this.View("Error");
+                return this.View(nameof(ErrorViewModel));
             }
         }
 
@@ -167,8 +169,8 @@
 
                 if (!isAdmin)
                 {
-                    this.ModelState.AddModelError(string.Empty, "You are not a client Admin.");
-                    return this.View("Error");
+                    this.ModelState.AddModelError(string.Empty, ClientControllerErrorMessages.ClientAdminError);
+                    return this.View(nameof(ErrorViewModel));
                 }
 
                 await this.userManager.RemoveFromRoleAsync(currentUser, SiteIdentityRoles.ClientAdmin);
@@ -177,23 +179,23 @@
 
                 if (newAdmin == null)
                 {
-                    return this.View("Error");
+                    return this.View(nameof(ErrorViewModel));
                 }
 
                 await this.userManager.AddToRoleAsync(newAdmin, SiteIdentityRoles.ClientAdmin);
 
                 if (!adminIsChanged)
                 {
-                    return this.View("Error");
+                    return this.View(nameof(ErrorViewModel));
                 }
 
                 await this.signInManager.SignOutAsync();
-                return this.Redirect("/Identity/Pages/Account/Login");
+                return this.Redirect(nameof(LoginModel));
             }
             catch (Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
-                return this.View("Error");
+                return this.View(nameof(ErrorViewModel));
             }
         }
 
@@ -253,10 +255,10 @@
             catch (Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
-                return this.View("Error");
+                return this.View(nameof(ErrorViewModel));
             }
 
-            return this.Redirect("/Clients/All");
+            return this.Redirect(nameof(this.All));
         }
 
         [Authorize]
@@ -273,7 +275,7 @@
             string userId = this.userManager.GetUserId(this.User);
             await this.clientService.ActivateClient(clientId, userId);
             
-            return this.RedirectToAction("/All");
+            return this.RedirectToAction(nameof(this.All));
         }
 
         // TODO: Check for correct redirection after deployment
@@ -285,7 +287,7 @@
                 Company = clientName,
             };
 
-            return this.RedirectToAction("/Identity/Pages/Account/Register", register);
+            return this.RedirectToAction(nameof(RegisterModel), register);
         }
     }
 }

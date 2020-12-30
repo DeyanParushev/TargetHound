@@ -8,6 +8,7 @@
     using System.Threading.Tasks;
     using TargetHound.Data;
     using TargetHound.DataModels;
+    using TargetHound.Services.ErrorMessages;
 
     public class BoreholeService : IBoreholeService
     {
@@ -22,17 +23,17 @@
         {
             if (!this.dbContext.Users.Any(x => x.Id == userId && x.IsDeleted == false))
             {
-                throw new ArgumentNullException("User does not exist.");
+                throw new ArgumentNullException(UserErrorMessages.UserDoesNotExist);
             }
 
             if (!this.dbContext.Projects.Any(x => x.Id == projectId && x.IsDeleted == false))
             {
-                throw new ArgumentNullException("Project does not exist.");
+                throw new ArgumentNullException(ProjectErrorMessages.ProjectDoesNotExist);
             }
 
             if (!this.dbContext.UsersProjects.Any(x => x.ApplicationUserId == userId && x.ProjectId == projectId))
             {
-                throw new ArgumentException("User is not in the project.");
+                throw new ArgumentException(ProjectErrorMessages.UserNotInProject);
             }
 
             var exportBorehole = CsvSerializer.SerializeToString(borehole.SurveyPoints);
@@ -48,17 +49,17 @@
         {
             if (!this.dbContext.Users.Any(x => x.Id == userId && x.IsDeleted == false))
             {
-                throw new ArgumentNullException("User does not exist.");
+                throw new ArgumentNullException(UserErrorMessages.UserDoesNotExist);
             }
 
             if (!this.dbContext.Projects.Any(x => x.Id == projectId && x.IsDeleted == false))
             {
-                throw new ArgumentNullException("Project does not exist.");
+                throw new ArgumentNullException(ProjectErrorMessages.ProjectDoesNotExist);
             }
 
             if (!this.dbContext.UsersProjects.Any(x => x.ApplicationUserId == userId && x.ProjectId == projectId))
             {
-                throw new ArgumentException("User is not in the project.");
+                throw new ArgumentException(ProjectErrorMessages.UserNotInProject);
             }
 
             if (!this.dbContext.Boreholes.Any(x => x.Id == borehole.Id && x.IsDeleted == false))

@@ -7,6 +7,7 @@
 
     using TargetHound.Data;
     using TargetHound.DataModels;
+    using TargetHound.Services.ErrorMessages;
     using TargetHound.Services.Interfaces;
 
     public class CollarService : ICollarService
@@ -22,17 +23,17 @@
         {
             if (!this.dbContext.Users.Any(x => x.Id == userId && x.IsDeleted == false))
             {
-                throw new ArgumentNullException("User does not exist.");
+                throw new ArgumentNullException(UserErrorMessages.UserDoesNotExist);
             }
 
             if (!this.dbContext.Projects.Any(x => x.Id == projectId && x.IsDeleted == false))
             {
-                throw new ArgumentNullException("Project does not exist.");
+                throw new ArgumentNullException(ProjectErrorMessages.ProjectDoesNotExist);
             }
 
             if (!this.dbContext.UsersProjects.Any(x => x.ApplicationUserId == userId && x.ProjectId == projectId))
             {
-                throw new ArgumentException("User is not in the project.");
+                throw new ArgumentException(ProjectErrorMessages.UserNotInProject);
             }
 
             foreach (var collar in collars)

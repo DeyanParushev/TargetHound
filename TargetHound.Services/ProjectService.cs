@@ -10,6 +10,7 @@
     using TargetHound.Data;
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
+    using TargetHound.Services.ErrorMessages;
     using TargetHound.Services.Interfaces;
 
     public class ProjectService : IProjectService
@@ -31,7 +32,7 @@
 
             if (this.dbContext.UsersProjects.Any(x => x.Project.Name == projectName && x.ApplicationUserId == userId))
             {
-                throw new ArgumentException("You are already part of a project with this name");
+                throw new ArgumentException(ProjectErrorMessages.UserAlreadyInProject);
             }
 
             var clientId = this.dbContext.Users.SingleOrDefault(x => x.Id == userId)?.ClientId;
@@ -248,7 +249,7 @@
         {
             if (!this.dbContext.Projects.Any(x => x.Id == projectId && x.IsDeleted == false))
             {
-                throw new NullReferenceException("Project does not exist");
+                throw new NullReferenceException(ProjectErrorMessages.ProjectDoesNotExist);
             }
         }
 
@@ -256,7 +257,7 @@
         {
             if (!this.dbContext.ApplicationUsers.Any(x => x.Id == userId && x.IsDeleted == false))
             {
-                throw new NullReferenceException("User does not exist");
+                throw new NullReferenceException(UserErrorMessages.UserDoesNotExist);
             }
         }
     }

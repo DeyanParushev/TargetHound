@@ -5,10 +5,12 @@
     using System.Threading.Tasks;
     using TargetHound.Data;
     using TargetHound.DataModels;
+    using TargetHound.Services.ErrorMessages;
     using TargetHound.Services.Interfaces;
 
     public class ClientInvitationsService : IClientInvitationsService
     {
+        private const string invalidInvitation = "Invalid invitation.";
         private readonly TargetHoundContext dbContext;
 
         public ClientInvitationsService(TargetHoundContext dbContext)
@@ -20,7 +22,7 @@
         {
             if (!this.dbContext.Clients.Any(x => x.Id == clientId && x.IsDeleted == false))
             {
-                throw new NullReferenceException("Clietn does not exist.");
+                throw new NullReferenceException(ClientErrorMessages.ClientDoesNotExist);
             }
 
             var clientInvitation = new ClientInvitation
@@ -39,7 +41,7 @@
         {
             if (!this.dbContext.Clients.Any(x => x.Id == clientId && x.IsDeleted == false))
             {
-                throw new NullReferenceException("Clietn does not exist.");
+                throw new NullReferenceException(ClientErrorMessages.ClientDoesNotExist);
             }
 
             var invitation = this.dbContext
@@ -47,7 +49,7 @@
                 .FirstOrDefault(x => x.ClientId == clientId && x.Email == invitationEmail && x.IsAccepted == false);
             if (invitation == null)
             {
-                throw new NullReferenceException("Invalid invitation");
+                throw new NullReferenceException(invalidInvitation);
             }
 
             invitation.IsAccepted = true;

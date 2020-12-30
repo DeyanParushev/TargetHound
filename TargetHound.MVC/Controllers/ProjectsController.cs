@@ -12,6 +12,8 @@
     using TargetHound.DataModels;
     using TargetHound.DTOs;
     using TargetHound.MVC.Areas.Identity;
+    using TargetHound.MVC.ErrorMessages;
+    using TargetHound.MVC.Models;
     using TargetHound.Services.Interfaces;
     using TargetHound.SharedViewModels.InputModels;
     using TargetHound.SharedViewModels.ViewModels;
@@ -70,7 +72,7 @@
                     ApplicationUser user = await this.userManager.GetUserAsync(this.User);
                     await this.userManager.AddToRoleAsync(user, SiteIdentityRoles.ProjectAdmin);
 
-                    return this.RedirectToAction("Load");
+                    return this.RedirectToAction(nameof(this.Load));
                 }
 
                 var projectModel = new ProjectDTO
@@ -84,7 +86,7 @@
             catch (Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
-                return this.Redirect("Error");
+                return this.Redirect(nameof(ErrorViewModel));
             }
         }
 
@@ -114,8 +116,8 @@
             }
             else
             {
-                this.ModelState.AddModelError(string.Empty, "You are not part of this project.");
-                return this.View("Error");
+                this.ModelState.AddModelError(string.Empty, ProjectControllerErrorMessages.NotPartOfProjectError);
+                return this.View(nameof(ErrorViewModel));
             }
         }
 
@@ -135,7 +137,7 @@
 
                 if (!isCurrentUserAdmin)
                 {
-                    return this.Redirect("/Projects/Load");
+                    return this.Redirect(nameof(this.Load));
                 }
 
                 return this.View(project);
@@ -143,7 +145,7 @@
             catch (Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
-                return this.View("Error");
+                return this.View(nameof(ErrorViewModel));
             }
         }
 
@@ -155,8 +157,8 @@
             {
                 if (!ModelState.IsValid)
                 {
-                    this.ModelState.AddModelError(string.Empty, "Invalid data!");
-                    return this.View("Error");
+                    this.ModelState.AddModelError(string.Empty, ProjectControllerErrorMessages.InvalidProjectData);
+                    return this.View(nameof(ErrorViewModel));
                 }
 
                 var userId = this.userManager.GetUserId(this.User);
@@ -164,18 +166,18 @@
                 if (await this.projectService.IsUserIdSameWithProjectAdminId(userId, model.Id))
                 {
                     await this.projectService.EditProjectAsync(model.Id, model.Name, model.MagneticDeclination, model.CountryId);
-                    return this.RedirectToAction("Edit", new { projectId = model.Id });
+                    return this.RedirectToAction(nameof(this.Edit), new { projectId = model.Id });
                 }
                 else
                 {
-                    this.ModelState.AddModelError(string.Empty, "You are not a project Admin.");
-                    return this.View("Error");
+                    this.ModelState.AddModelError(string.Empty, ProjectControllerErrorMessages.NotProjectAdminError);
+                    return this.View(nameof(ErrorViewModel));
                 }
             }
             catch (Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
-                return this.View("Error");
+                return this.View(nameof(ErrorViewModel));
             }
         }
 
@@ -234,12 +236,12 @@
                     await this.userService.SendProjectInvitationAsync(currentUser.Email, currentUser.UserName, receiver.Email, receiver.UserName, projectId, linkToJoin);
                 }
 
-                return this.RedirectToAction("Users", new { projectId = projectId });
+                return this.RedirectToAction(nameof(this.Users), new { projectId = projectId });
             }
             catch (Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
-                return this.View("Error");
+                return this.View(nameof(ErrorViewModel));
             }
         }
     }

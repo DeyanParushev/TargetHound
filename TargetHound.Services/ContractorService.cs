@@ -10,6 +10,7 @@
 
     public class ContractorService : IContractorService
     {
+        private const string contractorError = "Contractor does not exist!";
         private readonly TargetHoundContext dbContext;
 
         public ContractorService(TargetHoundContext dbContext)
@@ -32,7 +33,7 @@
         {
             if (!this.dbContext.Contractors.Any(x => x.Id == contractorId && x.IsDeleted == false))
             {
-                throw new NullReferenceException("Contractor does not exist!");
+                throw new NullReferenceException(contractorError);
             }
         }
     }

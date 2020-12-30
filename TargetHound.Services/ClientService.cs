@@ -8,6 +8,7 @@
     using TargetHound.Data;
     using TargetHound.DataModels;
     using TargetHound.Services.Automapper;
+    using TargetHound.Services.ErrorMessages;
     using TargetHound.Services.Interfaces;
 
     public class ClientService : IClientService
@@ -154,7 +155,7 @@
 
             if (!isUserAnAdmin)
             {
-                throw new ApplicationException("You are not admin for this client.");
+                throw new ApplicationException(ClientErrorMessages.ClientAdminError);
             }
 
             this.dbContext.Clients.SingleOrDefault(x => x.Id == clientId).IsDeleted = true;
@@ -184,7 +185,7 @@
         {
             if (!this.dbContext.ApplicationUsers.Any(x => x.Id == userId))
             {
-                throw new ArgumentException("User doesn`t exist.");
+                throw new ArgumentException(UserErrorMessages.UserDoesNotExist);
             }
         }
 
@@ -192,7 +193,7 @@
         {
             if (!this.dbContext.Clients.Any(x => x.Id == clientId))
             {
-                throw new ArgumentException("Company doesn`t exist.");
+                throw new ArgumentException(ClientErrorMessages.ClientDoesNotExist);
             }
         }
     }
