@@ -48,7 +48,7 @@
     @if (this.IsCreated)
     {
         <div class="text-center mt-2">
-            <alert class="text-success font-weight-bold">Collar Created!</alert>
+            <alert class="text-success font-weight-bold">Borehole Created!</alert>
         </div>
     }
     else if (this.ShowMessage)
@@ -143,6 +143,7 @@
         else
         {
             await this.SendBorehole(borehole);
+            this.storageService.Project.Boreholes.Add(borehole);
         }
     }
 
@@ -153,7 +154,6 @@
         if (response.IsSuccessStatusCode)
         {
             this.IsCreated = true;
-            this.storageService.Project.Boreholes.Add(borehole);
         }
         else
         {

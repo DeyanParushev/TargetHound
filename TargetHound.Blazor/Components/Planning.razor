@@ -93,7 +93,6 @@
         {
             BoreholeDTO borehole = this.stateService.Project.Boreholes.FirstOrDefault(x => x.Name == this.stateService.BoreholeToDisplayName);
             var result = this.jsModule.InvokeVoidAsync("RenderBorehole", borehole).GetAwaiter();
-            Console.WriteLine(result);
         }
         else
         {

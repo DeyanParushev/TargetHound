@@ -8,7 +8,7 @@ export function RenderProject(project) {
 }
 
 export function RenderBorehole(borehole) {
-    //ShowBorehole(borehole);
+    ShowBorehole(borehole);
     console.log(borehole.name);
 }
 
@@ -51,7 +51,7 @@ function RenderScene() {
     }
 }
 
-function ShowBorehole() {
+function ShowBorehole(borehole) {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
@@ -59,19 +59,14 @@ function ShowBorehole() {
     document.body.appendChild(renderer.domElement);
 
     const cubeGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-    const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    var randomColor = '#' + Math.floor(Math.random() * 16777215).toString(16);
+    const cubeMaterial = new THREE.MeshBasicMaterial({ color: randomColor });
     const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
     scene.add(cube);
 
     AddArrows(scene)
-
-    //if (borehole !== undefined) {
-    //    //DrawBorehole(scene, borehole);
-    //    console.log(borehole);
-    //}
-
     camera.position.z = 5;
-
+    DrawBorehole(scene, borehole);
     var container = document.getElementsByClassName("3dContainer")[0];
     while (container.lastElementChild) {
         container.removeChild(container.lastElementChild);
@@ -118,13 +113,6 @@ function AddArrows(scene) {
     scene.add(horizontalArrow);
 }
 
-function AddPlane(scene) {
-    var geo = new THREE.PlaneBufferGeometry(1000, 1000, 8, 8);
-    var mat = new THREE.MeshBasicMaterial({ color: 0xffffff, opacity: 0.9, side: THREE.DoubleSide });
-    var plane = new THREE.Mesh(geo, mat);
-    scene.add(plane);
-}
-
 function DrawBorehole(scene, borehole) {
     const collar = new THREE.BoxGeometry(0.2, 0.2, 0.2);
     const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x375A7F });
@@ -139,9 +127,9 @@ function AddPoint(scene, collar, point) {
     var pointMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     var sphere = new THREE.Mesh(pointGeometry, pointMaterial);
 
+    scene.add(sphere);
     sphere.position.x = 0 + (collar.easting - point.easting);
     sphere.position.y = 0 + (collar.norhing - point.norhing);
     sphere.position.z = 0 + (collar.elevation - point.elevation);
 
-    scene.add(sphere);
 }
