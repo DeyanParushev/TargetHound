@@ -26,7 +26,7 @@ function RenderScene() {
 
     AddArrows(scene)
     camera.position.z = 5;
-
+    
     var container = document.getElementsByClassName("3dContainer")[0];
     while (container.lastElementChild) {
         container.removeChild(container.lastElementChild);
@@ -65,7 +65,7 @@ function ShowBorehole(borehole) {
     scene.add(cube);
 
     AddArrows(scene)
-    camera.position.z = 5;
+    camera.position.z = borehole.collar.elevation + 5;
     DrawBorehole(scene, borehole);
     var container = document.getElementsByClassName("3dContainer")[0];
     while (container.lastElementChild) {
