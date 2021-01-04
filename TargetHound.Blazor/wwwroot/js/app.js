@@ -114,22 +114,39 @@ function AddArrows(scene) {
 }
 
 function DrawBorehole(scene, borehole) {
-    const collar = new THREE.BoxGeometry(0.2, 0.2, 0.2);
-    const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x375A7F });
-    const cube = new THREE.Mesh(collar, cubeMaterial);
-    scene.add(cube);
-
-    borehole.surveyPoints.forEach(x => AddPoint(scene, borehole.collar, x));
+    DrawCollar(scene);
+    DrawTarget(scene, borehole.collar, borehole.target);
+    //borehole.surveyPoints.shift();
+    //borehole.surveyPoints.pop();
+    //borehole.surveyPoints.forEach(x => AddPoint(scene, borehole.collar, x));
 }
 
-function AddPoint(scene, collar, point) {
-    var pointGeometry = new THREE.SphereGeometry(1, 16, 16, 6, 6, 6, 6);
-    var pointMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+function DrawCollar(scene) {
+    var pointGeometry = new THREE.SphereGeometry(0.2, 16, 16, 6, 6, 6, 6);
+    var pointMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
     var sphere = new THREE.Mesh(pointGeometry, pointMaterial);
 
     scene.add(sphere);
-    sphere.position.x = 0 + (collar.easting - point.easting);
-    sphere.position.y = 0 + (collar.norhing - point.norhing);
-    sphere.position.z = 0 + (collar.elevation - point.elevation);
+}
 
+function DrawTarget(scene, collar, target) {
+    var pointGeometry = new THREE.SphereGeometry(0.2, 16, 16, 6, 6, 6, 6);
+    var pointMaterial = new THREE.MeshBasicMaterial({ color: 0x0000ff });
+    var sphere = new THREE.Mesh(pointGeometry, pointMaterial);
+
+    sphere.position.x = 0 + (collar.easting - target.easting);
+    sphere.position.y = 0 + (collar.northing - target.northing);
+    sphere.position.z = 0 + (collar.elevation - target.elevation);
+    scene.add(sphere);
+}
+
+function AddPoint(scene, collar, point) {
+    var pointGeometry = new THREE.SphereGeometry(0.2, 16, 16, 6, 6, 6, 6);
+    var pointMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    var sphere = new THREE.Mesh(pointGeometry, pointMaterial);
+
+    sphere.position.x = 0 + (collar.easting - point.easting);
+    sphere.position.y = 0 + (collar.northing - point.northing);
+    sphere.position.z = 0 + (collar.elevation - point.elevation);
+    scene.add(sphere);
 }
