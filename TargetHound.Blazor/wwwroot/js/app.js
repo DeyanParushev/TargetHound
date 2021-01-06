@@ -21,15 +21,11 @@ function RenderScene(borehole) {
     AddArrows(scene)
     camera.position.z = 5;
 
-    const cubeGeometry = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+    const cubeGeometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
     const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x375A7F });
     const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
     scene.add(cube);
-    if (borehole != null) {
-        DrawBorehole(scene, borehole);
-    }
-    else {
-    }
+
 
     var container = document.getElementsByClassName("3dContainer")[0];
     while (container.lastElementChild) {
@@ -42,6 +38,13 @@ function RenderScene(borehole) {
     var dragControls = new DragControlls.DragControls(objects, camera, container);
     dragControls.addEventListener('dragstart', function () { orbitControlls.enabled = false; });
     dragControls.addEventListener('dragend', function () { orbitControlls.enabled = true; });
+
+    if (borehole !== null) {
+        DrawBorehole(scene, borehole);
+        cube.position.set(borehole.collar.easting, borehole.collar.northing, borehole.collar.elevation);
+        camera.position.set(borehole.collar.easting + 5, borehole.collar.northing + 5, borehole.collar.elevation + 5);
+        orbitControlls.target.set(borehole.collar.easting, borehole.collar.northing, borehole.collar.elevation);
+    }
 
     container.appendChild(renderer.domElement);
     window.addEventListener('resize', (event) => {
@@ -65,10 +68,10 @@ function RenderScene(borehole) {
 function DrawBorehole(scene, borehole) {
     var points = [];
     borehole.surveyPoints.forEach(x => ConvertCoordinate(points, borehole.collar, x));
-    DrawLine(scene, points);
-    AddPoints(scene, points);
+    DrawLine(scene, borehole.surveyPoints);
+    AddPoints(scene, borehole.surveyPoints);
     DrawCollar(scene, borehole.collar);
-    DrawTarget(scene, borehole.collar, borehole.target);
+    DrawTarget(scene, borehole.target);
 }
 
 function ConvertCoordinate(collection, referencePoint, point) {
@@ -103,8 +106,8 @@ function AddArrows(scene) {
 }
 
 function DrawCollar(scene, collar) {
-    var pointGeometry = new THREE.SphereGeometry(4, 16, 16, 6, 6, 6, 6);
-    var pointMaterial = new THREE.MeshBasicMaterial({ color: 0x0f00ff });
+    var pointGeometry = new THREE.SphereGeometry(1, 32, 32, 6, 6, 6, 6);
+    var pointMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
     var sphere = new THREE.Mesh(pointGeometry, pointMaterial);
 
     sphere.position.x = collar.easting;
@@ -114,14 +117,14 @@ function DrawCollar(scene, collar) {
     scene.add(sphere);
 }
 
-function DrawTarget(scene, collar, target) {
+function DrawTarget(scene, target) {
     var pointGeometry = new THREE.SphereGeometry(4, 32, 32, 6, 6, 6, 6);
     var pointMaterial = new THREE.MeshBasicMaterial({ color: 0x0f00ff });
     var sphere = new THREE.Mesh(pointGeometry, pointMaterial);
 
-    sphere.position.x = 0 + (collar.easting - target.easting);
-    sphere.position.y = 0 + (collar.northing - target.northing);
-    sphere.position.z = 0 + (collar.elevation - target.elevation);
+    sphere.position.x = target.easting;
+    sphere.position.y = target.northing;
+    sphere.position.z = target.elevation;
     scene.add(sphere);
 }
 
@@ -131,21 +134,23 @@ function AddPoints(scene, surveyPoints) {
         var pointMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
         var sphere = new THREE.Mesh(pointGeometry, pointMaterial);
 
-        sphere.position.x = x.x;
-        sphere.position.y = x.y;
-        sphere.position.z = x.z;
-
-        sphere.addEventListener('click', (event) => {
-            sphere.material.color = 0xff00ff;
-        });
+        sphere.position.x = x.easting;
+        sphere.position.y = x.northing;
+        sphere.position.z = x.elevation;
 
         scene.add(sphere);
     })
 }
 
 function DrawLine(scene, surveyPoints) {
-    const curve = new THREE.CatmullRomCurve3(surveyPoints);
-    const points = curve.getPoints(surveyPoints.length);
+    var pointsCoordinates = [];
+    surveyPoints.forEach(x => {
+        var vectorPoint = new THREE.Vector3(x.easting, x.northing, x.elevation);
+        pointsCoordinates.push(vectorPoint);
+    });
+
+    const curve = new THREE.CatmullRomCurve3(pointsCoordinates);
+    const points = curve.getPoints(pointsCoordinates.length);
     const geometry = new THREE.BufferGeometry().setFromPoints(points);
 
     const material = new THREE.LineBasicMaterial({ color: 0xff0000 });
