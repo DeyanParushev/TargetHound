@@ -26,6 +26,7 @@ function RenderScene(borehole) {
     const cube = new THREE.Mesh(cubeGeometry, cubeMaterial);
     scene.add(cube);
 
+    var mouse = new THREE.Vector2();
 
     var container = document.getElementsByClassName("3dContainer")[0];
     while (container.lastElementChild) {
@@ -52,6 +53,7 @@ function RenderScene(borehole) {
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth * 0.8, window.innerHeight * 0.9);
     });
+    document.addEventListener('mousemove', OnMouseMove, false);
 
     animate();
 
@@ -62,25 +64,62 @@ function RenderScene(borehole) {
         requestAnimationFrame(animate);
         renderer.render(scene, camera);
         orbitControlls.update();
+        render();
+    }
+
+    function OnMouseMove(event) {
+        event.preventDefault();
+
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+    }
+
+    function render() {
+        var raycaster = new THREE.Raycaster();
+        raycaster.setFromCamera(mouse, camera);
+
+        var meshPoints = [];
+        scene.children.forEach(x => {
+            if (x.type === 'Mesh') {
+                if (x.geometry.type === 'SphereGeometry') {
+                    meshPoints.push(x);
+                }
+            }
+        });
+        const intersects = raycaster.intersectObjects(meshPoints);
+
+        if (intersects.length > 0) {
+
+            //if (INTERSECTED != intersects[0].object) {
+
+            //    if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+
+            //    INTERSECTED = intersects[0].object;
+            //    INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
+            //    INTERSECTED.material.emissive.setHex(0xff0000);
+            //}
+            console.log(mouse.x);
+            console.log(); (mouse.y);
+
+        } else {
+
+            //if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);
+
+            //INTERSECTED = null;
+
+            console.log('no intersection');
+        }
+
+        renderer.render(scene, camera);
+
     }
 }
 
 function DrawBorehole(scene, borehole) {
-    var points = [];
-    borehole.surveyPoints.forEach(x => ConvertCoordinate(points, borehole.collar, x));
     DrawLine(scene, borehole.surveyPoints);
     AddPoints(scene, borehole.surveyPoints);
     DrawCollar(scene, borehole.collar);
     DrawTarget(scene, borehole.target);
-}
-
-function ConvertCoordinate(collection, referencePoint, point) {
-    var vectorPoint = new THREE.Vector3(
-        referencePoint.easting - point.easting,
-        referencePoint.northing - point.northing,
-        referencePoint.elevation - point.elevation);
-
-    collection.push(vectorPoint);
 }
 
 function AddArrows(scene) {
@@ -137,9 +176,8 @@ function AddPoints(scene, surveyPoints) {
         sphere.position.x = x.easting;
         sphere.position.y = x.northing;
         sphere.position.z = x.elevation;
-
         scene.add(sphere);
-    })
+    });
 }
 
 function DrawLine(scene, surveyPoints) {
@@ -157,3 +195,5 @@ function DrawLine(scene, surveyPoints) {
     const curveObject = new THREE.Line(geometry, material);
     scene.add(curveObject);
 }
+
+
