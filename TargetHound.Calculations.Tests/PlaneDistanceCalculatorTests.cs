@@ -1,7 +1,7 @@
 ﻿namespace TargetHound.Calculations.Tests
 {
     using System.Collections.Generic;
-    
+    using Moq;
     using NUnit.Framework;
 
     using TargetHound.Calcualtions;
@@ -14,14 +14,6 @@
         private Extrapolator extrapolator;
         private IPoint collar = new CollarDTO { Easting = 659_866, Northing = 9_022_962, Elevation = 530, Depth = 0 };
         private IPoint negativeTarget = new TargetDTO { Easting = 659_300, Northing = 9_022_400, Elevation = -811 };
-
-        public PlaneDistanceCalculatorTests(
-            PlaneDistanceCalculator planeDistanceCalculator,
-            Extrapolator extrapolator)
-        {
-            this.planeDistanceCalculator = planeDistanceCalculator;
-            this.extrapolator = extrapolator;
-        }
 
         [TestCase(225.18, -59.2, 0, 0, 1.8038841065563065)]
         [TestCase(225.18, -59.2, 0.2, 0, 72.13142077526004)]
@@ -48,7 +40,8 @@
         {
             this.collar.Azimuth = startAzimuth;
             this.collar.Dip = startDip;
-            IList<IPoint> borehole = this.extrapolator.GetCurvedExtrapolaton(this.collar, azimuthChange, dipChange);
+            this.Setup(negativeTarget, azimuthChange, dipChange);
+
             double horiozntalDistanceOtTargetElevation = this.planeDistanceCalculator.GetHorizontalDistanceOnTargetElevation();
 
             Assert.AreEqual(distance, horiozntalDistanceOtTargetElevation);
@@ -76,7 +69,8 @@
         {
             this.collar.Azimuth = startAzimuth;
             this.collar.Dip = startDip;
-            IList<IPoint> borehole = this.extrapolator.GetCurvedExtrapolaton(this.collar, azimuthChange, dipChange);
+            this.Setup(this.negativeTarget, azimuthChange, dipChange);
+
             double verticalDistance = this.planeDistanceCalculator.GetVerticalDistance();
 
             Assert.AreEqual(distance, verticalDistance);
@@ -105,15 +99,24 @@
         {
             this.collar.Azimuth = startAzimuth;
             this.collar.Dip = startDip;
-            IList<IPoint> borehole = this.extrapolator.GetCurvedExtrapolaton(this.collar, azimuthChange, dipChange);
+            this.Setup(this.negativeTarget, azimuthChange, dipChange);
+
             double minimumHorizontalDistance = this.planeDistanceCalculator.GetMinimumHorizontalDistance();
 
             Assert.AreEqual(distance, minimumHorizontalDistance);
         }
 
-        private void Setup()
+        private void Setup(IPoint target, double azimuthChange, double dipChange)
         {
+            var angleConverter = new Mock<AngleConverter>().Object;
+            var curveCalculator = new Mock<CurveCalculator>().Object;
+            var coordinateSetter = new Mock<CoordinatesSetter>(curveCalculator, angleConverter).Object;
+            var straightExtrapolationCalculator = new Mock<StraightExtrapolationCalculator>(angleConverter).Object;
 
+            this.extrapolator = new Extrapolator(straightExtrapolationCalculator, coordinateSetter);
+            var borehole = this.extrapolator.GetCurvedExtrapolaton(this.collar, azimuthChange, dipChange);
+
+            this.planeDistanceCalculator = new PlaneDistanceCalculator(borehole, target, coordinateSetter);
         }
     }
 }

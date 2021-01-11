@@ -1,5 +1,6 @@
 ﻿namespace TargetHound.Calculations.Tests
 {
+    using Moq;
     using NUnit.Framework;
 
     using TargetHound.Calcualtions;
@@ -7,13 +8,8 @@
 
     public class StraightExtrapolationCalculatorTests
     {
-        private readonly StraightExtrapolationCalculator straightExtrapolation;
+        private StraightExtrapolationCalculator straightExtrapolation;
         private IPoint collar = new CollarDTO { Easting = 659_866.0000, Northing = 9_022_962.0000, Elevation = 530.0000 };
-
-        public StraightExtrapolationCalculatorTests(StraightExtrapolationCalculator straightExtrapolation)
-        {
-            this.straightExtrapolation = straightExtrapolation;
-        }
 
         [TestCase(660_011.77, 9_023_008.37, -811.72, 1350.4117)]
         //// Only east change
@@ -33,6 +29,7 @@
             double targetElevation,
             double expectedLength)
         {
+            this.Setup();
             TargetDTO target = new TargetDTO { Easting = targetEasting, Northing = targetNorthing, Elevation = targetElevation };
 
             Assert.AreEqual(expectedLength.ToString("F4"), this.straightExtrapolation.GetStraightHoleLength(this.collar, target).ToString("F4"));
@@ -54,6 +51,7 @@
             double targetElevation,
             double expectedAzimuth)
         {
+            this.Setup();
             TargetDTO target = new TargetDTO { Easting = targetEasting, Northing = targetNorthing, Elevation = targetElevation };
 
             this.collar.Azimuth = this.straightExtrapolation.GetInitialAzimuthAngle(this.collar, target);
@@ -83,11 +81,18 @@
             double targetElevation,
             double expectedDip)
         {
+            this.Setup();
             TargetDTO target = new TargetDTO { Easting = targetEasting, Northing = targetNorthing, Elevation = targetElevation };
 
             this.collar.Dip = this.straightExtrapolation.GetInitialDipAngle(this.collar, target);
 
             Assert.AreEqual(expectedDip.ToString("F4"), this.collar.Dip.ToString("F4"));
+        }
+
+        private void Setup()
+        {
+            var angleConverter = Mock.Of<AngleConverter>();
+            this.straightExtrapolation = new StraightExtrapolationCalculator(angleConverter);
         }
     }
 }
