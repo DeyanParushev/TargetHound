@@ -1,14 +1,14 @@
 ﻿namespace TargetHound.Calculations.Tests
 {
     using NUnit.Framework;
+    using Moq;
 
     using TargetHound.Calcualtions;
     using TargetHound.DTOs;
 
     public class CoordinatesSetterTests
     {
-        private readonly CoordinatesSetter coordinatesSetter;
-
+        private CoordinatesSetter coordinatesSetter;
         private SurveyPointDTO topStation = new SurveyPointDTO
         {
             Depth = 0,
@@ -19,11 +19,6 @@
             Elevation = 530.00,
         };
 
-        public CoordinatesSetterTests(CoordinatesSetter coordinatesSetter)
-        {
-            this.coordinatesSetter = coordinatesSetter;
-        }
-
         [TestCase(15, 331.20, -89.7, 659_866.0334)]
         [TestCase(15, 270, -88, 659_865.7906)]
         [TestCase(15, 95, -89, 659_866.1828)]
@@ -33,8 +28,9 @@
 
         public void SetEastingTest(double bottomDepth, double bottomAzimuth, double bottomDip, double expectedBottomEasting)
         {
+            this.Setup();
             SurveyPointDTO bottomStation = new SurveyPointDTO { Depth = bottomDepth, Azimuth = bottomAzimuth, Dip = bottomDip };
-           
+
             this.coordinatesSetter.SetBottomStationUTMCoortinates(this.topStation, bottomStation);
 
             double bottomEasting = bottomStation.Easting;
@@ -50,8 +46,9 @@
 
         public void SetNorthingTest(double bottomDepth, double bottomAzimuth, double bottomDip, double expectedBottomEasting)
         {
+            this.Setup();
             SurveyPointDTO bottomStation = new SurveyPointDTO { Depth = bottomDepth, Azimuth = bottomAzimuth, Dip = bottomDip };
-           
+
             this.coordinatesSetter.SetBottomStationUTMCoortinates(this.topStation, bottomStation);
 
             double bottomNorthing = bottomStation.Northing;
@@ -67,12 +64,20 @@
 
         public void SetElevationTest(double bottomDepth, double bottomAzimuth, double bottomDip, double expectedBottomEasting)
         {
+            this.Setup();
             SurveyPointDTO bottomStation = new SurveyPointDTO { Depth = bottomDepth, Azimuth = bottomAzimuth, Dip = bottomDip };
-           
+
             this.coordinatesSetter.SetBottomStationUTMCoortinates(this.topStation, bottomStation);
 
             double bottomElevation = bottomStation.Elevation;
             Assert.AreEqual(expectedBottomEasting.ToString("F2"), bottomElevation.ToString("F2"));
+        }
+
+        private void Setup()
+        {
+            var angleConverter = new Mock<AngleConverter>().Object;
+            var curveCalculator = new Mock<CurveCalculator>().Object;
+            this.coordinatesSetter = new CoordinatesSetter(curveCalculator, angleConverter);
         }
     }
 }

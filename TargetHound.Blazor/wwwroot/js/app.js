@@ -53,7 +53,7 @@ function RenderScene(borehole) {
         camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth * 0.8, window.innerHeight * 0.9);
     });
-    document.addEventListener('mousemove', OnMouseMove, false);
+    container.addEventListener('mousemove', OnMouseMove, false);
 
     animate();
 
@@ -86,7 +86,7 @@ function RenderScene(borehole) {
                 }
             }
         });
-        const intersects = raycaster.intersectObjects(meshPoints);
+        var intersects = raycaster.intersectObjects(scene.children);
 
         if (intersects.length > 0) {
 
@@ -98,9 +98,9 @@ function RenderScene(borehole) {
             //    INTERSECTED.currentHex = INTERSECTED.material.emissive.getHex();
             //    INTERSECTED.material.emissive.setHex(0xff0000);
             //}
-            console.log(mouse.x);
-            console.log(); (mouse.y);
-
+            var object = intersects[0];
+            console.log(object.position);
+            
         } else {
 
             //if (INTERSECTED) INTERSECTED.material.emissive.setHex(INTERSECTED.currentHex);

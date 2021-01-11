@@ -14,14 +14,16 @@
         private CoordinatesSetter coordinatesSetter;
         private double extrapolationLength;
 
-        public Extrapolator(StraightExtrapolationCalculator straightExtrapolation, CoordinatesSetter coordinatesSetter, double extrapolation = 4000)
+        public Extrapolator(
+            StraightExtrapolationCalculator straightExtrapolation, 
+            CoordinatesSetter coordinatesSetter, double extrapolation = 4000)
         {
             this.coordinatesSetter = coordinatesSetter;
             this.extrapolationLength = extrapolation;
             this.straightExtrapolation = straightExtrapolation;
         }
 
-        public IList<SurveyPointDTO> GetStraightExtrapolation(
+        public IList<IPoint> GetStraightExtrapolation(
             double startEasting,
             double startNorthing,
             double startElevation,
@@ -30,7 +32,7 @@
         {
             int extrapolationPointsCount = (int)Math.Ceiling(this.extrapolationLength / 30.0);
             double endSectionLength = this.extrapolationLength % 30.0;
-            List<SurveyPointDTO> extrapolation = new List<SurveyPointDTO>(extrapolationPointsCount + 1);
+            List<IPoint> extrapolation = new List<IPoint>(extrapolationPointsCount + 1);
 
             for (int i = 0; i < extrapolation.Capacity - 1; i++)
             {
@@ -114,13 +116,13 @@
             return extrapolation;
         }
 
-        public IList<SurveyPointDTO> GetStraightExtrapolation(IPoint collar, IPoint target)
+        public IList<IPoint> GetStraightExtrapolation(IPoint collar, IPoint target)
         {
             double straightLength = this.straightExtrapolation.GetStraightHoleLength(collar, target);
 
             int extrapolationPointsCount = (int)Math.Ceiling(straightLength / StationSeparationDistance);
             double endSectionLength = this.extrapolationLength % StationSeparationDistance;
-            List<SurveyPointDTO> extrapolation = new List<SurveyPointDTO>(extrapolationPointsCount + 1);
+            List<IPoint> extrapolation = new List<IPoint>(extrapolationPointsCount + 1);
 
             for (int i = 0; i < extrapolationPointsCount; i++)
             {

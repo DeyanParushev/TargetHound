@@ -10,8 +10,8 @@
     public class PlaneDistanceCalculatorTests
     {
         //// TODO: Test for positively inclined boreholes
-        private readonly PlaneDistanceCalculator planeDistanceCalculator;
-        private readonly Extrapolator extrapolator;
+        private PlaneDistanceCalculator planeDistanceCalculator;
+        private Extrapolator extrapolator;
         private IPoint collar = new CollarDTO { Easting = 659_866, Northing = 9_022_962, Elevation = 530, Depth = 0 };
         private IPoint negativeTarget = new TargetDTO { Easting = 659_300, Northing = 9_022_400, Elevation = -811 };
 
@@ -109,6 +109,11 @@
             double minimumHorizontalDistance = this.planeDistanceCalculator.GetMinimumHorizontalDistance();
 
             Assert.AreEqual(distance, minimumHorizontalDistance);
+        }
+
+        private void Setup()
+        {
+
         }
     }
 }
