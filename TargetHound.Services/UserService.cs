@@ -1,5 +1,6 @@
 ﻿namespace TargetHound.Services
 {
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
 
@@ -20,7 +21,7 @@
 
         public async Task<string> GetUserNameById(string userId)
         {
-            string userName = this.dbContext.ApplicationUsers.SingleOrDefault(x => x.Id == userId).UserName;
+            string userName = this.dbContext.ApplicationUsers.SingleOrDefault(x => x.Id == userId)?.UserName;
             return userName;
         }
 
@@ -38,9 +39,15 @@
             
             var projectInvitationMessage = 
                 MessageTemplates.ProjectInvitation(senderName, receiverName, projectName, linkToJoin);
-
+            
             await this.emailSender
-                .SendEmailAsync(senderEmail, senderName, receiverEmail, receiverName, MessageTemplates.InvitationSubject(senderName), projectInvitationMessage);
+                .SendEmailAsync(
+                senderEmail, 
+                senderName, 
+                receiverEmail, 
+                receiverName, 
+                MessageTemplates.InvitationSubject(senderName), 
+                projectInvitationMessage);
         }
 
         public async Task SendClientInvitationAsync(string senderEmail, string senderName, string receiverEmail, string receiverName, string clientId, string linkToJoin)
@@ -53,7 +60,13 @@
                 MessageTemplates.ClientInvitation(senderName, clientName, linkToJoin);
 
             await this.emailSender
-                .SendEmailAsync(senderEmail, senderName, receiverEmail, receiverName, MessageTemplates.InvitationSubject(senderName), clientInvitationMessage);
+                .SendEmailAsync(
+                senderEmail, 
+                senderName, 
+                receiverEmail,
+                receiverName, 
+                MessageTemplates.InvitationSubject(senderName), 
+                clientInvitationMessage);
         }
     }
 }

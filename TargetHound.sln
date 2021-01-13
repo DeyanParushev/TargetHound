@@ -29,6 +29,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{974D738E-F4D6-41B9-AB21-39ABE8240962}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TargetHound.Services.Tests", "TargetHound.Services.Tests\TargetHound.Services.Tests.csproj", "{7F15DDA6-A514-4607-9975-D4FFF8DBE912}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -71,9 +75,17 @@ Global
 		{8528A88E-48E9-41BB-B392-E288C249A473}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8528A88E-48E9-41BB-B392-E288C249A473}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8528A88E-48E9-41BB-B392-E288C249A473}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F15DDA6-A514-4607-9975-D4FFF8DBE912}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F15DDA6-A514-4607-9975-D4FFF8DBE912}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F15DDA6-A514-4607-9975-D4FFF8DBE912}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F15DDA6-A514-4607-9975-D4FFF8DBE912}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{0BCB023A-926D-4AA9-B3C3-7CE2EDB13CE1} = {974D738E-F4D6-41B9-AB21-39ABE8240962}
+		{7F15DDA6-A514-4607-9975-D4FFF8DBE912} = {974D738E-F4D6-41B9-AB21-39ABE8240962}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F1ECF438-9F85-4C0C-B732-3214FB736167}

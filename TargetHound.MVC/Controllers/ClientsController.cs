@@ -237,10 +237,10 @@
             catch (Exception ex)
             {
                 this.ModelState.AddModelError(string.Empty, ex.Message);
-                return this.View("Error");
+                return this.View(nameof(ErrorViewModel));
             }
 
-            return this.Redirect("/Clients/All");
+            return this.Redirect(nameof(this.All));
         }
 
         [HttpPost]
