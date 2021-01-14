@@ -19,7 +19,7 @@
             this.dbContext = dbContext;
         }
 
-        public async Task ExportBoreholeAsync(string projectId, string userId, Borehole borehole, string saveDirectory)
+        public async Task CreateBoreholeCsv(string projectId, string userId, Borehole borehole, string saveDirectory)
         {
             if (!this.dbContext.Users.Any(x => x.Id == userId && x.IsDeleted == false))
             {

@@ -28,7 +28,12 @@
 
     private async Task ExportBorehole(string format)
     {
-        await this.client.PostAsJsonAsync<BoreholeDTO>($"api/BoreholeApi/Export{format}", this.Borehole);
+        var response = await this.client.PostAsJsonAsync<BoreholeDTO>($"api/BoreholeApi/Export{format}", this.Borehole);
+        if (response.IsSuccessStatusCode)
+        {
+            response = await this.client.GetAsync($"https://www.google.com");
+            Console.WriteLine(response.Content);
+        }
     }
 
     public async Task ExportCsv()

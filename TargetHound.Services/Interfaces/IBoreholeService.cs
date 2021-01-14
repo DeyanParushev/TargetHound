@@ -6,7 +6,7 @@
 
     public interface IBoreholeService
     {
-        public Task ExportBoreholeAsync(string projectId, string userId, Borehole borehole, string saveDirectory);
+        public Task CreateBoreholeCsv(string projectId, string userId, Borehole borehole, string saveDirectory);
         
         public Task<string> GetBoreholeName(string boreholeId);
         

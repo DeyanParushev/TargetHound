@@ -23,7 +23,6 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IWebHostEnvironment environment;
         private IMapper mapper;
-        private string boreholeId;
 
         public BoreholeApiController(
             IBoreholeService boreholeService,
@@ -71,12 +70,11 @@
             {
                 if (this.ModelState.IsValid)
                 {
-                    this.boreholeId = borehole.Id;
                     var userId = this.userManager.GetUserId(this.User);
                     var boreholeDataModel = this.mapper.Map<BoreholeDTO, Borehole>(borehole);
                     var saveDirectory = Path.Combine(environment.ContentRootPath, "FilesCSV", $"{borehole.Name}.csv");
-                    await this.boreholeService.ExportBoreholeAsync(borehole.ProjectId, userId, boreholeDataModel, saveDirectory);
-                    return this.Redirect(nameof(this.ExportFile));
+                    await this.boreholeService.CreateBoreholeCsv(borehole.ProjectId, userId, boreholeDataModel, saveDirectory);
+                    return this.StatusCode(200);
                 }
                 else
                 {
@@ -89,23 +87,24 @@
             }
         }
 
-        [HttpGet]
+        [HttpGet("{boreholeId}"), Route("Download")]
         [Authorize]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> ExportFile()
+        public async Task<IActionResult> DownloadFile(string boreholeId)
         {
-            var boreholeName = await this.boreholeService.GetBoreholeName(this.boreholeId);
-            var directory = Path.Combine(this.environment.ContentRootPath, "FilesCSV", $"{boreholeName}.csv");
+            //var boreholeName = await this.boreholeService.GetBoreholeName(boreholeId);
+            //var directory = Path.Combine(this.environment.ContentRootPath, "FilesCSV", $"{boreholeName}.csv");
 
-            System.Net.Mime.ContentDisposition cd = new System.Net.Mime.ContentDisposition
-            {
-                FileName = $"{boreholeName}.csv",
-                Inline = false,  // false = prompt the user for downloading;  true = browser to try to show the file inline
-            };
-            Response.Headers.Add("Content-Disposition", cd.ToString());
-            Response.Headers.Add("X-Content-Type-Options", "nosniff");
+            //System.Net.Mime.ContentDisposition cd = new System.Net.Mime.ContentDisposition
+            //{
+            //    FileName = $"{boreholeName}.csv",
+            //    Inline = false,  // false = prompt the user for downloading;  true = browser to try to show the file inline
+            //};
+            //Response.Headers.Add("Content-Disposition", cd.ToString());
+            //Response.Headers.Add("X-Content-Type-Options", "nosniff");
 
-            return File(System.IO.File.ReadAllBytes(directory), "text/csv");
+            //return File(System.IO.File.ReadAllBytes(directory), "text/csv");
+            return this.StatusCode(400);
         }
     }
 }

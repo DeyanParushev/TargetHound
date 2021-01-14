@@ -4,7 +4,6 @@ namespace TargetHound.Blazor
     using System.Net.Http;
     using System.Threading.Tasks;
     
-    using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
     using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
     using Microsoft.Extensions.DependencyInjection;
     
@@ -20,11 +19,6 @@ namespace TargetHound.Blazor
 
             builder.Services
                 .AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-
-            builder.Services.AddHttpClient(
-                "TargetHound",
-                    client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
-                    .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
             builder.Services.AddApiAuthorization();
             builder.Services.AddSingleton<IStateService, StateService>();
