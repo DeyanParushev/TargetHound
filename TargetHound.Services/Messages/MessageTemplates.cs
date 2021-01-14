@@ -33,5 +33,15 @@
         {
             return $"Invitation from {userName}";
         }
+
+        public static string HtmlClientInvitation()
+        {
+            return null;
+        }
+
+        public static string HtmlProjectInvitation()
+        {
+            return null;
+        }
     }
 }

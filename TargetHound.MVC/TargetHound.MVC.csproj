@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="FilesCSV\Borehole1.csv" />
+    <Content Include="FilesCSV\Borehole6.csv" />
+    <Content Include="FilesCSV\Borehole65.csv" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="10.1.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.0" />
@@ -40,7 +46,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\FilesCSV\" />
+    <Folder Include="FilesCSV\" />
   </ItemGroup>
 
 </Project>

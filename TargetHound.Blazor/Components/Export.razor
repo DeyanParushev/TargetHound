@@ -28,10 +28,7 @@
 
     private async Task ExportBorehole(string format)
     {
-        var result = await this.client.PostAsJsonAsync<BoreholeDTO>($"api/BoreholeApi/Export{format}", this.Borehole);
-
-        var response = await result.Content.ReadAsStringAsync();
-        Console.WriteLine(response);
+        await this.client.PostAsJsonAsync<BoreholeDTO>($"api/BoreholeApi/Export{format}", this.Borehole);
     }
 
     public async Task ExportCsv()

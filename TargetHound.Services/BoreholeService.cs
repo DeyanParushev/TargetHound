@@ -19,7 +19,7 @@
             this.dbContext = dbContext;
         }
 
-        public async Task<string> ExportBoreholeAsync(string projectId, string userId, Borehole borehole)
+        public async Task ExportBoreholeAsync(string projectId, string userId, Borehole borehole, string saveDirectory)
         {
             if (!this.dbContext.Users.Any(x => x.Id == userId && x.IsDeleted == false))
             {
@@ -37,12 +37,7 @@
             }
 
             var exportBorehole = CsvSerializer.SerializeToString(borehole.SurveyPoints);
-            var rootFolder = @$"\wwwroot";
-            var rootAddress = @$"\FilesCSV\{borehole.Name}.csv";
-            var localAdress = Environment.CurrentDirectory + rootFolder + rootAddress;
-            await this.CreateCsvFile(exportBorehole, localAdress);
-
-            return rootAddress;
+            await this.CreateCsvFile(exportBorehole, saveDirectory);
         }
 
         public async Task UpdateBoreholesAsync(string projectId, string userId, Borehole borehole)
@@ -86,6 +81,12 @@
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        public async Task<string> GetBoreholeName(string boreholeId)
+        {
+            string name = this.dbContext.Boreholes.FirstOrDefault(x => x.Id == boreholeId && x.IsDeleted == false)?.Name;
+            return name;
         }
 
         private async Task CreateCsvFile(string content, string localAdress)

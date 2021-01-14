@@ -37,17 +37,20 @@
                 .Projects
                 .SingleOrDefault(x => x.Id == projectId && x.IsDeleted == false).Name;
             
-            var projectInvitationMessage = 
+            var projectInvitationPlainText = 
                 MessageTemplates.ProjectInvitation(senderName, receiverName, projectName, linkToJoin);
-            
+            var subject = MessageTemplates.InvitationSubject(senderName);
+            var htmlContent = MessageTemplates.HtmlProjectInvitation();
+
             await this.emailSender
                 .SendEmailAsync(
                 senderEmail, 
                 senderName, 
                 receiverEmail, 
                 receiverName, 
-                MessageTemplates.InvitationSubject(senderName), 
-                projectInvitationMessage);
+                subject, 
+                projectInvitationPlainText,
+                htmlContent);
         }
 
         public async Task SendClientInvitationAsync(string senderEmail, string senderName, string receiverEmail, string receiverName, string clientId, string linkToJoin)
@@ -56,8 +59,10 @@
                 .Clients
                 .SingleOrDefault(x => x.Id == clientId && x.IsDeleted == false).Name;
 
-            var clientInvitationMessage = 
+            var plainTextContent = 
                 MessageTemplates.ClientInvitation(senderName, clientName, linkToJoin);
+            var subject = MessageTemplates.InvitationSubject(senderName);
+            var htmlContent = MessageTemplates.HtmlClientInvitation();
 
             await this.emailSender
                 .SendEmailAsync(
@@ -65,8 +70,9 @@
                 senderName, 
                 receiverEmail,
                 receiverName, 
-                MessageTemplates.InvitationSubject(senderName), 
-                clientInvitationMessage);
+                subject,
+                plainTextContent, 
+                htmlContent);
         }
     }
 }

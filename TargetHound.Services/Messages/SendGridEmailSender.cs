@@ -25,6 +25,7 @@
             string receiver,
             string receiverName,
             string subject,
+            string plainTextContent,
             string htmlContent)
         {
             if (string.IsNullOrWhiteSpace(subject) && string.IsNullOrWhiteSpace(htmlContent))
@@ -34,7 +35,6 @@
 
             var from = new EmailAddress(sender, senderName);
             var to = new EmailAddress(receiver, receiverName);
-            var plainTextContent = htmlContent;
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await this.client.SendEmailAsync(msg);
             

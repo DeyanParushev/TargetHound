@@ -1,5 +1,6 @@
 namespace TargetHound.MVC
 {
+    using System.IO;
     using System.Reflection;
     using System.Text.Json;
     
@@ -10,6 +11,7 @@ namespace TargetHound.MVC
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Hosting;
     using SendgridEmailInAspNetCore.Services;
    
@@ -96,6 +98,7 @@ namespace TargetHound.MVC
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCookiePolicy();
             app.UseBlazorFrameworkFiles();
 
             app.UseRouting();
@@ -104,6 +107,12 @@ namespace TargetHound.MVC
             app.UseCookiePolicy();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(env.ContentRootPath, "FilesCSV")),
+                RequestPath = "/ExportCSV"
+            });
 
             app.UseEndpoints(endpoints =>
             {

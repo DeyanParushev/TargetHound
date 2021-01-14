@@ -11,6 +11,7 @@
             string receiver, 
             string receiverName,
             string subject, 
-            string message);
+            string plaintTextContent,
+            string htmlContent);
     }
 }
