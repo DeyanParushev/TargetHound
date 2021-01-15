@@ -1,6 +1,7 @@
 ﻿@implements IComponent
 @inject HttpClient client
 @inject IStateService stateService
+@inject IJSRuntime jsRuntime
 
 <EditForm Model="@this.Borehole">
     <DataAnnotationsValidator />
@@ -12,7 +13,9 @@
 @code {
     public BoreholeDTO Borehole { get; set; }
 
-    protected override void OnInitialized()
+    private IJSObjectReference JsModule { get; set; }
+
+    protected override async Task OnInitializedAsync()
     {
         this.Borehole =
             this.stateService
@@ -24,6 +27,9 @@
         {
             this.Borehole = new BoreholeDTO();
         }
+
+        this.JsModule = 
+            await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/helperFunctions.js");
     }
 
     private async Task ExportBorehole(string format)
@@ -31,10 +37,10 @@
         var response = await this.client.PostAsJsonAsync<BoreholeDTO>($"api/BoreholeApi/Export{format}", this.Borehole);
         if (response.IsSuccessStatusCode)
         {
-            response = await this.client.GetAsync($"https://www.google.com");
-            Console.WriteLine(response.Content);
+            await JsModule.InvokeVoidAsync("downloadFile", $"api/BoreholeApi/{this.Borehole.Id}", $"{this.Borehole.Name}.{format}");
         }
     }
+
 
     public async Task ExportCsv()
     {

@@ -36,7 +36,20 @@
                 throw new ArgumentException(ProjectErrorMessages.UserNotInProject);
             }
 
-            var exportBorehole = CsvSerializer.SerializeToString(borehole.SurveyPoints);
+            var exportData = borehole.SurveyPoints
+                .Select(x => new
+                {
+                    Depth = x.Depth,
+                    Azimuth = x.Azimuth,
+                    Dip = x.Dip,
+                    Easting = x.Easting,
+                    Northing = x.Northing,
+                    Elevation = x.Elevation
+                })
+                .OrderBy(x => x.Depth)
+                .ToList();
+            var exportBorehole = CsvSerializer.SerializeToString(exportData);
+
             await this.CreateCsvFile(exportBorehole, saveDirectory);
         }
 

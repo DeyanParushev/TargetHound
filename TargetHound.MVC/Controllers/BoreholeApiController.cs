@@ -35,30 +35,23 @@
             this.mapper = AutoMapperConfig.MapperInstance;
         }
 
-        [HttpPost, Route("Save")]
+        [HttpGet("{boreholeId}")]
         [Authorize]
         [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> PutProject(BoreholeDTO borehole)
+        public async Task<IActionResult> DownloadFile(string boreholeId)
         {
-            try
-            {
-                if (this.ModelState.IsValid)
-                {
-                    var userId = this.userManager.GetUserId(this.User);
-                    var boreholeDataModel = this.mapper.Map<BoreholeDTO, Borehole>(borehole);
+            var boreholeName = await this.boreholeService.GetBoreholeName(boreholeId);
+            var directory = Path.Combine(this.environment.ContentRootPath, "FilesCSV", $"{boreholeName}.csv");
 
-                    await this.boreholeService.UpdateBoreholesAsync(borehole.ProjectId, userId, boreholeDataModel);
-                    return this.StatusCode(200);
-                }
-                else
-                {
-                    return this.StatusCode(422);
-                }
-            }
-            catch
+            System.Net.Mime.ContentDisposition cd = new System.Net.Mime.ContentDisposition
             {
-                return this.StatusCode(500);
-            }
+                FileName = $"{boreholeName}.csv",
+                Inline = false,  // false = prompt the user for downloading;  true = browser to try to show the file inline
+            };
+            Response.Headers.Add("Content-Disposition", cd.ToString());
+            Response.Headers.Add("X-Content-Type-Options", "nosniff");
+
+            return File(System.IO.File.ReadAllBytes(directory), "text/csv");
         }
 
         [HttpPost, Route("ExportCsv")]
@@ -85,26 +78,6 @@
             {
                 return this.StatusCode(500);
             }
-        }
-
-        [HttpGet("{boreholeId}"), Route("Download")]
-        [Authorize]
-        [IgnoreAntiforgeryToken]
-        public async Task<IActionResult> DownloadFile(string boreholeId)
-        {
-            //var boreholeName = await this.boreholeService.GetBoreholeName(boreholeId);
-            //var directory = Path.Combine(this.environment.ContentRootPath, "FilesCSV", $"{boreholeName}.csv");
-
-            //System.Net.Mime.ContentDisposition cd = new System.Net.Mime.ContentDisposition
-            //{
-            //    FileName = $"{boreholeName}.csv",
-            //    Inline = false,  // false = prompt the user for downloading;  true = browser to try to show the file inline
-            //};
-            //Response.Headers.Add("Content-Disposition", cd.ToString());
-            //Response.Headers.Add("X-Content-Type-Options", "nosniff");
-
-            //return File(System.IO.File.ReadAllBytes(directory), "text/csv");
-            return this.StatusCode(400);
         }
     }
 }
