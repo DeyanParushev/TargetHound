@@ -1,8 +1,10 @@
 ﻿namespace TargetHound.Services
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
+
     using TargetHound.Data;
     using TargetHound.Services.Automapper;
     using TargetHound.Services.Interfaces;
@@ -28,6 +30,11 @@
 
         public async Task<T> GetCountryByIdAsync<T>(int countryId)
         {
+            if(!this.dbContext.Countries.Any(x => x.Id == countryId))
+            {
+                throw new ArgumentOutOfRangeException();
+            }
+
             var country = this.dbContext
                 .Countries
                 .Where(x => x.Id == countryId)
