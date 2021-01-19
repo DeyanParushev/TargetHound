@@ -17,7 +17,7 @@
         [TestCase]
         public async Task GetAllCountriesShouldReturnCollectionOfViewModels()
         {
-            //// Setup
+            //// Arange
             var data = new List<Country>
             {
                 new Country { Id = 5, Name = "BBB" },
@@ -52,7 +52,7 @@
         [TestCase(15)]
         public async Task GetCountryByIdShouldReturnViewModel(int countryId)
         {
-            //// Setup
+            //// Arange
             var countryData = new Country { Id = countryId, Name = "Bahamas" };
             AutoMapperConfig.RegisterMappings(
                 typeof(CountryViewModel).GetTypeInfo().Assembly);
@@ -71,6 +71,7 @@
             //// Assert
             Assert.AreEqual(countryData.Name, country.Name);
             Assert.AreEqual(countryData.Id, country.Id);
+            Assert.AreEqual(typeof(CountryViewModel), country.GetType());
         }
 
         [TestCase(5)]
@@ -78,7 +79,7 @@
         [TestCase(15)]
         public async Task GetCountryByIdShouldThrowException(int countryId)
         {
-            //// Setup
+            //// Arange
             var options = new DbContextOptionsBuilder<TargetHoundContext>()
                 .UseInMemoryDatabase(databaseName: "FakeConnectionString")
                 .Options;
