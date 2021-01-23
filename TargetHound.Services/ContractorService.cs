@@ -20,9 +20,11 @@
 
         public async Task<ICollection<T>> GetDrillRigsAsync<T>(string contractorId)
         {
+            this.CheckContractorExists(contractorId);
+
             var machines = this.dbContext
                 .DrillRigs
-                .Where(x => x.Id == contractorId)
+                .Where(x => x.ContractorId == contractorId)
                 .To<T>()
                 .ToList();
 
@@ -33,7 +35,7 @@
         {
             if (!this.dbContext.Contractors.Any(x => x.Id == contractorId && x.IsDeleted == false))
             {
-                throw new NullReferenceException(contractorError);
+                throw new ArgumentException(contractorError);
             }
         }
     }

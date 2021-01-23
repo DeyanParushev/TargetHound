@@ -3,6 +3,7 @@
     using System;
     using System.Linq;
     using System.Threading.Tasks;
+   
     using TargetHound.Data;
     using TargetHound.DataModels;
     using TargetHound.Services.ErrorMessages;
@@ -41,15 +42,19 @@
         {
             if (!this.dbContext.Clients.Any(x => x.Id == clientId && x.IsDeleted == false))
             {
-                throw new NullReferenceException(ClientErrorMessages.ClientDoesNotExist);
+                throw new ArgumentException(ClientErrorMessages.ClientDoesNotExist);
             }
 
             var invitation = this.dbContext
                 .ClientInvitations
-                .FirstOrDefault(x => x.ClientId == clientId && x.Email == invitationEmail && x.IsAccepted == false);
+                .FirstOrDefault(
+                    x => x.ClientId == clientId && 
+                    x.Email == invitationEmail && 
+                    x.IsAccepted == false);
+           
             if (invitation == null)
             {
-                throw new NullReferenceException(invalidInvitation);
+                throw new ArgumentException(invalidInvitation);
             }
 
             invitation.IsAccepted = true;
