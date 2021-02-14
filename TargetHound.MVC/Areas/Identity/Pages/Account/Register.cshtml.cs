@@ -112,7 +112,6 @@
             return this.Page();
         }
 
-        // TODO: extract user roles into enum for code quality
         private async Task<IActionResult> Login(ApplicationUser user, IdentityResult result, string returnUrl)
         {
             this.logger.LogInformation("User created a new account with password.");
