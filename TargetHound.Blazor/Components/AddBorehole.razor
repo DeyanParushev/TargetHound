@@ -1,5 +1,6 @@
 ﻿@inject TargetHound.Calcualtions.StraightExtrapolationCalculator straightCalculator
 @inject TargetHound.Calcualtions.Extrapolator extrapolator
+@inject TargetHound.Calcualtions.CoordinatesSetter coordinatesSetter
 @inject IStateService storageService
 @inject HttpClient client
 
@@ -125,7 +126,26 @@
         }
         else
         {
-            // TODO: finish the algorythm for curved borehole;
+            var curveExtrapolationCalculator = new CurveExtrapolationCalculator(
+                borehole.Collar,
+                borehole.Target,
+                this.AzimuthChange,
+                this.DipChange);
+
+            curveExtrapolationCalculator.CalculateInitialAngles(
+                straightCalculator,
+                extrapolator,
+                coordinatesSetter);
+
+            borehole.Collar.Azimuth = curveExtrapolationCalculator.GetInitialAzimuth();
+            borehole.Collar.Dip = curveExtrapolationCalculator.GetInitialDip();
+            borehole.SurveyPoints = (IList<SurveyPointDTO>)this.extrapolator
+                .GetCurvedExtrapolaton(borehole.Collar, this.AzimuthChange, this.DipChange);
+
+            foreach (var point in borehole.SurveyPoints)
+            {
+                point.Id = Guid.NewGuid().ToString();
+            }
         }
 
         this.ShowMessage = true;
