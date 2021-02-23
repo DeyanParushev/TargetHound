@@ -139,6 +139,8 @@
 
             borehole.Collar.Azimuth = curveExtrapolationCalculator.GetInitialAzimuth();
             borehole.Collar.Dip = curveExtrapolationCalculator.GetInitialDip();
+
+            // TODO: Invalid cast to borehole.SurveyPoints ??
             borehole.SurveyPoints = (IList<SurveyPointDTO>)this.extrapolator
                 .GetCurvedExtrapolaton(borehole.Collar, this.AzimuthChange, this.DipChange);
 
