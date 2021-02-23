@@ -9,7 +9,7 @@
     {
         private CollarDTO collar = new CollarDTO { Easting = 659_866.0000, Northing = 9_022_962.0000, Elevation = 530.0000 };
 
-        // TODO: Finish the tests
+        // TODO: Finish the tests for curved extrapolation
         [TestCase(659_300, 9_022_400, -811, 0.5, 0.5)]
         public void GetCollarForCurvedExtrapolation(
             double targetEasting,
