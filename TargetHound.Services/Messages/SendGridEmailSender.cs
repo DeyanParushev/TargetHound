@@ -3,19 +3,21 @@
     using System;
     using System.Net;
     using System.Threading.Tasks;
+
     using SendGrid;
     using SendGrid.Helpers.Errors.Model;
     using SendGrid.Helpers.Mail;
-
+    using TargetHound.Services.Interfaces;
     using TargetHound.Services.Messages;
 
     public class SendGridEmailSender : IEmailSender
     {
         private readonly SendGridClient client;
-        private readonly string apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
+        private readonly string apiKey;
 
-        public SendGridEmailSender()
+        public SendGridEmailSender(ISecretsService secretsService)
         {
+            this.apiKey = secretsService.GetSecret("SendGrid", "ApiKey");
             this.client = new SendGridClient(this.apiKey);
         }
 

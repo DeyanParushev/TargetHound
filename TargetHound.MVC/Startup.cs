@@ -3,7 +3,7 @@ namespace TargetHound.MVC
     using System.IO;
     using System.Reflection;
     using System.Text.Json;
-    
+
     using AutoMapper;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -14,7 +14,7 @@ namespace TargetHound.MVC
     using Microsoft.Extensions.FileProviders;
     using Microsoft.Extensions.Hosting;
     using SendgridEmailInAspNetCore.Services;
-   
+
     using TargetHound.Data;
     using TargetHound.DataModels;
     using TargetHound.DTOs;
@@ -38,7 +38,7 @@ namespace TargetHound.MVC
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<TargetHoundContext>(
-                options => options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")), 
+                options => options.UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")),
                 ServiceLifetime.Singleton);
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
@@ -69,6 +69,7 @@ namespace TargetHound.MVC
             services.AddTransient<ICollarService, CollarService>();
             services.AddTransient<ITargetService, TargetService>();
             services.AddTransient<IBoreholeService, BoreholeService>();
+            services.AddTransient<ISecretsService, SecretsService>();
 
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
