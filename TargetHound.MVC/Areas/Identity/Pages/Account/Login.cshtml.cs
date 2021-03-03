@@ -69,6 +69,7 @@
                 var user = await this.userManager.FindByEmailAsync(this.Input.Email);
                 var result = await this.signInManager
                     .PasswordSignInAsync(user.UserName, this.Input.Password, this.Input.RememberMe, lockoutOnFailure: false);
+               
                 if (result.Succeeded)
                 {
                     this.logger.LogInformation("User logged in.");

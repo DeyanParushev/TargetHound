@@ -26,7 +26,6 @@
 
         public virtual Project Project { get; set; }
 
-        [ForeignKey("Borehole")]
         public string BoreholeId { get; set; }
 
         public virtual Borehole Borehole { get; set; }

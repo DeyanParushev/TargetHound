@@ -79,10 +79,7 @@
             this.Project = this.stateService.Project;
         }
 
-        if (this.Project.Boreholes.Count > 0)
-        {
-            this.Boreholes = this.Project.Boreholes;
-        }
+        this.Boreholes = this.Project.Boreholes;
 
         this.jsModule = await jsRuntime.InvokeAsync<IJSObjectReference>("import", "./js/app.js");
     }
@@ -94,10 +91,10 @@
             BoreholeDTO borehole = this.stateService.Project.Boreholes.FirstOrDefault(x => x.Name == this.stateService.BoreholeToDisplayName);
             var result = this.jsModule.InvokeVoidAsync("RenderBorehole", borehole).GetAwaiter();
         }
-        else
-        {
-            this.jsModule.InvokeVoidAsync("RenderProject", this.Project).GetAwaiter();
-        }
+        //else
+        //{
+        //    this.jsModule.InvokeVoidAsync("RenderProject", this.Project).GetAwaiter();
+        //}
     }
 
     public void Refresh(bool refreshComponent)

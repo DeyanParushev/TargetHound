@@ -117,7 +117,12 @@
         {
             borehole.Collar.Azimuth = this.straightCalculator.GetInitialAzimuthAngle(borehole.Collar, borehole.Target);
             borehole.Collar.Dip = this.straightCalculator.GetInitialDipAngle(borehole.Collar, borehole.Target);
-            borehole.SurveyPoints = (IList<SurveyPointDTO>)this.extrapolator.GetStraightExtrapolation(borehole.Collar, borehole.Target);
+            borehole.SurveyPoints = this.extrapolator.GetStraightExtrapolation(borehole.Collar, borehole.Target) as IList<SurveyPointDTO>;
+
+            if(borehole.SurveyPoints == null)
+            {
+                Console.WriteLine("Error");
+            }
 
             foreach (var point in borehole.SurveyPoints)
             {
@@ -141,8 +146,13 @@
             borehole.Collar.Dip = curveExtrapolationCalculator.GetInitialDip();
 
             // TODO: Invalid cast to borehole.SurveyPoints ??
-            borehole.SurveyPoints = (IList<SurveyPointDTO>)this.extrapolator
-                .GetCurvedExtrapolaton(borehole.Collar, this.AzimuthChange, this.DipChange);
+            borehole.SurveyPoints = this.extrapolator
+                .GetCurvedExtrapolaton(borehole.Collar, this.AzimuthChange, this.DipChange) as IList<SurveyPointDTO>;
+
+            if (borehole.SurveyPoints == null)
+            {
+                Console.WriteLine("Error");
+            }
 
             foreach (var point in borehole.SurveyPoints)
             {
@@ -164,8 +174,10 @@
         }
         else
         {
-            await this.SendBorehole(borehole);
+            //await this.SendBorehole(borehole);
+            
             this.storageService.Project.Boreholes.Add(borehole);
+            this.StateHasChanged();
         }
     }
 

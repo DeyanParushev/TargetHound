@@ -1,7 +1,6 @@
 import * as THREE from "./three.js";
 import * as OrbitControlls from "./OrbitControlls.js";
 import * as DragControlls from "./DragControlls.js";
-import * as VertexNormalHelpers from "./VertexNormalHelpers.js";
 
 export function RenderProject() {
     RenderScene();
@@ -12,6 +11,8 @@ export function RenderBorehole(borehole) {
 }
 
 function RenderScene(borehole) {
+    var container = document.getElementsByClassName("3dContainer")[0];
+    
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
@@ -28,7 +29,6 @@ function RenderScene(borehole) {
 
     var mouse = new THREE.Vector2();
 
-    var container = document.getElementsByClassName("3dContainer")[0];
     while (container.lastElementChild) {
         container.removeChild(container.lastElementChild);
     }

@@ -10,12 +10,12 @@
     public class PlaneDistanceCalculator
     {
         protected CoordinatesSetter coordinateSetter;
-        protected IList<IPoint> borehole;
+        protected IList<SurveyPointDTO> borehole;
         protected IPoint target;
         protected IPoint pointOnTargetElevation;
         protected IPoint closestHorizontalPoint;
 
-        public PlaneDistanceCalculator(IList<IPoint> borehole, IPoint target, CoordinatesSetter coordinatesSetter)
+        public PlaneDistanceCalculator(IList<SurveyPointDTO> borehole, IPoint target, CoordinatesSetter coordinatesSetter)
         {
             this.coordinateSetter = coordinatesSetter;
             this.target = target;
@@ -50,12 +50,12 @@
             return verticalDistance;
         }
 
-        protected virtual IPoint GetNextNearestStation(IList<IPoint> borehole, IPoint target, int indexOfNearestPoint)
+        protected virtual SurveyPointDTO GetNextNearestStation(IList<SurveyPointDTO> borehole, IPoint target, int indexOfNearestPoint)
         {
-            IList<IPoint> boreholeCopy = borehole.Select(x => x).ToList();
+            IList<SurveyPointDTO> boreholeCopy = borehole.Select(x => x).ToList();
             boreholeCopy.RemoveAt(indexOfNearestPoint);
 
-            IPoint nextNearestPoint = boreholeCopy.FirstOrDefault(
+            SurveyPointDTO nextNearestPoint = boreholeCopy.FirstOrDefault(
                 x => this.GetPlaneLineBetweenPoints(x, target) ==
                 boreholeCopy.Min(y => this.GetPlaneLineBetweenPoints(y, target)));
 
@@ -139,11 +139,11 @@
 
         private async Task SetClosestHorizontalPointAsync()
         {
-            IPoint startStation = this.borehole.FirstOrDefault(x =>
+            SurveyPointDTO startStation = this.borehole.FirstOrDefault(x =>
             this.GetPlaneLineBetweenPoints(x, this.target) == this.borehole.Min(y => this.GetPlaneLineBetweenPoints(y, this.target)));
             int indexOfStartStation = this.borehole.IndexOf(startStation);
 
-            IPoint endStation = this.GetNextNearestStation(this.borehole, this.target, indexOfStartStation);
+            SurveyPointDTO endStation = this.GetNextNearestStation(this.borehole, this.target, indexOfStartStation);
 
             if (endStation == null)
             {
@@ -152,7 +152,7 @@
 
             if (startStation.Depth > endStation.Depth)
             {
-                IPoint temp = new SurveyPointDTO
+                SurveyPointDTO temp = new SurveyPointDTO
                 {
                     Depth = startStation.Depth,
                     Azimuth = startStation.Azimuth,
@@ -182,7 +182,7 @@
             double dipChangePerMeter = totalDipChange / depthChange;
             double azimuthChangePerMeter = totalAzimuthChange / depthChange;
 
-            IPoint middleStation = new SurveyPointDTO();
+            SurveyPointDTO middleStation = new SurveyPointDTO();
             middleStation.Depth = startStation.Depth + (depthChange / 2);
             middleStation.Azimuth = startStation.Azimuth + (azimuthChangePerMeter * (depthChange / 2));
             middleStation.Dip = startStation.Dip + (dipChangePerMeter * (depthChange / 2));

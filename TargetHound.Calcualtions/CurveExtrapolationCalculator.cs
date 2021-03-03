@@ -134,7 +134,7 @@
                 this.collar.Azimuth += collarAzimuthChange;
                 this.collar.Dip += collarDipChange;
 
-                IList<IPoint> borehole = extrapolator.GetCurvedExtrapolaton(this.collar, this.azimuthChange, this.dipChange);
+                IList<SurveyPointDTO> borehole = extrapolator.GetCurvedExtrapolaton(this.collar, this.azimuthChange, this.dipChange);
                 _3DDistanceCalculator distanceCalculator = new _3DDistanceCalculator(borehole, this.target, coordinatesSetter);
                 minimumSpacial = distanceCalculator.GetMinimumSpacialDistance();
             }

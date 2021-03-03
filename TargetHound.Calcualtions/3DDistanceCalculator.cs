@@ -10,7 +10,7 @@
     {
         private IPoint closestSpacialPoint;
 
-        public _3DDistanceCalculator(IList<IPoint> borehole, IPoint target, CoordinatesSetter coordinatesSetter)
+        public _3DDistanceCalculator(IList<SurveyPointDTO> borehole, IPoint target, CoordinatesSetter coordinatesSetter)
             : base(borehole, target, coordinatesSetter)
         {
             this.ClosestSpacialPoint();
@@ -18,11 +18,11 @@
 
         public IPoint ClosestSpacialPoint()
         {
-            IPoint startStation = borehole.FirstOrDefault(x =>
+            SurveyPointDTO startStation = borehole.FirstOrDefault(x =>
                 this.LengthOfA3DLine(x, target) == borehole.Min(y => this.LengthOfA3DLine(y, target)));
             int indexOfStartStation = borehole.IndexOf(startStation);
 
-            IPoint endStation = this.GetNextNearestStation(borehole, target, indexOfStartStation);
+            SurveyPointDTO endStation = this.GetNextNearestStation(borehole, target, indexOfStartStation);
 
             if (endStation == null)
             {
@@ -31,7 +31,7 @@
 
             if (startStation.Depth > endStation.Depth)
             {
-                IPoint temp = new SurveyPointDTO
+                SurveyPointDTO temp = new SurveyPointDTO
                 {
                     Depth = startStation.Depth,
                     Azimuth = startStation.Azimuth,
@@ -61,7 +61,7 @@
             double dipChangePerMeter = totalDipChange / depthChange;
             double azimuthChangePerMeter = totalAzimuthChange / depthChange;
 
-            IPoint middleStation = new SurveyPointDTO();
+            SurveyPointDTO middleStation = new SurveyPointDTO();
             middleStation.Depth = startStation.Depth + (depthChange / 2);
             middleStation.Azimuth = startStation.Azimuth + (azimuthChangePerMeter * (depthChange / 2));
             middleStation.Dip = startStation.Dip + (dipChangePerMeter * (depthChange / 2));
@@ -115,12 +115,12 @@
             return lineLength;
         }
 
-        protected override IPoint GetNextNearestStation(IList<IPoint> borehole, IPoint target, int indexOfNearestPoint)
+        protected override SurveyPointDTO GetNextNearestStation(IList<SurveyPointDTO> borehole, IPoint target, int indexOfNearestPoint)
         {
-            IList<IPoint> boreholeCopy = borehole.Select(x => x).ToList();
+            IList<SurveyPointDTO> boreholeCopy = borehole.Select(x => x).ToList();
             boreholeCopy.RemoveAt(indexOfNearestPoint);
 
-            IPoint nextNearestPoint = boreholeCopy.FirstOrDefault(
+            SurveyPointDTO nextNearestPoint = boreholeCopy.FirstOrDefault(
                 x => this.LengthOfA3DLine(x, target) ==
                 boreholeCopy.Min(y => this.LengthOfA3DLine(y, target)));
 
