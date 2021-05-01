@@ -1,25 +1,26 @@
 ﻿@inject IStateService storageService
+@inject IObjectCreator objectCreator
 
-<EditForm Model="@this.Target" OnValidSubmit="AddToProject" class="mt-4">
+<EditForm Model="@this" OnValidSubmit="AddToProject" class="mt-4">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="form-group flex-sm-column">
         <label class="text-center font-weight-bold d-block">Target Name</label>
-        <InputText @bind-Value="@this.Target.Name" class="form-control" />
+        <InputText @bind-Value="@this.Name" class="form-control" />
     </div>
     <div class="form-group">
         <label class="text-center font-weight-bold d-block">Easting</label>
-        <InputNumber @bind-Value="@this.Target.Easting" class="form-control" />
+        <InputNumber @bind-Value="@this.Easting" class="form-control" />
     </div>
     <div class="form-group">
         <label class="text-center font-weight-bold d-block">Northing</label>
-        <InputNumber @bind-Value="@this.Target.Northing" class="form-control" />
+        <InputNumber @bind-Value="@this.Northing" class="form-control" />
     </div>
 
     <div class="form-group">
         <label class="text-center font-weight-bold d-block">Elevation</label>
-        <InputNumber @bind-Value="@this.Target.Elevation" class="form-control" />
+        <InputNumber @bind-Value="@this.Elevation" class="form-control" />
     </div>
 
     <button type="submit" class="btn btn-success offset-4">
@@ -42,7 +43,10 @@
 <hr style="border:0;height:1.5px;background-color: rgb(230, 230, 230); width:80%;" />
 
 @code {
-    private TargetDTO Target { get; set; } = new TargetDTO();
+    private string Name { get; set; }
+    private double Easting { get; set; }
+    private double Northing { get; set; }
+    private double Elevation { get; set; }
 
     private bool isCreated { get; set; } = false;
 
@@ -58,14 +62,7 @@
 
     public void AddToProject()
     {
-        TargetDTO target = new TargetDTO
-        {
-            Name = this.Target.Name,
-            Easting = this.Target.Easting,
-            Northing = this.Target.Northing,
-            Elevation = this.Target.Elevation,
-            ProjectId = this.storageService.Project.Id,
-        };
+        var target = this.objectCreator.CreateTarget(this.Name, this.Easting, this.Northing, this.Elevation, this.storageService.Project.Id);
 
         this.ShowMessage = true;
 
@@ -95,9 +92,9 @@
 
     private void ClearForm()
     {
-        this.Target.Name = null;
-        this.Target.Easting = 0;
-        this.Target.Northing = 0;
-        this.Target.Elevation = 0;
+        this.Name = null;
+        this.Easting = 0;
+        this.Northing = 0;
+        this.Elevation = 0;
     }
 }

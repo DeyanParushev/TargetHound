@@ -1,6 +1,4 @@
-﻿@inject TargetHound.Calcualtions.StraightExtrapolationCalculator straightCalculator
-@inject TargetHound.Calcualtions.Extrapolator extrapolator
-@inject TargetHound.Calcualtions.CoordinatesSetter coordinatesSetter
+﻿@inject TargetHound.Blazor.Services.IObjectCreator objectCreator
 @inject IStateService storageService
 @inject HttpClient client
 
@@ -105,59 +103,18 @@
 
     public async Task AddToProject()
     {
-        BoreholeDTO borehole = new BoreholeDTO
-        {
-            Collar = this.Collars.FirstOrDefault(x => x.Name == this.CollarName),
-            Target = this.Targets.FirstOrDefault(x => x.Name == this.TargetName),
-            Name = this.Borehole.Name,
-            ProjectId = this.Project.Id,
-        };
+        var collar = this.Collars.FirstOrDefault(x => x.Name == this.CollarName);
+        var target = this.Targets.FirstOrDefault(x => x.Name == this.TargetName);
+
+        var borehole = new BoreholeDTO();
 
         if (this.IsStraight)
         {
-            borehole.Collar.Azimuth = this.straightCalculator.GetInitialAzimuthAngle(borehole.Collar, borehole.Target);
-            borehole.Collar.Dip = this.straightCalculator.GetInitialDipAngle(borehole.Collar, borehole.Target);
-            borehole.SurveyPoints = this.extrapolator.GetStraightExtrapolation(borehole.Collar, borehole.Target) as IList<SurveyPointDTO>;
-
-            if(borehole.SurveyPoints == null)
-            {
-                Console.WriteLine("Error");
-            }
-
-            foreach (var point in borehole.SurveyPoints)
-            {
-                point.Id = Guid.NewGuid().ToString();
-            }
+            borehole = this.objectCreator.CreateStraightBorehole(this.Borehole.Name, collar, target);
         }
         else
         {
-            var curveExtrapolationCalculator = new CurveExtrapolationCalculator(
-                borehole.Collar,
-                borehole.Target,
-                this.AzimuthChange,
-                this.DipChange);
-
-            curveExtrapolationCalculator.CalculateInitialAngles(
-                straightCalculator,
-                extrapolator,
-                coordinatesSetter);
-
-            borehole.Collar.Azimuth = curveExtrapolationCalculator.GetInitialAzimuth();
-            borehole.Collar.Dip = curveExtrapolationCalculator.GetInitialDip();
-
-            // TODO: Invalid cast to borehole.SurveyPoints ??
-            borehole.SurveyPoints = this.extrapolator
-                .GetCurvedExtrapolaton(borehole.Collar, this.AzimuthChange, this.DipChange) as IList<SurveyPointDTO>;
-
-            if (borehole.SurveyPoints == null)
-            {
-                Console.WriteLine("Error");
-            }
-
-            foreach (var point in borehole.SurveyPoints)
-            {
-                point.Id = Guid.NewGuid().ToString();
-            }
+            borehole = this.objectCreator.CreateCurvedBorehole(this.Borehole.Name, collar, target, this.AzimuthChange, this.DipChange);
         }
 
         this.ShowMessage = true;
@@ -174,16 +131,17 @@
         }
         else
         {
-            //await this.SendBorehole(borehole);
-            
+            await this.SendBorehole(borehole);
             this.storageService.Project.Boreholes.Add(borehole);
-            this.StateHasChanged();
+            this.IsCreated = true;
         }
+
+        this.StateHasChanged();
     }
 
     private async Task SendBorehole(BoreholeDTO borehole)
     {
-        var response = await this.client.PostAsJsonAsync<BoreholeDTO>($"api/BoreholeApi/Save", borehole);
+        var response = await this.client.PostAsJsonAsync<BoreholeDTO>($"/api/BoreholeApi/", borehole);
 
         if (response.IsSuccessStatusCode)
         {
@@ -199,4 +157,3 @@
         this.StateHasChanged();
     }
 }
-

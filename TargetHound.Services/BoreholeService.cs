@@ -10,6 +10,7 @@
     
     using TargetHound.Data;
     using TargetHound.DataModels;
+    using TargetHound.Services.Automapper;
     using TargetHound.Services.ErrorMessages;
 
     public class BoreholeService : IBoreholeService
@@ -81,6 +82,37 @@
 
             string name = this.dbContext.Boreholes.FirstOrDefault(x => x.Id == boreholeId && x.IsDeleted == false)?.Name;
             return name;
+        }
+
+        public async Task<T> GetBorehole<T>(string boreholeId)
+        {
+            var borehole = this.dbContext.Boreholes.Where(x => x.Id == boreholeId).To<T>().SingleOrDefault();
+            
+            if(borehole == null)
+            {
+                throw new ArgumentNullException("Borehole does not exist.");
+            }
+
+            return borehole;
+        }
+
+        public async Task Create(Borehole borehole)
+        {
+            this.dbContext.Boreholes.Add(borehole);
+            await this.dbContext.SaveChangesAsync();
+        }
+
+        public async Task Edit(Borehole inputBorehole)
+        {
+            var borehole = this.dbContext.Boreholes.SingleOrDefault(x => x.Id == inputBorehole.Id);
+
+            if(borehole == null)
+            {
+                throw new ArgumentNullException("Borehole does not exist.");
+            }
+
+            borehole = inputBorehole;
+            await this.dbContext.SaveChangesAsync();
         }
 
         private void CheckUserAndProjectExist(string userId, string projectId)

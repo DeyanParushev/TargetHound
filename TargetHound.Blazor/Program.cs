@@ -9,6 +9,7 @@ namespace TargetHound.Blazor
     
     using TargetHound.Blazor.Services;
     using TargetHound.Calcualtions;
+    using TargetHound.DataModels.Interfaces;
 
     public class Program
     {
@@ -22,6 +23,7 @@ namespace TargetHound.Blazor
 
             builder.Services.AddApiAuthorization();
             builder.Services.AddSingleton<IStateService, StateService>();
+            builder.Services.AddTransient<IObjectCreator, ObjectCreator>();
             builder.Services.AddTransient<AngleConverter>();
             builder.Services.AddTransient<StraightExtrapolationCalculator>();
             builder.Services.AddTransient<CurveExtrapolationCalculator>();
@@ -30,6 +32,7 @@ namespace TargetHound.Blazor
             builder.Services.AddTransient<CoordinatesSetter>();
             builder.Services.AddTransient<CurveCalculator>();
             builder.Services.AddTransient<Extrapolator>();
+            
             await builder.Build().RunAsync();
         }
     }

@@ -56,7 +56,15 @@ namespace TargetHound.MVC
                 options.JsonSerializerOptions.PropertyNameCaseInsensitive = new JsonSerializerOptions().PropertyNameCaseInsensitive;
             });
 
-            services.AddAntiforgery(options => options.HeaderName = "X-CSRF-TOKEN");
+            services.AddMvc()
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "BlazorApp", builder =>
+                {
+                    builder.WithOrigins("https://localhost");
+                });
+            });
 
             services.AddAutoMapper(typeof(Startup));
             services.AddTransient<IProjectService, ProjectService>();
@@ -103,11 +111,14 @@ namespace TargetHound.MVC
             app.UseBlazorFrameworkFiles();
 
             app.UseRouting();
+            app.UseCors("BlazorApp");
 
             app.UseResponseCaching();
             app.UseCookiePolicy();
+            
             app.UseAuthentication();
             app.UseAuthorization();
+            
             app.UseStaticFiles(new StaticFileOptions()
             {
                 FileProvider = new PhysicalFileProvider(

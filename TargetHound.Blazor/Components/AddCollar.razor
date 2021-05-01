@@ -1,24 +1,25 @@
 ﻿@inject IStateService storageService
+@inject TargetHound.Blazor.Services.IObjectCreator objectCreator
 
-<EditForm Model="@this.Collar" OnValidSubmit="AddToProject" class="mt-4">
+<EditForm Model="@this" OnValidSubmit="AddToProject" class="mt-4">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="form-group flex-sm-column">
         <label class="text-center font-weight-bold d-block">Collar Name</label>
-        <InputText @bind-Value="@this.Collar.Name" class="form-control" />
+        <InputText @bind-Value="@this.Name" class="form-control" />
     </div>
     <div class="form-group">
         <label class="text-center font-weight-bold d-block">Easting</label>
-        <InputNumber @bind-Value="@this.Collar.Easting" class="form-control" />
+        <InputNumber @bind-Value="@this.Easting" class="form-control" />
     </div>
     <div class="form-group">
         <label class="text-center font-weight-bold d-block">Northing</label>
-        <InputNumber @bind-Value="@this.Collar.Northing" class="form-control" />
+        <InputNumber @bind-Value="@this.Northing" class="form-control" />
     </div>
     <div class="form-group">
         <label class="text-center font-weight-bold d-block">Elevation</label>
-        <InputNumber @bind-Value="@this.Collar.Elevation" class="form-control" />
+        <InputNumber @bind-Value="@this.Elevation" class="form-control" />
     </div>
 
     <button type="submit" class="btn btn-success offset-4">
@@ -42,7 +43,10 @@
 <hr style="border:0;height:1.5px;background-color: rgb(230, 230, 230); width:80%;" />
 
 @code {
-    private CollarDTO Collar { get; set; } = new CollarDTO();
+    private string Name { get; set; }
+    private double Easting { get; set; }
+    private double Northing { get; set; }
+    private double Elevation { get; set; }
 
     private bool isCreated { get; set; } = false;
 
@@ -58,14 +62,7 @@
 
     public void AddToProject()
     {
-        CollarDTO collar = new CollarDTO
-        {
-            Name = this.Collar.Name,
-            Easting = this.Collar.Easting,
-            Northing = this.Collar.Northing,
-            Elevation = this.Collar.Elevation,
-            ProjectId = this.storageService.Project.Id,
-        };
+        var collar = this.objectCreator.CreateCollar(this.Name, this.Easting, this.Northing, this.Elevation, this.storageService.Project.Id);
 
         this.ShowMessage = true;
 
@@ -95,9 +92,9 @@
 
     private void ClearForm()
     {
-        this.Collar.Name = null;
-        this.Collar.Easting = 0;
-        this.Collar.Northing = 0;
-        this.Collar.Elevation = 0;
+        this.Name = null;
+        this.Easting = 0;
+        this.Northing = 0;
+        this.Elevation = 0;
     }
 }
